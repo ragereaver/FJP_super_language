@@ -1,3 +1,4 @@
+﻿********************************************************************************************
 ********************************************************************************************
 ********************************Language for FJP subject************************************
 **********************************Language Description**************************************
@@ -8,14 +9,25 @@
 
 Minimal requirements (10)
 
+definice celočíselných proměnných
+definice celočíselných konstant
+přiřazení
+základní aritmetiku a logiku (+, -, *, /, AND, OR, negace a závorky, operátory pro porovnání čísel)
+cyklus (libovolný)
+jednoduchou podmínku (if bez else)
+definice podprogramu (procedura, funkce, metoda) a jeho volání
 
 Simple extenders (7)
 cycles ... for, do-while, repeat-until (3)
 else (1)
 boolean and operations (1)
+násobné přiřazení (a = b = c = d = 3;) (1)
+datový typ string (s operátory pro spojování řětezců) (1)
 
 More difficult extenders (6)
 arrays (2)
+návratová hodnota podprogramu (2)
+operátor pro porovnání řetězců (2)
 
 
 Total : 23 points
