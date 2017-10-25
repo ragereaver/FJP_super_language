@@ -1,0 +1,11 @@
+﻿this should show how should our language look like when its finnish
+example how to write commands
+
+Cycles:
+
+for 
+while
+do - while
+
+...
+
