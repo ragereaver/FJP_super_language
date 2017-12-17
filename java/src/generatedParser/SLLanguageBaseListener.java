@@ -1,3 +1,4 @@
+// Generated from D:/projekty/FJP_super_language\SLLanguage.g4 by ANTLR 4.7
 package generatedParser;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -39,13 +40,13 @@ public class SLLanguageBaseListener implements SLLanguageListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFunctionOrVariableDefinition(SLLanguageParser.FunctionOrVariableDefinitionContext ctx) { }
+	@Override public void enterFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFunctionOrVariableDefinition(SLLanguageParser.FunctionOrVariableDefinitionContext ctx) { }
+	@Override public void exitFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

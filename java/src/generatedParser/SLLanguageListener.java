@@ -1,5 +1,5 @@
+// Generated from D:/projekty/FJP_super_language\SLLanguage.g4 by ANTLR 4.7
 package generatedParser;
-
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -28,15 +28,15 @@ public interface SLLanguageListener extends ParseTreeListener {
 	 */
 	void exitTranslationUnit(SLLanguageParser.TranslationUnitContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SLLanguageParser#functionOrVariableDefinition}.
+	 * Enter a parse tree produced by {@link SLLanguageParser#functionDefinition}.
 	 * @param ctx the parse tree
 	 */
-	void enterFunctionOrVariableDefinition(SLLanguageParser.FunctionOrVariableDefinitionContext ctx);
+	void enterFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SLLanguageParser#functionOrVariableDefinition}.
+	 * Exit a parse tree produced by {@link SLLanguageParser#functionDefinition}.
 	 * @param ctx the parse tree
 	 */
-	void exitFunctionOrVariableDefinition(SLLanguageParser.FunctionOrVariableDefinitionContext ctx);
+	void exitFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SLLanguageParser#initList}.
 	 * @param ctx the parse tree
