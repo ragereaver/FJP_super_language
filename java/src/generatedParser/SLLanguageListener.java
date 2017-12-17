@@ -28,6 +28,36 @@ public interface SLLanguageListener extends ParseTreeListener {
 	 */
 	void exitTranslationUnit(SLLanguageParser.TranslationUnitContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SLLanguageParser#allCode}.
+	 * @param ctx the parse tree
+	 */
+	void enterAllCode(SLLanguageParser.AllCodeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SLLanguageParser#allCode}.
+	 * @param ctx the parse tree
+	 */
+	void exitAllCode(SLLanguageParser.AllCodeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SLLanguageParser#constDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterConstDeclaration(SLLanguageParser.ConstDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SLLanguageParser#constDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitConstDeclaration(SLLanguageParser.ConstDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SLLanguageParser#arrayDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrayDeclaration(SLLanguageParser.ArrayDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SLLanguageParser#arrayDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrayDeclaration(SLLanguageParser.ArrayDeclarationContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SLLanguageParser#functionDefinition}.
 	 * @param ctx the parse tree
 	 */
@@ -57,6 +87,16 @@ public interface SLLanguageListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTypeSpecifier(SLLanguageParser.TypeSpecifierContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SLLanguageParser#emptySpecifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterEmptySpecifier(SLLanguageParser.EmptySpecifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SLLanguageParser#emptySpecifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitEmptySpecifier(SLLanguageParser.EmptySpecifierContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SLLanguageParser#cycle}.
 	 * @param ctx the parse tree
@@ -197,6 +237,26 @@ public interface SLLanguageListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAssignmentOperator(SLLanguageParser.AssignmentOperatorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SLLanguageParser#functionCall}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionCall(SLLanguageParser.FunctionCallContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SLLanguageParser#functionCall}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionCall(SLLanguageParser.FunctionCallContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SLLanguageParser#functionValues}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionValues(SLLanguageParser.FunctionValuesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SLLanguageParser#functionValues}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionValues(SLLanguageParser.FunctionValuesContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SLLanguageParser#logicalOrExpression}.
 	 * @param ctx the parse tree

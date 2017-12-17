@@ -23,6 +23,24 @@ public interface SLLanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTranslationUnit(SLLanguageParser.TranslationUnitContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SLLanguageParser#allCode}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAllCode(SLLanguageParser.AllCodeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SLLanguageParser#constDeclaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConstDeclaration(SLLanguageParser.ConstDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SLLanguageParser#arrayDeclaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArrayDeclaration(SLLanguageParser.ArrayDeclarationContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SLLanguageParser#functionDefinition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -40,6 +58,12 @@ public interface SLLanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitTypeSpecifier(SLLanguageParser.TypeSpecifierContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SLLanguageParser#emptySpecifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEmptySpecifier(SLLanguageParser.EmptySpecifierContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SLLanguageParser#cycle}.
 	 * @param ctx the parse tree
@@ -124,6 +148,18 @@ public interface SLLanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAssignmentOperator(SLLanguageParser.AssignmentOperatorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SLLanguageParser#functionCall}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionCall(SLLanguageParser.FunctionCallContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SLLanguageParser#functionValues}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionValues(SLLanguageParser.FunctionValuesContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SLLanguageParser#logicalOrExpression}.
 	 * @param ctx the parse tree
