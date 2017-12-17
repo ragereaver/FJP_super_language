@@ -5,13 +5,29 @@ compilationUnit
     ;
 
 translationUnit
-    :   typeSpecifier functionDefinition
+    :   allCode
+    |   allCode translationUnit
+    ;
+
+allCode
+    :   functionDefinition
     |   declaration
     |   cycle
+    |   functionCall
+    |   constDeclaration
+    |   expressionStatement
+    ;
+
+constDeclaration
+    :   'const' typeSpecifier Identifier '=' DigitSequence ';'
+    ;
+
+arrayDeclaration
+    :   typeSpecifier '[' ']' Identifier '=' 'new' typeSpecifier '[' (Identifier | DigitSequence) ']' ';'
     ;
 
 functionDefinition
-    :   'function' Identifier '(' initList? ')' compoundStatement
+    :   (typeSpecifier | emptySpecifier) 'function' Identifier '(' initList? ')' compoundStatement
     ;
 
 initList
@@ -20,12 +36,15 @@ initList
     ;
 
 typeSpecifier
-    :   'void'
-    |   'char'
+    :   'char'
     |   'short'
     |   'int'
     |   'long'
     |   'boolean'
+    ;
+
+emptySpecifier
+    :'void'
     ;
 
 cycle
@@ -43,6 +62,7 @@ statement
     |   expressionStatement
     |   cycle
     |   jumpStatement
+    |   functionCall
     ;
 
 labeledStatement
@@ -70,6 +90,7 @@ blockItem
 
 declaration
     :   typeSpecifier initDeclaratorList ';'
+    |   arrayDeclaration
     ;
 
 initDeclaratorList
@@ -99,6 +120,19 @@ conditionalExpression
 
 assignmentOperator
     :   '=' | '/=' | '%=' | '+=' | '-='
+    ;
+
+functionCall
+    :   Identifier '(' functionValues? ')' ';'
+    ;
+
+functionValues
+    :   Identifier
+    |   Identifier ',' functionValues
+    |   Constant
+    |   Constant ',' functionValues
+    |   DigitSequence
+    |   DigitSequence ',' functionValues
     ;
 
 /**
