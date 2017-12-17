@@ -1,4 +1,12 @@
+/*
+
+ */
 grammar superLanguage;
+
+startingRule
+    :   type
+    |   procedureOrVariableName
+    ;
 
 literal
 	:	IntegerLiteral
@@ -47,32 +55,16 @@ arrayType
 	;
 
 dims
-	:	'[' ']' ('[' ']')*
+	:	'[' ']'
 	;
-
 
 /*
  * Productions from §6 (Names)
  */
 
-typeName
+procedureOrVariableName
 	:	Identifier
 	;
-
-expressionName
-	:	Identifier
-	|	ambiguousName '.' Identifier
-	;
-
-methodName
-	:	Identifier
-	;
-
-ambiguousName
-	:	Identifier
-	|	ambiguousName '.' Identifier
-	;
-
 
 /*
  * Productions from §10 (Arrays)
@@ -107,7 +99,7 @@ assignment
 	;
 
 leftHandSide
-	:	expressionName
+	:	procedureOrVariableName
 	|	arrayAccess
 	;
 
@@ -151,29 +143,20 @@ ifThenStatement
 
 statement
 	:	statementWithoutTrailingSubstatement
-	|	labeledStatement
 	|	ifThenStatement
 	|	ifThenElseStatement
 	|	whileStatement
 	|	forStatement
 	;
 
-labeledStatement
-	:	Identifier ':' statement
-	;
-
 
 statementNoShortIf
 	:	statementWithoutTrailingSubstatement
-	|	labeledStatementNoShortIf
 	|	ifThenElseStatementNoShortIf
 	|	whileStatementNoShortIf
 	|	forStatementNoShortIf
 	;
 
-labeledStatementNoShortIf
-	:	Identifier ':' statementNoShortIf
-	;
 
 statementWithoutTrailingSubstatement
 	:	block
@@ -297,12 +280,10 @@ doStatement
 
 forStatement
 	:	basicForStatement
-	|	enhancedForStatement
 	;
 
 forStatementNoShortIf
 	:	basicForStatementNoShortIf
-	|	enhancedForStatementNoShortIf
 	;
 
 basicForStatement
@@ -326,20 +307,12 @@ statementExpressionList
 	:	statementExpression (',' statementExpression)*
 	;
 
-enhancedForStatement
-	:	'for' '(' unannType variableDeclaratorId ':' expression ')' statement
-	;
-
-enhancedForStatementNoShortIf
-	:	'for' '(' unannType variableDeclaratorId ':' expression ')' statementNoShortIf
-	;
-
 breakStatement
-	:	'break' Identifier? ';'
+	:	'break' ';'
 	;
 
 continueStatement
-	:	'continue' Identifier? ';'
+	:	'continue' ';'
 	;
 
 returnStatement
@@ -360,7 +333,7 @@ primary
 
 primaryNoNewArray
 	:	literal
-	|	typeName ('[' ']')*
+	|	procedureOrVariableName ('[' ']')*
 	|	'(' expression ')'
 	|	arrayAccess
 	|	methodInvocation
@@ -390,11 +363,9 @@ primaryNoNewArray_lf_primary_lfno_arrayAccess_lf_primary
 
 primaryNoNewArray_lfno_primary
 	:	literal
-	|	typeName ('[' ']')* '.' 'class'
+	|	procedureOrVariableName ('[' ']')* '.' 'class'
 	|	unannPrimitiveType ('[' ']')* '.' 'class'
-	|	'void' '.' 'class'
-	|	'this'
-	|	typeName '.' 'this'
+	|	procedureOrVariableName '.' 'this'
 	|	'(' expression ')'
 	|	fieldAccess_lfno_primary
 	|	arrayAccess_lfno_primary
@@ -407,11 +378,9 @@ primaryNoNewArray_lfno_primary_lf_arrayAccess_lfno_primary
 
 primaryNoNewArray_lfno_primary_lfno_arrayAccess_lfno_primary
 	:	literal
-	|	typeName ('[' ']')* '.' 'class'
+	|	procedureOrVariableName ('[' ']')* '.' 'class'
 	|	unannPrimitiveType ('[' ']')* '.' 'class'
-	|	'void' '.' 'class'
-	|	'this'
-	|	typeName '.' 'this'
+	|	procedureOrVariableName '.' 'this'
 	|	'(' expression ')'
 	|	fieldAccess_lfno_primary
 	|	methodInvocation_lfno_primary
@@ -422,12 +391,11 @@ fieldAccess_lf_primary
 	;
 
 fieldAccess_lfno_primary
-	:	'super' '.' Identifier
-	|	typeName '.' 'super' '.' Identifier
+	:	Identifier
 	;
 
 arrayAccess
-	:	(	expressionName '[' expression ']'
+	:	(	procedureOrVariableName '[' expression ']'
 		|	primaryNoNewArray_lfno_arrayAccess '[' expression ']'
 		)
 		(	primaryNoNewArray_lf_arrayAccess '[' expression ']'
@@ -446,7 +414,7 @@ arrayAccess_lf_primary
 	;
 
 arrayAccess_lfno_primary
-	:	(	expressionName '[' expression ']'
+	:	(	procedureOrVariableName '[' expression ']'
 		|	primaryNoNewArray_lfno_primary_lfno_arrayAccess_lfno_primary '[' expression ']'
 		)
 		(	primaryNoNewArray_lfno_primary_lf_arrayAccess_lfno_primary '[' expression ']'
@@ -454,12 +422,8 @@ arrayAccess_lfno_primary
 	;
 
 methodInvocation
-	:	methodName '(' argumentList? ')'
-	|	typeName '.' Identifier '(' argumentList? ')'
-	|	expressionName '.' Identifier '(' argumentList? ')'
-	|	primary '.'  Identifier '(' argumentList? ')'
-	|	'super' '.'  Identifier '(' argumentList? ')'
-	|	typeName '.' 'super' '.'  Identifier '(' argumentList? ')'
+	:	procedureOrVariableName '(' argumentList? ')'
+	|	Identifier '(' argumentList? ')'
 	;
 
 methodInvocation_lf_primary
@@ -467,11 +431,11 @@ methodInvocation_lf_primary
 	;
 
 methodInvocation_lfno_primary
-	:	methodName '(' argumentList? ')'
-	|	typeName '.' Identifier '(' argumentList? ')'
-	|	expressionName '.' Identifier '(' argumentList? ')'
+	:	procedureOrVariableName '(' argumentList? ')'
+	|	procedureOrVariableName '.' Identifier '(' argumentList? ')'
+	|	procedureOrVariableName '.' Identifier '(' argumentList? ')'
 	|	'super' '.' Identifier '(' argumentList? ')'
-	|	typeName '.' 'super' '.' Identifier '(' argumentList? ')'
+	|	procedureOrVariableName '.' 'super' '.' Identifier '(' argumentList? ')'
 	;
 
 argumentList
@@ -581,7 +545,7 @@ unaryExpressionNotPlusMinus
 
 postfixExpression
 	:	(	primary
-		|	expressionName
+		|	procedureOrVariableName
 		)
 		(	postIncrementExpression_lf_postfixExpression
 		|	postDecrementExpression_lf_postfixExpression
