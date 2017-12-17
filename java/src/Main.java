@@ -1,7 +1,10 @@
+import elements.FunctionTranslate;
+import generatedParser.SLLanguageBaseListener;
 import generatedParser.SLLanguageLexer;
 import generatedParser.SLLanguageParser;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.io.File;
 
@@ -24,10 +27,19 @@ public class Main {
         parser.setBuildParseTree(true);
         ParserRuleContext tree = parser.compilationUnit();
 
-        for(ParseTree child : tree.children) {
-            System.out.println(child.getText());
+        Token error = tree.getStop();
+        if(error != null) {
+            System.out.println("NAstala chyba" + error.getText());
+
         }
 
+        for(ParseTree child : tree.children) {
+            //System.out.println(child.getText());
+        }
+        // Walk it and attach our listener
+    /*    ParseTreeWalker walker = new ParseTreeWalker();
+        SLLanguageBaseListener listener = new SLLanguageBaseListener();
+        walker.walk(listener, tree);*/
 
         /*File file = new File("");
         try {

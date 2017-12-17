@@ -24,3 +24,5 @@ int [] pole = new int [5];
 int b = pole [2];
 
 const int CON = 5;
+
+string test = "ahoj";

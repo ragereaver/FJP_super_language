@@ -19,7 +19,7 @@ allCode
     ;
 
 constDeclaration
-    :   'const' typeSpecifier Identifier '=' DigitSequence ';'
+    :   'const' (typeSpecifier) Identifier '=' DigitSequence ';'
     ;
 
 arrayDeclaration
@@ -41,6 +41,11 @@ typeSpecifier
     |   'int'
     |   'long'
     |   'boolean'
+    |   stringSpecifier
+    ;
+
+stringSpecifier
+    :   'string'
     ;
 
 emptySpecifier
@@ -155,9 +160,15 @@ assignmentExpression
     ;
 
 equalityExpression
+    :   stringEqualityExpression
+    |   equalityExpression '==' stringEqualityExpression
+    |   equalityExpression '!=' stringEqualityExpression
+    ;
+
+stringEqualityExpression
     :   relationalExpression
-    |   equalityExpression '==' relationalExpression
-    |   equalityExpression '!=' relationalExpression
+    |   stringEqualityExpression '===' relationalExpression
+    |   stringEqualityExpression '!==' relationalExpression
     ;
 
 relationalExpression

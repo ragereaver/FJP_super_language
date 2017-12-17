@@ -112,6 +112,18 @@ public class SLLanguageBaseListener implements SLLanguageListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterStringSpecifier(SLLanguageParser.StringSpecifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStringSpecifier(SLLanguageParser.StringSpecifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterEmptySpecifier(SLLanguageParser.EmptySpecifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -359,6 +371,18 @@ public class SLLanguageBaseListener implements SLLanguageListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitEqualityExpression(SLLanguageParser.EqualityExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStringEqualityExpression(SLLanguageParser.StringEqualityExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStringEqualityExpression(SLLanguageParser.StringEqualityExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

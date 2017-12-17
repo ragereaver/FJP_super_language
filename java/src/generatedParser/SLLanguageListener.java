@@ -88,6 +88,16 @@ public interface SLLanguageListener extends ParseTreeListener {
 	 */
 	void exitTypeSpecifier(SLLanguageParser.TypeSpecifierContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SLLanguageParser#stringSpecifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterStringSpecifier(SLLanguageParser.StringSpecifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SLLanguageParser#stringSpecifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitStringSpecifier(SLLanguageParser.StringSpecifierContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SLLanguageParser#emptySpecifier}.
 	 * @param ctx the parse tree
 	 */
@@ -297,6 +307,16 @@ public interface SLLanguageListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitEqualityExpression(SLLanguageParser.EqualityExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SLLanguageParser#stringEqualityExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterStringEqualityExpression(SLLanguageParser.StringEqualityExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SLLanguageParser#stringEqualityExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitStringEqualityExpression(SLLanguageParser.StringEqualityExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SLLanguageParser#relationalExpression}.
 	 * @param ctx the parse tree
