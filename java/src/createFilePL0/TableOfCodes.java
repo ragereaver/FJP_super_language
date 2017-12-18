@@ -7,15 +7,15 @@ import java.util.ArrayList;
  */
 public class TableOfCodes {
 
-    private static ArrayList<Code> tableOfCodes;
+    private static ArrayList<Code> tableOfCodes = new ArrayList<>();
 
     public static class Code {
-        private EOperationCodes code;
+        private EInstructionSet code;
         private int level;
         private int value;
         private int index;
 
-        public Code (EOperationCodes code, int level, int value, int index) {
+        public Code (EInstructionSet code, int level, int value, int index) {
             this.code = code;
             this.level = level;
             this.value = value;
@@ -26,7 +26,7 @@ public class TableOfCodes {
             return level;
         }
 
-        public EOperationCodes getCode() {
+        public EInstructionSet getCode() {
             return code;
         }
 
@@ -40,11 +40,11 @@ public class TableOfCodes {
 
         @Override
         public String toString() {
-            return index + "\t" + code.getOperationName() + "\t" + level + "\t" + value + "\n";
+            return index + "\t" + code.getInsturctionName() + "\t" + level + "\t" + value + "\n";
         }
     }
 
-    public static  void addCode (EOperationCodes code, int level, int value) {
+    public static  void addCode (EInstructionSet code, int level, int value) {
         tableOfCodes.add(new Code(code, level, value, tableOfCodes.size()));
     }
 
@@ -54,5 +54,11 @@ public class TableOfCodes {
 
     public static ArrayList<Code> getTableOfCodes() {
         return tableOfCodes;
+    }
+
+    public static String createString(){
+        StringBuilder code = new StringBuilder();
+        tableOfCodes.forEach(code1 -> code.append(code1.toString()));
+        return code.toString();
     }
 }

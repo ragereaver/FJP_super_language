@@ -10,11 +10,11 @@ import java.nio.file.Paths;
 /**
  * Created by BobrZlosyn on 17.12.2017.
  */
-public class createFile {
+public class CreateFile {
     private BufferedWriter writerFile;
     private String filename;
 
-    public createFile(String fileName){
+    public CreateFile(String fileName){
         try {
             this.filename = fileName;
             writerFile = new BufferedWriter(new FileWriter(fileName));
@@ -23,9 +23,9 @@ public class createFile {
         }
     }
 
-    public boolean writeToFile(CodeBuffer buffer){
+    public boolean writeToFile(String buffer){
         try {
-            writerFile.write(buffer.getContent());
+            writerFile.write(buffer);
             writerFile.flush();
 
         } catch (IOException e) {
@@ -49,5 +49,15 @@ public class createFile {
         }
 
         return true;
+    }
+
+    public void close (){
+        try {
+            writerFile.flush();
+            writerFile.close();
+        } catch (IOException e) {
+            System.out.println("couldnt close file: " + filename);
+            e.printStackTrace();
+        }
     }
 }
