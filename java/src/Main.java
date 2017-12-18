@@ -27,19 +27,11 @@ public class Main {
         parser.setBuildParseTree(true);
         ParserRuleContext tree = parser.compilationUnit();
 
-        Token error = tree.getStop();
-        if(error != null) {
-            System.out.println("NAstala chyba" + error.getText());
 
-        }
-
-        for(ParseTree child : tree.children) {
-            //System.out.println(child.getText());
-        }
         // Walk it and attach our listener
-    /*    ParseTreeWalker walker = new ParseTreeWalker();
+        ParseTreeWalker walker = new ParseTreeWalker();
         SLLanguageBaseListener listener = new SLLanguageBaseListener();
-        walker.walk(listener, tree);*/
+        walker.walk(listener, tree);
 
         /*File file = new File("");
         try {

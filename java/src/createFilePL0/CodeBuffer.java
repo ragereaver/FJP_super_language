@@ -12,6 +12,7 @@ public class CodeBuffer {
 
     public void appendToBuffer(String toWrite){
         code.append(toWrite);
+        code.append("\n");
     }
 
     public void eraseBuffer(){

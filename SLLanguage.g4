@@ -56,7 +56,7 @@ cycle
     : 'for' '(' forCondition ')' compoundStatement
     | 'while' '(' expression ')' compoundStatement
     | 'do' compoundStatement 'while' '(' expression ')' ';'
-    | 'until'
+    | 'until' compoundStatement 'until' '(' expression ')' ';'
     | 'if' '(' logicalOrExpression ')' compoundStatement ('else' compoundStatement)?
     | 'switch' '(' expression ')' '{' labeledStatement '}'
     ;
@@ -120,7 +120,7 @@ expression
     ;
 
 conditionalExpression
-    :   logicalOrExpression ('?' expression ':' conditionalExpression)?
+    :   logicalOrExpression ('?' expression ':' (conditionalExpression | expression))?
     ;
 
 assignmentOperator
