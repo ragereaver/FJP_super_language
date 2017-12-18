@@ -1,4 +1,4 @@
-package createFilePL0;
+package tableClasses;
 
 import java.util.ArrayList;
 
@@ -12,6 +12,7 @@ public class TableOfSymbols {
     public static final String VARIABLE_TYPE_ARRAY = "array";
 
     private static ArrayList<Symbols> tableOfSymbols = new ArrayList<>();;
+    private static int actualLevel = 0;
 
     public static class Symbols {
         private String name, variableType;
@@ -58,14 +59,14 @@ public class TableOfSymbols {
         }
     }
 
-    public static boolean addSymbol(String name, boolean isVariable, int level, int address, String variableType, int size, boolean isConst){
+    public static boolean addSymbol(String name, boolean isVariable, int address, String variableType, int size, boolean isConst){
         for (Symbols symbol : tableOfSymbols){
-            if (symbol.getLevel() == level && symbol.getName().equals(name) && (isVariable == symbol.isVariable())){
+            if (symbol.getLevel() == actualLevel && symbol.getName().equals(name) && (isVariable == symbol.isVariable())){
                 return false;
             }
         }
 
-        return tableOfSymbols.add(new Symbols(name, isVariable, level, address, variableType, size, isConst));
+        return tableOfSymbols.add(new Symbols(name, isVariable, actualLevel, address, variableType, size, isConst));
     }
 
     public static Symbols findByAdress(int address){
@@ -94,6 +95,15 @@ public class TableOfSymbols {
                 tableOfSymbols.remove(i);
                 i--;
             }
+        }
+
+    }
+
+    public static void setLevel(boolean isUp){
+        if(isUp) {
+            actualLevel++;
+        }else {
+            actualLevel--;
         }
 
     }

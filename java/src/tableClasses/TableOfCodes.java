@@ -1,4 +1,6 @@
-package createFilePL0;
+package tableClasses;
+
+import createFilePL0.EInstructionSet;
 
 import java.util.ArrayList;
 

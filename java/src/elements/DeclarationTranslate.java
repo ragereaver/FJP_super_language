@@ -2,6 +2,9 @@ package elements;
 
 import generatedParser.SLLanguageParser;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.xml.sax.ErrorHandler;
+import tableClasses.ErrorHandle;
+import tableClasses.TableOfSymbols;
 
 import java.util.ArrayList;
 
@@ -11,9 +14,9 @@ import java.util.ArrayList;
 public class DeclarationTranslate {
     private String type;
     private ArrayList<String> variables = new ArrayList<>();
-    private ArrayList<String> values = new ArrayList<>();
+    private ArrayList values = new ArrayList<>();
 
-    public void doDeclaration(SLLanguageParser.DeclarationContext ctx){
+    public void doStandardDeclaration(SLLanguageParser.DeclarationContext ctx){
         for (int i = 0; i <= ctx.getChildCount(); i++) {
             type = ctx.getChild(0).getText();
             System.out.println(ctx.getChildCount());
@@ -23,5 +26,27 @@ public class DeclarationTranslate {
 
     private void doDeclarationInner(ParseTree children, int depth){
         System.out.println(children.getText());
+    }
+
+    public boolean doArrayDeclaration(SLLanguageParser.ArrayDeclarationContext ctx) {
+
+        int firstTypeIndex = 0;
+        int SecondTypeIndex = 6;
+
+        type = ctx.typeSpecifier(firstTypeIndex).getText();
+        if (!type.equals(ctx.typeSpecifier(SecondTypeIndex).getText())){
+            ErrorHandle.addError(ErrorHandle.TYPE_MISMATCH_ARRAY, ctx.getRuleContext().getAltNumber());
+            return false;
+        }
+
+        values.add(ctx.DigitSequence());
+        variables.add(ctx.Identifier().toString().substring(1, ctx.Identifier().toString().length() - 1));
+
+        if (!TableOfSymbols.addSymbol(variables.get(0), true, 0, type, (int)values.get(0), false)) {
+            ErrorHandle.addError(ErrorHandle.VARIABLE_EXISTS, ctx.getRuleContext().getAltNumber());
+            return false;
+        }
+
+        return true;
     }
 }

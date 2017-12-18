@@ -3,7 +3,8 @@ package generatedParser;
 
 import createFilePL0.CreateFile;
 import createFilePL0.EInstructionSet;
-import createFilePL0.TableOfCodes;
+import tableClasses.TableOfCodes;
+import elements.DeclarationTranslate;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -74,7 +75,10 @@ public class SLLanguageBaseListener implements SLLanguageListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArrayDeclaration(SLLanguageParser.ArrayDeclarationContext ctx) { }
+	@Override public void enterArrayDeclaration(SLLanguageParser.ArrayDeclarationContext ctx) {
+		DeclarationTranslate declarationTranslate = new DeclarationTranslate();
+		declarationTranslate.doArrayDeclaration(ctx);
+	}
 	/**
 	 * {@inheritDoc}
 	 *
