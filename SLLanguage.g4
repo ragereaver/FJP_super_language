@@ -58,7 +58,7 @@ cycle
     | 'do' compoundStatement 'while' '(' expression ')' ';'
     | 'until' compoundStatement 'until' '(' expression ')' ';'
     | 'if' '(' logicalOrExpression ')' compoundStatement ('else' compoundStatement)?
-    | 'switch' '(' expression ')' '{' labeledStatement '}'
+    | 'switch' '(' expression ')' '{' (labeledStatement)* '}'
     ;
 
 statement
@@ -71,8 +71,8 @@ statement
     ;
 
 labeledStatement
-    :   'case' DigitSequence ':' statement
-    |   'default' ':' statement
+    :   'case' DigitSequence ':' (compoundStatement | expressionStatement | jumpStatement | functionCall)*
+    |   'default' ':' (compoundStatement | expressionStatement | jumpStatement | functionCall)
     ;
 
 compoundStatement
