@@ -31,15 +31,17 @@ public class DeclarationTranslate {
     public boolean doArrayDeclaration(SLLanguageParser.ArrayDeclarationContext ctx) {
 
         int firstTypeIndex = 0;
-        int SecondTypeIndex = 6;
+        int secondTypeIndex = 1;
 
         type = ctx.typeSpecifier(firstTypeIndex).getText();
-        if (!type.equals(ctx.typeSpecifier(SecondTypeIndex).getText())){
+        if (!type.equals(ctx.typeSpecifier(secondTypeIndex).getText())){
             ErrorHandle.addError(ErrorHandle.TYPE_MISMATCH_ARRAY, ctx.getRuleContext().getAltNumber());
             return false;
         }
 
-        values.add(ctx.DigitSequence());
+        String arrSize = ctx.DigitSequence().getText();
+
+        values.add(Integer.parseInt(arrSize));
         variables.add(ctx.Identifier().toString().substring(1, ctx.Identifier().toString().length() - 1));
 
         if (!TableOfSymbols.addSymbol(variables.get(0), true, 0, type, (int)values.get(0), false)) {
