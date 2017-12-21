@@ -1,6 +1,6 @@
 package tableClasses;
 
-import createFilePL0.EInstructionSet;
+import enums.EInstructionSet;
 
 import java.util.ArrayList;
 

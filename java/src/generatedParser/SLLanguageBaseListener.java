@@ -2,7 +2,7 @@
 package generatedParser;
 
 import createFilePL0.CreateFile;
-import createFilePL0.EInstructionSet;
+import enums.EInstructionSet;
 import tableClasses.TableOfCodes;
 import elements.DeclarationTranslate;
 import org.antlr.v4.runtime.ParserRuleContext;

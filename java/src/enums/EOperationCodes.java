@@ -1,4 +1,4 @@
-package createFilePL0;
+package enums;
 
 /**
  * Created by BobrZlosyn on 17.12.2017.
