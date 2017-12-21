@@ -99,12 +99,21 @@ public class TableOfSymbols {
 
     }
 
-    public static void setLevel(boolean isUp){
-        if(isUp) {
+    public static void setLevel(boolean isDeeper){
+        if(isDeeper) {
             actualLevel++;
         }else {
             actualLevel--;
         }
 
+    }
+
+    public static int getActualLevel() {
+        return actualLevel;
+    }
+
+    public static int getParentLevel() {
+        int parentLevel = getActualLevel() - 1;
+        return (parentLevel > 0) ? parentLevel : 0;
     }
 }

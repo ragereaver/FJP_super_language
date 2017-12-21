@@ -36,4 +36,3 @@ switch (5) {
     case 4: b = 2; break;
     default: b = 5;
 }
-

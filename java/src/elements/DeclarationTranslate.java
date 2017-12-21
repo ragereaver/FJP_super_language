@@ -1,5 +1,6 @@
 package elements;
 
+import enums.EErrorCodes;
 import generatedParser.SLLanguageParser;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.xml.sax.ErrorHandler;
@@ -16,6 +17,11 @@ public class DeclarationTranslate {
     private ArrayList<String> variables = new ArrayList<>();
     private ArrayList values = new ArrayList<>();
 
+    /**
+     * zpracovava normalni deklarace ( vse krome pole)
+     * @param ctx
+     * @return
+     */
     public void doStandardDeclaration(SLLanguageParser.DeclarationContext ctx){
         for (int i = 0; i <= ctx.getChildCount(); i++) {
             type = ctx.getChild(0).getText();
@@ -28,6 +34,11 @@ public class DeclarationTranslate {
         System.out.println(children.getText());
     }
 
+    /**
+     * zpracovava deklaraci pole
+     * @param ctx
+     * @return
+     */
     public boolean doArrayDeclaration(SLLanguageParser.ArrayDeclarationContext ctx) {
 
         int firstTypeIndex = 0;
@@ -35,7 +46,8 @@ public class DeclarationTranslate {
 
         type = ctx.typeSpecifier(firstTypeIndex).getText();
         if (!type.equals(ctx.typeSpecifier(secondTypeIndex).getText())){
-            ErrorHandle.addError(ErrorHandle.TYPE_MISMATCH_ARRAY, ctx.getRuleContext().getAltNumber());
+            ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH_ARRAY,
+                    ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
             return false;
         }
 
@@ -45,7 +57,8 @@ public class DeclarationTranslate {
         variables.add(ctx.Identifier().toString().substring(1, ctx.Identifier().toString().length() - 1));
 
         if (!TableOfSymbols.addSymbol(variables.get(0), true, 0, type, (int)values.get(0), false)) {
-            ErrorHandle.addError(ErrorHandle.VARIABLE_EXISTS, ctx.getRuleContext().getAltNumber());
+            ErrorHandle.addError(EErrorCodes.VARIABLE_EXISTS,
+                    ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
             return false;
         }
 

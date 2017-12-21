@@ -8,6 +8,7 @@ import elements.DeclarationTranslate;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import tableClasses.TableOfSymbols;
 
 /**
  * This class provides an empty implementation of {@link SLLanguageListener},
@@ -22,6 +23,7 @@ public class SLLanguageBaseListener implements SLLanguageListener {
 	 */
 	@Override public void enterCompilationUnit(SLLanguageParser.CompilationUnitContext ctx) {
 		TableOfCodes.addCode(EInstructionSet.JUMP, 0, 1);
+
 	}
 	/**
 	 * {@inheritDoc}
@@ -90,13 +92,21 @@ public class SLLanguageBaseListener implements SLLanguageListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) { }
+	@Override public void enterFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) {
+		TableOfSymbols.setLevel(true);
+		System.out.println("zacatek funkce");
+		System.out.println(ctx.getText());
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) { }
+	@Override public void exitFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) {
+		TableOfSymbols.setLevel(false);
+		System.out.println("konec funkce");
+		System.out.println();
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -150,13 +160,21 @@ public class SLLanguageBaseListener implements SLLanguageListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCycle(SLLanguageParser.CycleContext ctx) { }
+	@Override public void enterCycle(SLLanguageParser.CycleContext ctx) {
+		TableOfSymbols.setLevel(true);
+		System.out.println("zacatek cyklu");
+		System.out.println(ctx.getText());
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCycle(SLLanguageParser.CycleContext ctx) { }
+	@Override public void exitCycle(SLLanguageParser.CycleContext ctx) {
+		TableOfSymbols.setLevel(false);
+		System.out.println("konec cyklu");
+		System.out.println();
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -234,7 +252,9 @@ public class SLLanguageBaseListener implements SLLanguageListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclaration(SLLanguageParser.DeclarationContext ctx) { }
+	@Override public void enterDeclaration(SLLanguageParser.DeclarationContext ctx) {
+		System.out.println("deklarace");
+	}
 	/**
 	 * {@inheritDoc}
 	 *
