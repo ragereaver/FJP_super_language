@@ -130,7 +130,7 @@ public enum EInstructionSet {
             return false;
         }
 
-        public static boolean loadIntegerArrayVariable (String variable, Token token, int index){
+        public static boolean loadIntegerArrayVariable (String variable, Token token, String index){
             if (Validators.isVariableName(variable)){
                 TableOfSymbols.Symbol sym = TableOfSymbols.findByNameAllLevels(variable, true);
                 if (sym == null) {
@@ -145,7 +145,52 @@ public enum EInstructionSet {
                     return false;
                 }
 
-                doInstruction(EInstructionSet.LOAD, sym.getLevel(), sym.getAddress());
+                int ind = 0;
+                if (Validators.isInteger(index)) {
+                    ind = Integer.parseInt(index);
+                    if (ind + sym.getAddress() > sym.getSize()) {
+                        ErrorHandle.addError(EErrorCodes.OUT_OF_ARRAY,
+                                token.getLine(), token.getCharPositionInLine());
+                        return false;
+                    }
+                }
+
+                //TODO: implementace proměnných v poli
+
+                doInstruction(EInstructionSet.LOAD, sym.getLevel(), sym.getAddress() + ind);
+                return true;
+            }
+            return false;
+        }
+
+        public static boolean loadBooleanArrayVariable (String variable, Token token, String index){
+            if (Validators.isVariableName(variable)){
+                TableOfSymbols.Symbol sym = TableOfSymbols.findByNameAllLevels(variable, true);
+                if (sym == null) {
+                    ErrorHandle.addError(EErrorCodes.VARIABLE_DOESNT_EXIST,
+                            token.getLine(), token.getCharPositionInLine());
+                    return false;
+                }
+
+                if (!sym.getVariableType().equals(Validators.VARIABLE_TYPE_ARRAY_BOOLEAN)){
+                    ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH,
+                            token.getLine(), token.getCharPositionInLine());
+                    return false;
+                }
+
+                int ind = 0;
+                if (Validators.isInteger(index)) {
+                    ind = Integer.parseInt(index);
+                    if (ind + sym.getAddress() > sym.getSize()) {
+                        ErrorHandle.addError(EErrorCodes.OUT_OF_ARRAY,
+                                token.getLine(), token.getCharPositionInLine());
+                        return false;
+                    }
+                }
+
+                //TODO: implementace proměnných v poli
+
+                doInstruction(EInstructionSet.LOAD, sym.getLevel(), sym.getAddress() + ind);
                 return true;
             }
             return false;

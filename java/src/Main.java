@@ -1,10 +1,7 @@
 import Convertor.TypeConvertor;
 import createFilePL0.CreateFile;
 import elements.FunctionTranslate;
-import generatedParser.SLLanguageBaseErrorListener;
-import generatedParser.SLLanguageBaseListener;
-import generatedParser.SLLanguageLexer;
-import generatedParser.SLLanguageParser;
+import generatedParser.*;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -56,7 +53,7 @@ public class Main {
 
             // Walk it and attach our listener
             ParseTreeWalker walker = new ParseTreeWalker();
-            SLLanguageBaseListener listener = new SLLanguageBaseListener();
+            SLLanguageMainListener listener = new SLLanguageMainListener();
             walker.walk(listener, tree);
         }
     }

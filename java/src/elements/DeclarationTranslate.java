@@ -87,7 +87,10 @@ public class DeclarationTranslate {
 
             }else {
                 if (Validators.isArrayHere(value)) {// reseni prirazeni pole
-                    //TODO: dosazeni promenne v poli
+                    identifier = ctx.initDeclarator().Identifier().getText();
+
+                    resolveMathProblems(ctx.initDeclarator().getChild(2), ctx.getStart(), 0);
+                    TableOfSymbols.addSymbolVariable(ctx.getStart(), identifier, type, 0);
 
                 }else {// reseni prirazeni pole
                     if (Validators.validateType(type, value)) {
@@ -104,6 +107,13 @@ public class DeclarationTranslate {
 
     }
 
+
+    /**
+     * rekurzivni procházení listu deklarací
+     * @param child
+     * @param token
+     * @param type
+     */
     private void innerMultipleAssigment(ParseTree child, Token token, String type) {
         if (child.getChildCount() != 1) {
             if (child.getChild(1).getText().equals("=")) {
@@ -153,11 +163,18 @@ public class DeclarationTranslate {
                     String left = resolveMathProblems(nextChild.getChild(0), ctx, depth + 1);
                     String sign = nextChild.getChild(1).getText();
                     String right = resolveMathProblems(nextChild.getChild(2), ctx, depth + 1);
-                    System.out.println(left + "------------" + sign + "-----------" + right);
-                    loadValue(left, ctx);
-                    loadValue(right, ctx);
+                    if (Validators.isArrayHere(sign)){
+                        loadValueFromArray(left, ctx, right);
+                    }else {
+                        loadValue(left, ctx);
+                        loadValue(right, ctx);
 
-                    EOperationCodes.doOperation(sign);
+                        EOperationCodes.doOperation(sign);
+                    }
+
+
+                    System.out.println(left + "------------" + sign + "-----------" + right);
+
 
                     return res;
                 }
@@ -174,5 +191,9 @@ public class DeclarationTranslate {
         }
     }
 
-
+    private void loadValueFromArray(String value, Token token, String index){
+        if (!value.equals("")) {
+            EInstructionSet.loadIntegerArrayVariable(value, token, index);
+        }
+    }
 }

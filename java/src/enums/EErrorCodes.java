@@ -11,6 +11,7 @@ public enum EErrorCodes {
     VARIABLE_DOESNT_EXIST("Variable on right side doesnt exist!"),
     PARSER_FAILED("Parsing code wasnt possible!"),
     UNKNOW_ERROR("Some weird error happened while adding to arraylist!"),
+    OUT_OF_ARRAY("Index is out of array memory!"),
     ;
 
     private final String errorMessage;
