@@ -1,8 +1,7 @@
 int ahoj = 5;
 int b = 3;
-boolean c = true;
 
-int a, c = 3, i;
+int a, c = 3 + 3, i = 5 + b;
 neee(3,b);
 
 b = 5;
@@ -13,13 +12,14 @@ b = ahoj = c;
 int function neee(int first, int second){
     int ahoj = 8;
     int i;
+    i = 22;
     for (i = 0; i < 5; i++) {
         ahoj = 5 * i + ahoj;
     }
     return ahoj;
 }
 
-int p = ((3 * (5 + 5) * 6) + 5 * (1 + 3)) + 5 + 3 * 7;
+
 
 int [] pole = new int [5];
 

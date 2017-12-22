@@ -38,6 +38,8 @@ public class DeclarationTranslate {
 
             String value = doDeclarationInner(type, ctx.getChild(1), 1);
 
+        }else {
+
         }
     }
 
@@ -49,74 +51,83 @@ public class DeclarationTranslate {
      * @return
      */
     private String doDeclarationInner(String type, ParseTree children, int depth){
-        String identifier;
-        String value;
+
+        InitDeclaratorListContext ctx = (InitDeclaratorListContext) children;
         if (children.getChildCount() == 1) {
-            System.out.println("jednotlive casti");
-            InitDeclaratorListContext ctx = (InitDeclaratorListContext) children;
-            identifier = ctx.initDeclarator().Identifier().getText();
-
-            AssignmentExpressionContext assignmentExpCtx = ctx.initDeclarator().assignmentExpression();
-            if (assignmentExpCtx != null) {
-                value = assignmentExpCtx.getText();
-
-                if(Validators.isDimHere(value)) {
-
-                    value = resolveMathProblems(assignmentExpCtx, ctx.getStart(), 0);
-                }else {
-                    if (Validators.isArrayHere(value)) {
-                        //TODO: dosazeni promenne v poli
-                    }else {
-                        TableOfSymbols.addSymbol(ctx.getStart(), identifier, true, 0, type, 0, false, value);
-                        TableOfCodes.addCode(EInstructionSet.LITERAL, TableOfSymbols.getLastSymbolValue().get(0).toString());
-                    }
-                }
-
-
-            }else {
-                value = null;
-                TableOfSymbols.addSymbol(ctx.getStart(), identifier, true, 0, type, 0, false, value);
-            }
-
-
-
-
-            System.out.println("konec \n");
+            singleAssignment(type, ctx);
 
         }else {
-            //doDeclarationInner(ct);
+            innerMultipleAssigment(ctx, ctx.getStart(), type);
         }
-        System.out.println(children.getChildCount());
-        System.out.println(children.getText());
 
+        System.out.println("konec \n");
         return "";
     }
 
-    /**
-     * zpracovava deklaraci pole
-     * @param ctx
-     * @return
-     */
-    public boolean doArrayDeclaration(ArrayDeclarationContext ctx) {
 
-        int firstTypeIndex = 0;
-        int secondTypeIndex = 1;
+    public void singleAssignment (String type, InitDeclaratorListContext ctx) {
+        String identifier;
+        String value;
+        identifier = ctx.initDeclarator().Identifier().getText();
 
-        type = ctx.typeSpecifier(firstTypeIndex).getText();
-        if (!type.equals(ctx.typeSpecifier(secondTypeIndex).getText())){
-            ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH_ARRAY,
-                    ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
-            return false;
+        AssignmentExpressionContext assignmentExpCtx = ctx.initDeclarator().assignmentExpression();
+        if (assignmentExpCtx != null) {
+            value = assignmentExpCtx.getText();
+
+            if (type.equals(Validators.VARIABLE_TYPE_BOOLEAN)) {
+                if (Validators.isTernalIfHere(value)) {
+                    // obstara se jinde - trida IfTranslate
+                    return;
+                }
+            }
+
+            if(Validators.isDimHere(value)) { // reseni zavorkovych vyrazu
+                resolveMathProblems(assignmentExpCtx, ctx.getStart(), 0);
+                TableOfSymbols.addSymbol(ctx.getStart(), identifier, true, type, 0, false);
+
+            }else {
+                if (Validators.isArrayHere(value)) {// reseni prirazeni pole
+                    //TODO: dosazeni promenne v poli
+
+                }else {// reseni prirazeni pole
+                    if (Validators.validateType(type, value)) {
+                        EInstructionSet.handleVariables(value, ctx.getStart(), type);
+                        TableOfSymbols.addSymbol(ctx.getStart(), identifier, true, type, 0, false);
+                    }
+                }
+            }
+
+
+        }else {
+            TableOfSymbols.addSymbol(ctx.getStart(), identifier, true, type, 0, false, true);
         }
 
-        String arrSize = ctx.DigitSequence().getText();
-
-        values.add(Integer.parseInt(arrSize));
-        variables.add(ctx.Identifier().toString().substring(1, ctx.Identifier().toString().length() - 1));
-
-        return TableOfSymbols.addSymbol(ctx.getStart(), variables.get(0), true, 0, type, (int)values.get(0), false, null);
     }
 
+    private void innerMultipleAssigment(ParseTree child, Token token, String type) {
+        if (child.getChildCount() != 1) {
+            if (child.getChild(1).getText().equals("=")) {
+                String left = child.getChild(0).getText();
+                String right = child.getChild(2).getText();
+
+                if (child.getChildCount() > 1) {
+                    resolveMathProblems(child.getChild(2), token, 0);
+                    TableOfSymbols.addSymbol(token, left, true, type, 0, false);
+
+                }else {
+                    EInstructionSet.handleVariables(right, token, type);
+                    TableOfSymbols.addSymbol(token, left, true, type, 0, false);
+                }
+
+            }else {
+                innerMultipleAssigment(child.getChild(0), token, type);
+                innerMultipleAssigment(child.getChild(2), token, type);
+            }
+        }else {
+            String identifier = child.getText();
+            TableOfSymbols.addSymbol(token, identifier, true, type, 0, false, true);
+        }
+    }
 
     /**
      * resi problem se zavorkami (zatim jen cisla)
@@ -139,62 +150,29 @@ public class DeclarationTranslate {
                     nextChild = nextChild.getChild(1);
                 }else {
 
-                    String result = resolveMathProblems(nextChild.getChild(0), ctx, depth + 1);
+                    String left = resolveMathProblems(nextChild.getChild(0), ctx, depth + 1);
                     String sign = nextChild.getChild(1).getText();
                     String right = resolveMathProblems(nextChild.getChild(2), ctx, depth + 1);
+                    System.out.println(left + "------------" + sign + "-----------" + right);
+                    loadValue(left, ctx);
+                    loadValue(right, ctx);
 
-                    String num1 = TypeConvertor.convertIntegerType(ctx, result);
-                    if (num1 != null) {
-                        TableOfCodes.addCode(EInstructionSet.LITERAL, num1);
-                    }
+                    EOperationCodes.doOperation(sign);
 
-                    res = getResult(result, right, sign, ctx);
                     return res;
                 }
             }
 
         }
+
         return res;
     }
 
-    private String getResult(String leftNumber, String rightNumber, String sign, Token ctx ){
-        String num1 = TypeConvertor.convertIntegerType(ctx, leftNumber);
-        String num2 = TypeConvertor.convertIntegerType(ctx, rightNumber);
-        if (num1 == null || num2 == null) {
-            return "0";
+    private void loadValue(String value, Token token){
+        if (!value.equals("")) {
+            EInstructionSet.loadIntegerVariable(value, token);
         }
-
-        int left = Integer.parseInt(num1);
-        int right = Integer.parseInt(num2);
-        int result = 0;
-        switch (sign) {
-            case "+": {
-                result = left + right;
-                TableOfCodes.addCode(EInstructionSet.OPERATION, EOperationCodes.PLUS.getOperationName());
-            }break;
-
-            case "-": {
-                result = left - right;
-                TableOfCodes.addCode(EInstructionSet.OPERATION, EOperationCodes.MINUS.getOperationName());
-            }break;
-
-            case "*": {
-                result = left * right;
-                TableOfCodes.addCode(EInstructionSet.OPERATION, EOperationCodes.MULLTIPLY.getOperationName());
-            }break;
-
-            case "/": {
-                result = left / right;
-                TableOfCodes.addCode(EInstructionSet.OPERATION, EOperationCodes.DIVIDE.getOperationName());
-            }break;
-
-            case "%": {
-                result = left / right;
-                TableOfCodes.addCode(EInstructionSet.OPERATION, EOperationCodes.MODULO.getOperationName());
-            }break;
-        }
-
-        return String.valueOf(result);
     }
+
 
 }

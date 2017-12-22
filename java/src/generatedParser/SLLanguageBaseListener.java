@@ -2,7 +2,9 @@
 package generatedParser;
 
 import createFilePL0.CreateFile;
+import elements.ArrayDeclarationTranslate;
 import enums.EInstructionSet;
+import enums.EOperationCodes;
 import tableClasses.TableOfCodes;
 import elements.DeclarationTranslate;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -22,8 +24,8 @@ public class SLLanguageBaseListener implements SLLanguageListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterCompilationUnit(SLLanguageParser.CompilationUnitContext ctx) {
-		TableOfCodes.addCode(EInstructionSet.JUMP, 0, "1");
-
+		EInstructionSet.doInstruction(EInstructionSet.JUMP, 1);
+		EInstructionSet.doInstruction(EInstructionSet.INT, 1);
 	}
 	/**
 	 * {@inheritDoc}
@@ -31,7 +33,7 @@ public class SLLanguageBaseListener implements SLLanguageListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCompilationUnit(SLLanguageParser.CompilationUnitContext ctx) {
-		TableOfCodes.addCode(EInstructionSet.RETURN, 0, "0");
+		EInstructionSet.doInstruction(EInstructionSet.RETURN, 0);
 		CreateFile createFile = new CreateFile(TableOfSymbols.filepath);
 		createFile.writeToFile(TableOfCodes.createString());
 		createFile.close();
@@ -79,7 +81,7 @@ public class SLLanguageBaseListener implements SLLanguageListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterArrayDeclaration(SLLanguageParser.ArrayDeclarationContext ctx) {
-		DeclarationTranslate declarationTranslate = new DeclarationTranslate();
+		ArrayDeclarationTranslate declarationTranslate = new ArrayDeclarationTranslate();
 		declarationTranslate.doArrayDeclaration(ctx);
 	}
 	/**

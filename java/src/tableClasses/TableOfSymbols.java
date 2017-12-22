@@ -2,6 +2,8 @@ package tableClasses;
 
 import Convertor.TypeConvertor;
 import enums.EErrorCodes;
+import enums.EInstructionSet;
+import jdk.nashorn.internal.ir.Symbol;
 import org.antlr.v4.runtime.Token;
 
 import java.util.ArrayList;
@@ -23,12 +25,12 @@ public class TableOfSymbols {
     public static String filepath = "";
 
     public static class Symbol {
-        private String name, variableType, value;
+        private String name, variableType;
         private boolean isVariable, isConst;
         private int level, address, size, parentID, objectID;
 
         public Symbol(int parentID, int objectID, String name, boolean isVariable, int level, int address,
-                                                    String variableType, int size, boolean isConst, String value){
+                                                    String variableType, int size, boolean isConst){
 
             this.name = name;
             this.isVariable = isVariable;
@@ -37,10 +39,8 @@ public class TableOfSymbols {
             this.variableType = variableType;
             this.size = size;
             this.isConst = isConst;
-            this.value = value;
             this.parentID = parentID;
             this.objectID = objectID;
-
         }
 
         public int getLevel() {
@@ -79,12 +79,9 @@ public class TableOfSymbols {
             return parentID;
         }
 
-        public String getValue() {
-            return value;
-        }
     }
 
-    public static boolean addSymbol(Token ctxToken, String name, boolean isVariable, int address, String variableType, int size, boolean isConst, String value){
+    public static boolean addSymbol(Token ctxToken, String name, boolean isVariable, String variableType, int size, boolean isConst){
 
         if (findByNameActLevel(name, isVariable) != null) {
             ErrorHandle.addError(EErrorCodes.VARIABLE_EXISTS,
@@ -92,27 +89,60 @@ public class TableOfSymbols {
             return false;
         }
 
-        String newValue = value;
-        if (value != null) {
-            newValue = TypeConvertor.convertteValue(ctxToken,variableType, value);
-            if (newValue == null) {
-                ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH,
-                        ctxToken.getLine(), ctxToken.getCharPositionInLine());
-                return false;
-            }
-
-            if(variableType.equals(TypeConvertor.VARIABLE_TYPE_STRING)){
-                size = newValue.length() - 1;
-            }
-        }
-
-
-
-
-        if (!tableOfSymbols.add(new Symbol(parentID, objectID, name, isVariable, actualLevel, address, variableType, size, isConst, newValue))) {
+        int address = getNextSymbolVariableAddress();
+        if (!tableOfSymbols.add(new Symbol(parentID, objectID, name, isVariable, actualLevel, address, variableType, size, isConst))) {
             ErrorHandle.addError(EErrorCodes.UNKNOW_ERROR,
                     ctxToken.getLine(), ctxToken.getCharPositionInLine());
+            return false;
         }
+
+        if (isVariable) {
+            EInstructionSet.doInstruction(EInstructionSet.STORE, address);
+        }
+
+        return true;
+    }
+
+    public static boolean addSymbol(Token ctxToken, String name, boolean isVariable, String variableType, int size, boolean isConst, boolean isEmpty){
+
+        if (findByNameActLevel(name, isVariable) != null) {
+            ErrorHandle.addError(EErrorCodes.VARIABLE_EXISTS,
+                    ctxToken.getLine(), ctxToken.getCharPositionInLine());
+            return false;
+        }
+
+        int address = getNextSymbolVariableAddress();
+        if (!tableOfSymbols.add(new Symbol(parentID, objectID, name, isVariable, actualLevel, address, variableType, size, isConst))) {
+            ErrorHandle.addError(EErrorCodes.UNKNOW_ERROR,
+                    ctxToken.getLine(), ctxToken.getCharPositionInLine());
+            return false;
+        }
+
+        if (isVariable && !isEmpty) {
+            EInstructionSet.doInstruction(EInstructionSet.STORE, address);
+        }
+
+        return true;
+    }
+
+    public static boolean addSymbol(Token ctxToken, String name, boolean isVariable, int address, String variableType, int size, boolean isConst){
+
+        if (findByNameActLevel(name, isVariable) != null) {
+            ErrorHandle.addError(EErrorCodes.VARIABLE_EXISTS,
+                    ctxToken.getLine(), ctxToken.getCharPositionInLine());
+            return false;
+        }
+
+        if (!tableOfSymbols.add(new Symbol(parentID, objectID, name, isVariable, actualLevel, address, variableType, size, isConst))) {
+            ErrorHandle.addError(EErrorCodes.UNKNOW_ERROR,
+                    ctxToken.getLine(), ctxToken.getCharPositionInLine());
+            return false;
+        }
+
+        if (isVariable) {
+            EInstructionSet.doInstruction(EInstructionSet.STORE, address);
+        }
+
         return true;
     }
 
@@ -137,12 +167,17 @@ public class TableOfSymbols {
 
     public static Symbol findByNameAllLevels(String name, boolean isVariable){
 
-        int parent = -1;
+        int parent = parentID;
         int object = objectID;
         int pomObject = -1;
+        boolean lastRound = true;
 
-        while (parent != -1) {
-            for (Symbol symbol : tableOfSymbols){
+        while (lastRound) {
+            if (parent == -1) {
+                lastRound = false;
+            }
+            for (int i = 0; i < tableOfSymbols.size(); i++) {
+                Symbol symbol = tableOfSymbols.get(i);
 
                 if(symbol.getObjectID() == object) {
                     parent = symbol.getParentID();
@@ -206,7 +241,21 @@ public class TableOfSymbols {
         return tableOfSymbols.get(tableOfSymbols.size() - 1);
     }
 
-    public static ArrayList getLastSymbolValue(){
-        return TypeConvertor.convertValuesToInt(getLastSymbol());
+
+
+    public static int getNextSymbolVariableAddress(){
+        Symbol symbol = null;
+        for (Symbol sym : tableOfSymbols){
+            if (sym.getObjectID() == objectID && (sym.isVariable())){
+                symbol = sym;
+            }
+        }
+
+        if (symbol == null) {
+            return 3;
+        }else {
+            return symbol.getAddress() + symbol.getSize() + 1;
+        }
+
     }
 }

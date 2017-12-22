@@ -24,6 +24,7 @@ public class Main {
         //2) run with gramatic files in generated parser
 
         TableOfSymbols.filepath = "testFile.sll";
+        //TableOfSymbols.filepath = "testZavorek.sll";
         File file = new File(TableOfSymbols.filepath);
 
 

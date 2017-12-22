@@ -1,8 +1,10 @@
 package Convertor;
 
 import enums.EErrorCodes;
+import enums.EInstructionSet;
 import org.antlr.v4.runtime.Token;
 import tableClasses.ErrorHandle;
+import tableClasses.TableOfCodes;
 import tableClasses.TableOfSymbols;
 
 import java.util.ArrayList;
@@ -11,29 +13,42 @@ import java.util.ArrayList;
  * Created by BobrZlosyn on 22.12.2017.
  */
 public class TypeConvertor {
-    public static final String VARIABLE_TYPE_STRING = "string";
-    public static final String VARIABLE_TYPE_INT = "int";
-    public static final String VARIABLE_TYPE_BOOLEAN = "boolean";
-    public static final String VARIABLE_TYPE_ARRAY = "array";
 
-    public static String convertteValue(Token ctxToken, String variableType, String value) {
+/*
+    public static boolean validateValue(Token ctxToken, String variableType, String value) {
         switch (variableType){
             case VARIABLE_TYPE_STRING: {
+                char startChar = value.charAt(0);
+                char endChar = value.charAt(value.length() - 1);
+                if(startChar == '"' && endChar == '"') {
+                    return value;
+                }
+
                 return convertStringType(ctxToken, value);
             }
             case VARIABLE_TYPE_INT: {
-                return convertIntegerType(ctxToken, value);
+                if( Validators.isInteger(value)) {
+                    return true;
+                }
+
+                return validateName(ctxToken, value, variableType);
             }
             case VARIABLE_TYPE_BOOLEAN: {
-                return convertBooleanType(ctxToken, value);
+                if(Validators.isBoolean(value)) {
+                    return true;
+                }
+
+                return validateName(ctxToken, value, variableType);
             }
             default: {
-                return null;
+                return false;
             }
         }
     }
+*/
 
-    public static String convertStringType(Token ctxToken, String value){
+/*
+    public static String validateStringType(Token ctxToken, String value){
 
         if(Validators.isVariableName(value)) {
             TableOfSymbols.Symbol variable = TableOfSymbols.findByNameAllLevels(value, true);
@@ -57,7 +72,7 @@ public class TypeConvertor {
         }
     }
 
-    public static String convertIntegerType(Token ctxToken, String value){
+    public static String validateIntegerType(Token ctxToken, String value){
 
         if(Validators.isVariableName(value)) {
             TableOfSymbols.Symbol variable = TableOfSymbols.findByNameAllLevels(value, true);
@@ -92,7 +107,7 @@ public class TypeConvertor {
         }
     }
 
-    public static String convertBooleanType(Token ctxToken, String value){
+    public static String validateBooleanType(Token ctxToken, String value){
 
         if(Validators.isBoolean(value)) {
             return value.equals("false") ? String.valueOf(0) : String.valueOf(1);
@@ -137,7 +152,7 @@ public class TypeConvertor {
     }
 
 
-    public static ArrayList convertValuesToInt(TableOfSymbols.Symbol symbol){
+    public static ArrayList validateValuesToInt(TableOfSymbols.Symbol symbol){
         ArrayList values = new ArrayList();
 
         switch (symbol.getVariableType()){
@@ -160,5 +175,5 @@ public class TypeConvertor {
             }
         }
         return values;
-    }
+    }*/
 }
