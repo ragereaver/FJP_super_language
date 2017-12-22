@@ -83,7 +83,7 @@ public class DeclarationTranslate {
 
             if(Validators.isDimHere(value)) { // reseni zavorkovych vyrazu
                 resolveMathProblems(assignmentExpCtx, ctx.getStart(), 0);
-                TableOfSymbols.addSymbol(ctx.getStart(), identifier, true, type, 0, false);
+                TableOfSymbols.addSymbolVariable(ctx.getStart(), identifier, type, 0);
 
             }else {
                 if (Validators.isArrayHere(value)) {// reseni prirazeni pole
@@ -92,7 +92,7 @@ public class DeclarationTranslate {
                 }else {// reseni prirazeni pole
                     if (Validators.validateType(type, value)) {
                         EInstructionSet.handleVariables(value, ctx.getStart(), type);
-                        TableOfSymbols.addSymbol(ctx.getStart(), identifier, true, type, 0, false);
+                        TableOfSymbols.addSymbolVariable(ctx.getStart(), identifier, type, 0);
                     }
                 }
             }
@@ -112,11 +112,11 @@ public class DeclarationTranslate {
 
                 if (child.getChildCount() > 1) {
                     resolveMathProblems(child.getChild(2), token, 0);
-                    TableOfSymbols.addSymbol(token, left, true, type, 0, false);
+                    TableOfSymbols.addSymbolVariable(token, left, type, 0);
 
                 }else {
                     EInstructionSet.handleVariables(right, token, type);
-                    TableOfSymbols.addSymbol(token, left, true, type, 0, false);
+                    TableOfSymbols.addSymbolVariable(token, left, type, 0);
                 }
 
             }else {

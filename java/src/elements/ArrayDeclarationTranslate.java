@@ -38,6 +38,6 @@ public class ArrayDeclarationTranslate {
         variables.add(ctx.Identifier().toString().substring(1, ctx.Identifier().toString().length() - 1));
         type +=  "[]";
 
-        return TableOfSymbols.addSymbol(ctx.getStart(), variables.get(0), true, type, (int)values.get(0), false);
+        return TableOfSymbols.addSymbolVariable(ctx.getStart(), variables.get(0), type, (int)values.get(0));
     }
 }

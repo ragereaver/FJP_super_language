@@ -23,10 +23,13 @@ public class Main {
         //1) load file
         //2) run with gramatic files in generated parser
 
-        TableOfSymbols.filepath = "testFile.sll";
+        TableOfSymbols.filepath = "testFiles/testPole.sll";
         //TableOfSymbols.filepath = "testZavorek.sll";
         File file = new File(TableOfSymbols.filepath);
-
+        if (!file.exists() || file.isDirectory()) {
+            System.err.println("File wasnt found!");
+            return;
+        }
 
         CharStream input = CharStreams.fromFileName(file.getPath());
         SLLanguageLexer lexer = new SLLanguageLexer(input);

@@ -21,7 +21,6 @@ int function neee(int first, int second){
 
 
 
-int [] pole = new int [5];
 
 int b = pole [2];
 

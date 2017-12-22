@@ -1,16 +1,9 @@
 // Generated from D:/projekty/FJP_super_language\SLLanguage.g4 by ANTLR 4.7
 package generatedParser;
 
-import createFilePL0.CreateFile;
-import elements.ArrayDeclarationTranslate;
-import enums.EInstructionSet;
-import enums.EOperationCodes;
-import tableClasses.TableOfCodes;
-import elements.DeclarationTranslate;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import tableClasses.TableOfSymbols;
 
 /**
  * This class provides an empty implementation of {@link SLLanguageListener},
@@ -23,22 +16,13 @@ public class SLLanguageBaseListener implements SLLanguageListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCompilationUnit(SLLanguageParser.CompilationUnitContext ctx) {
-		EInstructionSet.doInstruction(EInstructionSet.JUMP, 1);
-		EInstructionSet.doInstruction(EInstructionSet.INT, 1);
-	}
+	@Override public void enterCompilationUnit(SLLanguageParser.CompilationUnitContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCompilationUnit(SLLanguageParser.CompilationUnitContext ctx) {
-		EInstructionSet.doInstruction(EInstructionSet.RETURN, 0);
-		CreateFile createFile = new CreateFile(TableOfSymbols.filepath);
-		createFile.writeToFile(TableOfCodes.createString());
-		createFile.close();
-
-	}
+	@Override public void exitCompilationUnit(SLLanguageParser.CompilationUnitContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -80,10 +64,7 @@ public class SLLanguageBaseListener implements SLLanguageListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArrayDeclaration(SLLanguageParser.ArrayDeclarationContext ctx) {
-		ArrayDeclarationTranslate declarationTranslate = new ArrayDeclarationTranslate();
-		declarationTranslate.doArrayDeclaration(ctx);
-	}
+	@Override public void enterArrayDeclaration(SLLanguageParser.ArrayDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -95,21 +76,13 @@ public class SLLanguageBaseListener implements SLLanguageListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) {
-		TableOfSymbols.setLevel(true);
-		System.out.println("zacatek funkce");
-		System.out.println(ctx.getText());
-	}
+	@Override public void enterFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) {
-		TableOfSymbols.setLevel(false);
-		System.out.println("konec funkce");
-		System.out.println();
-	}
+	@Override public void exitFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -163,21 +136,13 @@ public class SLLanguageBaseListener implements SLLanguageListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCycle(SLLanguageParser.CycleContext ctx) {
-		TableOfSymbols.setLevel(true);
-		System.out.println("zacatek cyklu");
-		System.out.println(ctx.getText());
-	}
+	@Override public void enterCycle(SLLanguageParser.CycleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCycle(SLLanguageParser.CycleContext ctx) {
-		TableOfSymbols.setLevel(false);
-		System.out.println("konec cyklu");
-		System.out.println();
-	}
+	@Override public void exitCycle(SLLanguageParser.CycleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -255,11 +220,7 @@ public class SLLanguageBaseListener implements SLLanguageListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclaration(SLLanguageParser.DeclarationContext ctx) {
-		DeclarationTranslate declarationTranslate = new DeclarationTranslate();
-		declarationTranslate.doStandardDeclaration(ctx);
-		System.out.println("deklarace");
-	}
+	@Override public void enterDeclaration(SLLanguageParser.DeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

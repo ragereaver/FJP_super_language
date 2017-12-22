@@ -1,6 +1,7 @@
 package tableClasses;
 
 import Convertor.TypeConvertor;
+import Convertor.Validators;
 import enums.EErrorCodes;
 import enums.EInstructionSet;
 import jdk.nashorn.internal.ir.Symbol;
@@ -81,29 +82,25 @@ public class TableOfSymbols {
 
     }
 
-    public static boolean addSymbol(Token ctxToken, String name, boolean isVariable, String variableType, int size, boolean isConst){
+    public static boolean addSymbolConst(Token ctxToken, String name, String variableType, int size){
 
-        if (findByNameActLevel(name, isVariable) != null) {
-            ErrorHandle.addError(EErrorCodes.VARIABLE_EXISTS,
-                    ctxToken.getLine(), ctxToken.getCharPositionInLine());
-            return false;
-        }
+        return addSymbol(ctxToken, name, true, getNextSymbolVariableAddress(), variableType, size, true, false);
+    }
 
-        int address = getNextSymbolVariableAddress();
-        if (!tableOfSymbols.add(new Symbol(parentID, objectID, name, isVariable, actualLevel, address, variableType, size, isConst))) {
-            ErrorHandle.addError(EErrorCodes.UNKNOW_ERROR,
-                    ctxToken.getLine(), ctxToken.getCharPositionInLine());
-            return false;
-        }
+    public static boolean addSymbolVariable(Token ctxToken, String name, String variableType, int size){
 
-        if (isVariable) {
-            EInstructionSet.doInstruction(EInstructionSet.STORE, address);
-        }
+        return addSymbol(ctxToken, name, true, getNextSymbolVariableAddress(), variableType, size, false, false);
+    }
 
-        return true;
+    public static boolean addSymbolFunction(Token ctxToken, String name, String variableType, int size){
+        return addSymbol(ctxToken, name, false, getNextSymbolVariableAddress(), variableType, size, false, false);
     }
 
     public static boolean addSymbol(Token ctxToken, String name, boolean isVariable, String variableType, int size, boolean isConst, boolean isEmpty){
+        return addSymbol(ctxToken, name, isVariable, getNextSymbolVariableAddress(), variableType, size, isConst, isEmpty);
+    }
+
+    public static boolean addSymbol(Token ctxToken, String name, boolean isVariable, int address, String variableType, int size, boolean isConst, boolean isEmpty){
 
         if (findByNameActLevel(name, isVariable) != null) {
             ErrorHandle.addError(EErrorCodes.VARIABLE_EXISTS,
@@ -111,40 +108,39 @@ public class TableOfSymbols {
             return false;
         }
 
-        int address = getNextSymbolVariableAddress();
+        System.out.println("VKLADAMA DO TABLE_OF_SYMBOLS>" + parentID +", " + objectID+", " + name+", " +isVariable +", " + actualLevel+", " + address +", " + variableType +", " + size+", " + isConst );
         if (!tableOfSymbols.add(new Symbol(parentID, objectID, name, isVariable, actualLevel, address, variableType, size, isConst))) {
             ErrorHandle.addError(EErrorCodes.UNKNOW_ERROR,
                     ctxToken.getLine(), ctxToken.getCharPositionInLine());
             return false;
         }
 
-        if (isVariable && !isEmpty) {
-            EInstructionSet.doInstruction(EInstructionSet.STORE, address);
+
+
+
+        if (Validators.isArrayHere(variableType)) {
+
+            TableOfCodes.updateInt(getObjectID(), size);
+            for (int i = 0; i < size; i++) {
+                EInstructionSet.doInstruction(EInstructionSet.LITERAL, 0);
+                EInstructionSet.doInstruction(EInstructionSet.STORE, address + i);
+            }
+
+        }else {
+            if (isVariable) {
+                TableOfCodes.updateInt(getObjectID());
+            }
+
+            if (isVariable && !isEmpty) {
+                EInstructionSet.doInstruction(EInstructionSet.STORE, address);
+            }
         }
+
+
 
         return true;
     }
 
-    public static boolean addSymbol(Token ctxToken, String name, boolean isVariable, int address, String variableType, int size, boolean isConst){
-
-        if (findByNameActLevel(name, isVariable) != null) {
-            ErrorHandle.addError(EErrorCodes.VARIABLE_EXISTS,
-                    ctxToken.getLine(), ctxToken.getCharPositionInLine());
-            return false;
-        }
-
-        if (!tableOfSymbols.add(new Symbol(parentID, objectID, name, isVariable, actualLevel, address, variableType, size, isConst))) {
-            ErrorHandle.addError(EErrorCodes.UNKNOW_ERROR,
-                    ctxToken.getLine(), ctxToken.getCharPositionInLine());
-            return false;
-        }
-
-        if (isVariable) {
-            EInstructionSet.doInstruction(EInstructionSet.STORE, address);
-        }
-
-        return true;
-    }
 
     public static Symbol findByAdress(int address){
         for (Symbol symbol : tableOfSymbols){
@@ -257,5 +253,9 @@ public class TableOfSymbols {
             return symbol.getAddress() + symbol.getSize() + 1;
         }
 
+    }
+
+    public static int getObjectID() {
+        return objectID;
     }
 }
