@@ -1,0 +1,15 @@
+if (ahoj > 5 && ahoj < 12) {
+    c = (10 > ahoj) ? b = 5 : b = 1;
+}
+
+switch (5) {
+    case 5: b = 3; break;
+    case 4: b = 2; break;
+    default: b = 5;
+}
+
+int i;
+i = 22;
+for (i = 0; i < 5; i++) {
+    ahoj = 5 * i + ahoj;
+}

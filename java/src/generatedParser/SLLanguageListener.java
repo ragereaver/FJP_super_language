@@ -48,6 +48,16 @@ public interface SLLanguageListener extends ParseTreeListener {
 	 */
 	void exitConstDeclaration(SLLanguageParser.ConstDeclarationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SLLanguageParser#constValues}.
+	 * @param ctx the parse tree
+	 */
+	void enterConstValues(SLLanguageParser.ConstValuesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SLLanguageParser#constValues}.
+	 * @param ctx the parse tree
+	 */
+	void exitConstValues(SLLanguageParser.ConstValuesContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SLLanguageParser#arrayDeclaration}.
 	 * @param ctx the parse tree
 	 */

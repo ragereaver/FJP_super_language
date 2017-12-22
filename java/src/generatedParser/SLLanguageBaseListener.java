@@ -64,6 +64,18 @@ public class SLLanguageBaseListener implements SLLanguageListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterConstValues(SLLanguageParser.ConstValuesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConstValues(SLLanguageParser.ConstValuesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterArrayDeclaration(SLLanguageParser.ArrayDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}

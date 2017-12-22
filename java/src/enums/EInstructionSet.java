@@ -22,12 +22,12 @@ public enum EInstructionSet {
         RETURN("RET"),
 
         //ROZSIRENA SADA
-        NEW("NEW"),
-        DELETE("DEL"),
-        LOAD_ADD("LDA"), //ABSOLUTNI ADRESA
-        STORE_ADD("STA"), //ABSOLUTNI ADRESA
-        LOAD_ADD_LEVEL("PLD"), //load a store na zadanou adresu L, A
-        STORE_ADD_LEVEL("PST"), //load a store na zadanou adresu L, A
+        NEW("NEW"), //alokace 1 bunky pameti, na zasobnik jeji adresa */
+        DELETE("DEL"), //dealokace 1 bunky pameti, jeji adresa na vrcholu zasobniku */
+        LOAD_ADD("LDA"), //na vrchol zasobniku data z adresy uvedene na vrcholu zasobniku */
+        STORE_ADD("STA"), //na zasobniku hodnota, adresa -> ulozeni hodnoty na adresu */
+        LOAD_ADD_LEVEL("PLD"), //na zasobniku L, A -> na vrchol hodnota z (L, A) */
+        STORE_ADD_LEVEL("PST"), //na zasobnkku X, L, A -> na adresu (L, A) se ulozi X */
         ;
 
         private final String instructionName;
@@ -48,23 +48,27 @@ public enum EInstructionSet {
                 TableOfCodes.addCode(instruction, level, String.valueOf(address));
         }
 
-        public static boolean loadIntegerVariable (String variable, Token token){
+        private static boolean loadVariableName(String variable, Token token, String type){
+                TableOfSymbols.Symbol sym = TableOfSymbols.findByNameAllLevels(variable, true);
+                if (sym == null) {
+                    ErrorHandle.addError(EErrorCodes.VARIABLE_DOESNT_EXIST,
+                            token.getLine(), token.getCharPositionInLine());
+                    return false;
+                }
+
+                if (!sym.getVariableType().equals(type)){
+                    ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH,
+                            token.getLine(), token.getCharPositionInLine());
+                    return false;
+                }
+
+                doInstruction(EInstructionSet.LOAD, sym.getLevel(), sym.getAddress());
+                return true;
+        }
+
+        public static boolean loadIntegerVariable (String variable, Token token, String type){
                 if (Validators.isVariableName(variable)){
-                        TableOfSymbols.Symbol sym = TableOfSymbols.findByNameAllLevels(variable, true);
-                        if (sym == null) {
-                                ErrorHandle.addError(EErrorCodes.VARIABLE_DOESNT_EXIST,
-                                        token.getLine(), token.getCharPositionInLine());
-                                return false;
-                        }
-
-                        if (!sym.getVariableType().equals(Validators.VARIABLE_TYPE_INT)){
-                                ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH,
-                                        token.getLine(), token.getCharPositionInLine());
-                                return false;
-                        }
-
-                        doInstruction(EInstructionSet.LOAD, sym.getLevel(), sym.getAddress());
-                        return true;
+                        return loadVariableName(variable, token, type);
                 } else {
                         if (Validators.isInteger(variable)) {
                                 TableOfCodes.addCode(EInstructionSet.LITERAL, variable);
@@ -76,23 +80,9 @@ public enum EInstructionSet {
             return false;
         }
 
-        public static boolean loadStringVariable (String variable, Token token){
+        public static boolean loadStringVariable (String variable, Token token, String type){
                 if (Validators.isVariableName(variable)){
-                        TableOfSymbols.Symbol sym = TableOfSymbols.findByNameAllLevels(variable, true);
-                        if (sym == null) {
-                                ErrorHandle.addError(EErrorCodes.VARIABLE_DOESNT_EXIST,
-                                        token.getLine(), token.getCharPositionInLine());
-                                return false;
-                        }
-
-                        if (!sym.getVariableType().equals(Validators.VARIABLE_TYPE_STRING)){
-                                ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH,
-                                        token.getLine(), token.getCharPositionInLine());
-                                return false;
-                        }
-
-                        doInstruction(EInstructionSet.LOAD, sym.getLevel(), sym.getAddress());
-                        return true;
+                    return loadVariableName(variable, token, type);
                 } else {
                         if (Validators.isString(variable)) {
                                 TableOfCodes.addCode(EInstructionSet.LITERAL, variable);
@@ -103,23 +93,9 @@ public enum EInstructionSet {
             return false;
         }
 
-        public static boolean loadBooleanVariable (String variable, Token token){
+        public static boolean loadBooleanVariable (String variable, Token token, String type){
                 if (Validators.isVariableName(variable)){
-                        TableOfSymbols.Symbol sym = TableOfSymbols.findByNameAllLevels(variable, true);
-                        if (sym == null) {
-                                ErrorHandle.addError(EErrorCodes.VARIABLE_DOESNT_EXIST,
-                                        token.getLine(), token.getCharPositionInLine());
-                                return false;
-                        }
-
-                        if (!sym.getVariableType().equals(Validators.VARIABLE_TYPE_BOOLEAN)){
-                                ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH,
-                                        token.getLine(), token.getCharPositionInLine());
-                                return false;
-                        }
-
-                        doInstruction(EInstructionSet.LOAD, sym.getLevel(), sym.getAddress());
-                        return true;
+                    return loadVariableName(variable, token, type);
                 } else {
                     if (Validators.isBoolean(variable)) {
                         TableOfCodes.addCode(EInstructionSet.LITERAL, variable);
@@ -130,7 +106,7 @@ public enum EInstructionSet {
             return false;
         }
 
-        public static boolean loadIntegerArrayVariable (String variable, Token token, String index){
+        public static boolean loadArrayVariable (String variable, Token token, String index, String type){
             if (Validators.isVariableName(variable)){
                 TableOfSymbols.Symbol sym = TableOfSymbols.findByNameAllLevels(variable, true);
                 if (sym == null) {
@@ -139,56 +115,43 @@ public enum EInstructionSet {
                     return false;
                 }
 
-                if (!sym.getVariableType().equals(Validators.VARIABLE_TYPE_ARRAY_INT)){
+                if (!sym.getVariableType().equals(type)){
                     ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH,
                             token.getLine(), token.getCharPositionInLine());
                     return false;
                 }
 
-                int ind = 0;
+                int ind = -1;
                 if (Validators.isInteger(index)) {
                     ind = Integer.parseInt(index);
-                    if (ind + sym.getAddress() > sym.getSize()) {
-                        ErrorHandle.addError(EErrorCodes.OUT_OF_ARRAY,
+                }
+
+                if (Validators.isVariableName(index)) {
+                    TableOfSymbols.Symbol indexSym = TableOfSymbols.findByNameAllLevels(variable, true);
+                    if (indexSym != null) {
+                        if (indexSym.getVariableType().equals(Validators.VARIABLE_TYPE_INT)) {
+                            doInstruction(EInstructionSet.LOAD, indexSym.getLevel(), indexSym.getAddress());
+                            doInstruction(EInstructionSet.LOAD, sym.getLevel(), sym.getAddress());
+                            EOperationCodes.doOperation("+");
+                            doInstruction(EInstructionSet.LOAD_ADD, sym.getLevel(), sym.getAddress());
+                            return true;
+                        }else {
+                            ErrorHandle.addError(EErrorCodes.BAD_INDEX_ARRAY,
+                                    token.getLine(), token.getCharPositionInLine());
+                            return false;
+                        }
+                    }else {
+                        ErrorHandle.addError(EErrorCodes.VARIABLE_DOESNT_EXIST,
                                 token.getLine(), token.getCharPositionInLine());
                         return false;
                     }
                 }
 
-                //TODO: implementace proměnných v poli
-
-                doInstruction(EInstructionSet.LOAD, sym.getLevel(), sym.getAddress() + ind);
-                return true;
-            }
-            return false;
-        }
-
-        public static boolean loadBooleanArrayVariable (String variable, Token token, String index){
-            if (Validators.isVariableName(variable)){
-                TableOfSymbols.Symbol sym = TableOfSymbols.findByNameAllLevels(variable, true);
-                if (sym == null) {
-                    ErrorHandle.addError(EErrorCodes.VARIABLE_DOESNT_EXIST,
+                if (ind < 0 || ind + sym.getAddress() > sym.getSize()) {
+                    ErrorHandle.addError(EErrorCodes.OUT_OF_ARRAY,
                             token.getLine(), token.getCharPositionInLine());
                     return false;
                 }
-
-                if (!sym.getVariableType().equals(Validators.VARIABLE_TYPE_ARRAY_BOOLEAN)){
-                    ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH,
-                            token.getLine(), token.getCharPositionInLine());
-                    return false;
-                }
-
-                int ind = 0;
-                if (Validators.isInteger(index)) {
-                    ind = Integer.parseInt(index);
-                    if (ind + sym.getAddress() > sym.getSize()) {
-                        ErrorHandle.addError(EErrorCodes.OUT_OF_ARRAY,
-                                token.getLine(), token.getCharPositionInLine());
-                        return false;
-                    }
-                }
-
-                //TODO: implementace proměnných v poli
 
                 doInstruction(EInstructionSet.LOAD, sym.getLevel(), sym.getAddress() + ind);
                 return true;
@@ -199,13 +162,13 @@ public enum EInstructionSet {
         public static boolean handleVariables(String variable, Token token, String type) {
             switch (type){
                 case Validators.VARIABLE_TYPE_STRING: {
-                    return loadStringVariable(variable, token);
+                    return loadStringVariable(variable, token, type);
                 }
                 case Validators.VARIABLE_TYPE_INT: {
-                    return loadIntegerVariable(variable, token);
+                    return loadIntegerVariable(variable, token, type);
                 }
                 case Validators.VARIABLE_TYPE_BOOLEAN: {
-                    return loadBooleanVariable(variable, token);
+                    return loadBooleanVariable(variable, token, type);
                 }
 
                 default: {

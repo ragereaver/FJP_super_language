@@ -82,14 +82,14 @@ public class DeclarationTranslate {
             }
 
             if(Validators.isDimHere(value)) { // reseni zavorkovych vyrazu
-                resolveMathProblems(assignmentExpCtx, ctx.getStart(), 0);
+                resolveMathProblems(assignmentExpCtx, ctx.getStart(), 0, type);
                 TableOfSymbols.addSymbolVariable(ctx.getStart(), identifier, type, 0);
 
             }else {
                 if (Validators.isArrayHere(value)) {// reseni prirazeni pole
                     identifier = ctx.initDeclarator().Identifier().getText();
 
-                    resolveMathProblems(ctx.initDeclarator().getChild(2), ctx.getStart(), 0);
+                    resolveMathProblems(ctx.initDeclarator().getChild(2), ctx.getStart(), 0, type);
                     TableOfSymbols.addSymbolVariable(ctx.getStart(), identifier, type, 0);
 
                 }else {// reseni prirazeni pole
@@ -121,7 +121,7 @@ public class DeclarationTranslate {
                 String right = child.getChild(2).getText();
 
                 if (child.getChildCount() > 1) {
-                    resolveMathProblems(child.getChild(2), token, 0);
+                    resolveMathProblems(child.getChild(2), token, 0, type);
                     TableOfSymbols.addSymbolVariable(token, left, type, 0);
 
                 }else {
@@ -146,7 +146,7 @@ public class DeclarationTranslate {
      * @param depth
      * @return
      */
-    private String resolveMathProblems(ParseTree nextChild, Token ctx, int depth ){
+    private String resolveMathProblems(ParseTree nextChild, Token ctx, int depth, String defType ){
         String res = "";
         for(int i = 0; i < 100; i++) {
             if (nextChild.getChildCount() == 1) {
@@ -160,15 +160,15 @@ public class DeclarationTranslate {
                     nextChild = nextChild.getChild(1);
                 }else {
 
-                    String left = resolveMathProblems(nextChild.getChild(0), ctx, depth + 1);
+                    String left = resolveMathProblems(nextChild.getChild(0), ctx, depth + 1, defType);
                     String sign = nextChild.getChild(1).getText();
-                    String right = resolveMathProblems(nextChild.getChild(2), ctx, depth + 1);
+                    String right = resolveMathProblems(nextChild.getChild(2), ctx, depth + 1, defType);
+
                     if (Validators.isArrayHere(sign)){
-                        loadValueFromArray(left, ctx, right);
+                        loadValueFromArray(left, ctx, right, defType);
                     }else {
                         loadValue(left, ctx);
                         loadValue(right, ctx);
-
                         EOperationCodes.doOperation(sign);
                     }
 
@@ -179,7 +179,6 @@ public class DeclarationTranslate {
                     return res;
                 }
             }
-
         }
 
         return res;
@@ -191,9 +190,9 @@ public class DeclarationTranslate {
         }
     }
 
-    private void loadValueFromArray(String value, Token token, String index){
+    private void loadValueFromArray(String value, Token token, String index, String defType){
         if (!value.equals("")) {
-            EInstructionSet.loadIntegerArrayVariable(value, token, index);
+            EInstructionSet.loadArrayVariable(value, token, index, defType);
         }
     }
 }

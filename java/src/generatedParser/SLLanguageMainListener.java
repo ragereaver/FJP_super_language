@@ -2,10 +2,9 @@
 package generatedParser;
 
 import createFilePL0.CreateFile;
-import elements.ArrayDeclarationTranslate;
+import elements.*;
 import enums.EInstructionSet;
 import tableClasses.TableOfCodes;
-import elements.DeclarationTranslate;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -16,7 +15,7 @@ import tableClasses.TableOfSymbols;
  * which can be extended to create a listener which only needs to handle a subset
  * of the available methods.
  */
-public class SLLanguageMainListener implements SLLanguageListener {
+public class SLLanguageMainListener extends SLLanguageBaseListener {
 	/**
 	 * {@inheritDoc}
 	 *
@@ -67,7 +66,10 @@ public class SLLanguageMainListener implements SLLanguageListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConstDeclaration(SLLanguageParser.ConstDeclarationContext ctx) { }
+	@Override public void enterConstDeclaration(SLLanguageParser.ConstDeclarationContext ctx) {
+		ConstantDeclarationTranslate constantDeclarationTranslate = new ConstantDeclarationTranslate();
+		constantDeclarationTranslate.doConstantDeclaration(ctx);
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -164,8 +166,35 @@ public class SLLanguageMainListener implements SLLanguageListener {
 	 */
 	@Override public void enterCycle(SLLanguageParser.CycleContext ctx) {
 		TableOfSymbols.setLevel(true);
-		System.out.println("zacatek cyklu");
-		System.out.println(ctx.getText());
+		System.out.println("--------zacatek cyklu-------");
+		String type = ctx.getChild(0).getText();
+		switch (type) {
+			case "for":{
+				ForTranslate forTranslate = new ForTranslate();
+				forTranslate.runFor(ctx);
+			}; break;
+			case "if":{
+				IfTranslate ifTranslate = new IfTranslate();
+				ifTranslate.runIf(ctx);
+			}; break;
+			case "while":{
+				WhileTranslate whileTranslate = new WhileTranslate();
+				whileTranslate.runWhile(ctx);
+			}; break;
+			case "do":{
+				DoTranslate doTranslate = new DoTranslate();
+				doTranslate.runDo(ctx);
+			}; break;
+			case "until":{
+				UntilTranslate untilTranslate = new UntilTranslate();
+				untilTranslate.runUntil(ctx);
+			}; break;
+			case "switch":{
+				SwitchTranslate switchTranslate = new SwitchTranslate();
+				switchTranslate.runSwitch(ctx);
+			}; break;
+		}
+
 	}
 	/**
 	 * {@inheritDoc}

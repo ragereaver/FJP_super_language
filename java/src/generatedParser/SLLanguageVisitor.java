@@ -35,6 +35,12 @@ public interface SLLanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitConstDeclaration(SLLanguageParser.ConstDeclarationContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SLLanguageParser#constValues}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConstValues(SLLanguageParser.ConstValuesContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SLLanguageParser#arrayDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

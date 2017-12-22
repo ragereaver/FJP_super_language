@@ -19,7 +19,14 @@ allCode
     ;
 
 constDeclaration
-    :   'const' (typeSpecifier) Identifier '=' DigitSequence ';'
+    :   'const' typeSpecifier Identifier '=' constValues ';'
+    ;
+
+constValues
+    :DigitSequence
+    |StringLiteral+
+    |'true'
+    |'false'
     ;
 
 arrayDeclaration
@@ -37,9 +44,7 @@ initList
 
 typeSpecifier
     :   'char'
-    |   'short'
     |   'int'
-    |   'long'
     |   'boolean'
     |   stringSpecifier
     ;
