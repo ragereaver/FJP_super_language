@@ -1,25 +1,34 @@
 package tableClasses;
 
+import Convertor.TypeConvertor;
+import enums.EErrorCodes;
+import org.antlr.v4.runtime.Token;
+
 import java.util.ArrayList;
+import java.util.Stack;
 
 /**
  * Created by BobrZlosyn on 17.12.2017.
  */
 public class TableOfSymbols {
-    public static final String VARIABLE_TYPE_STRING = "string";
-    public static final String VARIABLE_TYPE_INT = "int";
-    public static final String VARIABLE_TYPE_BOOLEAN = "bool";
-    public static final String VARIABLE_TYPE_ARRAY = "array";
 
-    private static ArrayList<Symbols> tableOfSymbols = new ArrayList<>();;
+
+    private static ArrayList <Symbol> tableOfSymbols = new ArrayList<>();
+    private static Stack <Integer> changesInParentID = new Stack<>();
+    private static Stack <Integer> changesInObjectID = new Stack<>();
     private static int actualLevel = 0;
+    private static int parentID = -1;
+    private static int objectID = 0;
+    private static int actObjectID = 0;
+    public static String filepath = "";
 
-    public static class Symbols {
-        private String name, variableType;
+    public static class Symbol {
+        private String name, variableType, value;
         private boolean isVariable, isConst;
-        private int level, address, size;
+        private int level, address, size, parentID, objectID;
 
-        public Symbols(String name, boolean isVariable, int level, int address, String variableType, int size, boolean isConst){
+        public Symbol(int parentID, int objectID, String name, boolean isVariable, int level, int address,
+                                                    String variableType, int size, boolean isConst, String value){
 
             this.name = name;
             this.isVariable = isVariable;
@@ -28,6 +37,10 @@ public class TableOfSymbols {
             this.variableType = variableType;
             this.size = size;
             this.isConst = isConst;
+            this.value = value;
+            this.parentID = parentID;
+            this.objectID = objectID;
+
         }
 
         public int getLevel() {
@@ -57,20 +70,54 @@ public class TableOfSymbols {
         public boolean isConst() {
             return isConst;
         }
+
+        public int getObjectID() {
+            return objectID;
+        }
+
+        public int getParentID() {
+            return parentID;
+        }
+
+        public String getValue() {
+            return value;
+        }
     }
 
-    public static boolean addSymbol(String name, boolean isVariable, int address, String variableType, int size, boolean isConst){
-        for (Symbols symbol : tableOfSymbols){
-            if (symbol.getLevel() == actualLevel && symbol.getName().equals(name) && (isVariable == symbol.isVariable())){
+    public static boolean addSymbol(Token ctxToken, String name, boolean isVariable, int address, String variableType, int size, boolean isConst, String value){
+
+        if (findByNameActLevel(name, isVariable) != null) {
+            ErrorHandle.addError(EErrorCodes.VARIABLE_EXISTS,
+                    ctxToken.getLine(), ctxToken.getCharPositionInLine());
+            return false;
+        }
+
+        String newValue = value;
+        if (value != null) {
+            newValue = TypeConvertor.convertteValue(ctxToken,variableType, value);
+            if (newValue == null) {
+                ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH,
+                        ctxToken.getLine(), ctxToken.getCharPositionInLine());
                 return false;
+            }
+
+            if(variableType.equals(TypeConvertor.VARIABLE_TYPE_STRING)){
+                size = newValue.length() - 1;
             }
         }
 
-        return tableOfSymbols.add(new Symbols(name, isVariable, actualLevel, address, variableType, size, isConst));
+
+
+
+        if (!tableOfSymbols.add(new Symbol(parentID, objectID, name, isVariable, actualLevel, address, variableType, size, isConst, newValue))) {
+            ErrorHandle.addError(EErrorCodes.UNKNOW_ERROR,
+                    ctxToken.getLine(), ctxToken.getCharPositionInLine());
+        }
+        return true;
     }
 
-    public static Symbols findByAdress(int address){
-        for (Symbols symbol : tableOfSymbols){
+    public static Symbol findByAdress(int address){
+        for (Symbol symbol : tableOfSymbols){
             if (symbol.getAddress() == address){
                 return symbol;
             }
@@ -78,11 +125,36 @@ public class TableOfSymbols {
         return null;
     }
 
-    public static Symbols findByName(String name, boolean isVariable, int level){
-        for (Symbols symbol : tableOfSymbols){
-            if (symbol.getLevel() == level && symbol.getName().equals(name) && (isVariable == symbol.isVariable())){
+    public static Symbol findByNameActLevel(String name, boolean isVariable){
+        for (Symbol symbol : tableOfSymbols){
+            if (symbol.getObjectID() == objectID && symbol.getName().equals(name) && (isVariable == symbol.isVariable())){
                 return symbol;
             }
+        }
+
+        return null;
+    }
+
+    public static Symbol findByNameAllLevels(String name, boolean isVariable){
+
+        int parent = -1;
+        int object = objectID;
+        int pomObject = -1;
+
+        while (parent != -1) {
+            for (Symbol symbol : tableOfSymbols){
+
+                if(symbol.getObjectID() == object) {
+                    parent = symbol.getParentID();
+                    pomObject = symbol.getObjectID();
+
+                    if (symbol.getName().equals(name) && (isVariable == symbol.isVariable())){
+                        return symbol;
+                    }
+                }
+            }
+
+            object = pomObject;
         }
 
         return null;
@@ -101,11 +173,24 @@ public class TableOfSymbols {
 
     public static void setLevel(boolean isDeeper){
         if(isDeeper) {
+            if(parentID == 0) {
+                changesInParentID.push(parentID);
+                parentID = objectID;
+
+            }else {
+                parentID++;
+                changesInParentID.push(-1);
+            }
+
+            changesInObjectID.push(objectID);
+            objectID = ++actObjectID;
             actualLevel++;
+
         }else {
             actualLevel--;
+            parentID = changesInParentID.pop();
+            objectID = changesInObjectID.pop();
         }
-
     }
 
     public static int getActualLevel() {
@@ -115,5 +200,13 @@ public class TableOfSymbols {
     public static int getParentLevel() {
         int parentLevel = getActualLevel() - 1;
         return (parentLevel > 0) ? parentLevel : 0;
+    }
+
+    public static Symbol getLastSymbol(){
+        return tableOfSymbols.get(tableOfSymbols.size() - 1);
+    }
+
+    public static ArrayList getLastSymbolValue(){
+        return TypeConvertor.convertValuesToInt(getLastSymbol());
     }
 }

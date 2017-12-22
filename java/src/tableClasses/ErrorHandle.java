@@ -24,7 +24,7 @@ public class ErrorHandle {
 
         @Override
         public String toString() {
-            return "Warning: At line " + line + ":" + character + " - " + code.getErrorMessage() + " " + additionalMsg;
+            return "Warning: At line " + line + ":" + character + " - " + code.getErrorMessage() + " " + additionalMsg + "\n";
         }
     }
 

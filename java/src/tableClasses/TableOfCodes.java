@@ -14,10 +14,10 @@ public class TableOfCodes {
     public static class Code {
         private EInstructionSet code;
         private int level;
-        private int value;
+        private String value;
         private int index;
 
-        public Code (EInstructionSet code, int level, int value, int index) {
+        public Code (EInstructionSet code, int level, String value, int index) {
             this.code = code;
             this.level = level;
             this.value = value;
@@ -32,11 +32,11 @@ public class TableOfCodes {
             return code;
         }
 
-        public int getValue() {
+        public String getValue() {
             return value;
         }
 
-        public void setValue(int value) {
+        public void setValue(String value) {
             this.value = value;
         }
 
@@ -46,11 +46,14 @@ public class TableOfCodes {
         }
     }
 
-    public static  void addCode (EInstructionSet code, int level, int value) {
+    public static  void addCode (EInstructionSet code, int level, String value) {
         tableOfCodes.add(new Code(code, level, value, tableOfCodes.size()));
     }
 
-    public static void updateCode (int index, int value) {
+    public static  void addCode (EInstructionSet code, String value) {
+        tableOfCodes.add(new Code(code, TableOfSymbols.getActualLevel(), value, tableOfCodes.size()));
+    }
+    public static void updateCode (int index, String value) {
         tableOfCodes.get(index).setValue(value);
     }
 

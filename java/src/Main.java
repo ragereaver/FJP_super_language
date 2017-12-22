@@ -1,3 +1,4 @@
+import Convertor.TypeConvertor;
 import createFilePL0.CreateFile;
 import elements.FunctionTranslate;
 import generatedParser.SLLanguageBaseErrorListener;
@@ -8,6 +9,7 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import tableClasses.ErrorHandle;
+import tableClasses.TableOfSymbols;
 
 import java.io.File;
 
@@ -20,8 +22,9 @@ public class Main {
 
         //1) load file
         //2) run with gramatic files in generated parser
-        String filepath = "testFile.sll";
-        File file = new File(filepath);
+
+        TableOfSymbols.filepath = "testFile.sll";
+        File file = new File(TableOfSymbols.filepath);
 
 
         CharStream input = CharStreams.fromFileName(file.getPath());
@@ -43,7 +46,7 @@ public class Main {
 
 
         if(ErrorHandle.hasError()) {
-            CreateFile errorFile = new CreateFile(filepath);
+            CreateFile errorFile = new CreateFile(TableOfSymbols.filepath);
             errorFile.writeToFile("");
         } else {
 
@@ -52,6 +55,5 @@ public class Main {
             SLLanguageBaseListener listener = new SLLanguageBaseListener();
             walker.walk(listener, tree);
         }
-
     }
 }

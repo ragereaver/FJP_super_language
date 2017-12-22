@@ -16,35 +16,41 @@ import java.nio.file.Paths;
 public class CreateFile {
     private BufferedWriter writerFile;
     private String filename;
+    private String newFilename;
 
     public CreateFile(String filename){
-        try {
-            this.filename = filename;
-            openFile(filename, true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.filename = filename;
+        this.newFilename = "";
     }
 
-    private void openFile(String filename, boolean isAppend) throws IOException{
+    private void openFile(boolean isAppend) throws IOException{
         if (writerFile != null) {
             close();
         }
 
-        writerFile = new BufferedWriter(new FileWriter(filename, isAppend));
+        writerFile = new BufferedWriter(new FileWriter(newFilename, isAppend));
     }
 
     public boolean writeToFile(String buffer){
         try {
             if(ErrorHandle.hasError()){
-                writeErrorFile();
+                newFilename = getNewFilePath("-errors", "log");
+                buffer = ErrorHandle.createString();
+
+                //jen pro testovani
+                System.err.println("Error was found so I created error file instead: " + newFilename);
+                System.err.println(ErrorHandle.createString());
+
             }else {
-                writerFile.write(buffer);
-                writerFile.flush();
+                newFilename = getNewFilePath("", "pl");
             }
 
+            openFile(false);
+            writerFile.write(buffer);
+            writerFile.flush();
+
         } catch (IOException e) {
-            System.err.println("Couldnt write to file: " + filename);
+            System.err.println("Couldnt write to file: " + newFilename);
             e.printStackTrace();
             return false;
         }
@@ -52,16 +58,16 @@ public class CreateFile {
         return true;
     }
 
-    private void writeErrorFile() throws IOException{
+
+    private String getNewFilePath (String newName, String ext) {
         File file = new File(filename);
         String absolutePath = file.getAbsolutePath();
         String filePath = absolutePath.substring(0,absolutePath.lastIndexOf(File.separator));
-        filePath += File.separator + "errors.log";
+        String origName = absolutePath.substring(
+                    absolutePath.lastIndexOf(File.separator), absolutePath.lastIndexOf("."));
+        filePath += File.separator + origName + newName + "." + ext;
 
-        openFile(filePath, false);
-        System.err.println("Error was found so I created error file instead: " + filePath);
-        writerFile.write(ErrorHandle.createString());
-        writerFile.flush();
+        return filePath;
     }
 
     public boolean eraseFile() {
