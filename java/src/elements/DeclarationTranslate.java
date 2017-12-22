@@ -167,8 +167,8 @@ public class DeclarationTranslate {
                     if (Validators.isArrayHere(sign)){
                         loadValueFromArray(left, ctx, right, defType);
                     }else {
-                        loadValue(left, ctx);
-                        loadValue(right, ctx);
+                        loadValue(left, ctx, type);
+                        loadValue(right, ctx, type);
                         EOperationCodes.doOperation(sign);
                     }
 
@@ -184,9 +184,9 @@ public class DeclarationTranslate {
         return res;
     }
 
-    private void loadValue(String value, Token token){
+    private void loadValue(String value, Token token, String type){
         if (!value.equals("")) {
-            EInstructionSet.loadIntegerVariable(value, token);
+            EInstructionSet.loadIntegerVariable(value, token, type);
         }
     }
 
