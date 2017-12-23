@@ -114,6 +114,7 @@ public class Validators {
     public static String getType (Token token, String variable) {
         if (isVariableName(variable)) {
             TableOfSymbols.Symbol sym = TableOfSymbols.findByNameAllLevels(variable, true);
+            System.out.println("ahoj");
             if (sym == null) {
                 ErrorHandle.addError(EErrorCodes.VARIABLE_DOESNT_EXIST,
                         token.getLine(), token.getCharPositionInLine());

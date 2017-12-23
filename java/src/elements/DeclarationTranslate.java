@@ -169,10 +169,9 @@ public class DeclarationTranslate {
                     String right = resolveMathProblems(nextChild.getChild(2), ctx, depth + 1, defType);
 
                     if (Validators.isArrayHere(sign)){
-
                         loadValueFromArray(left, ctx, right, defType + "[]");
-
                         lastType = defType;
+
                     }else {
                         System.out.println(ctx.getText());
                         String leftType = Validators.getType(ctx, left);

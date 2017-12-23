@@ -1,6 +1,7 @@
 package createFilePL0;
 
 import tableClasses.ErrorHandle;
+import tableClasses.TableOfSymbols;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -28,7 +29,17 @@ public class CreateFile {
             close();
         }
 
-        writerFile = new BufferedWriter(new FileWriter(newFilename, isAppend));
+        File file = new File(filename);
+        if (file.exists() && file.isFile()) {
+            writerFile = new BufferedWriter(new FileWriter(newFilename, isAppend));
+        }else {
+            if (file.exists() && file.isDirectory() ) {
+                String name = getFilename();
+                filename += name;
+                writerFile = new BufferedWriter(new FileWriter(newFilename, isAppend));
+            }
+        }
+
     }
 
     public boolean writeToFile(String buffer){
@@ -68,6 +79,14 @@ public class CreateFile {
         filePath += File.separator + origName + newName + "." + ext;
 
         return filePath;
+    }
+
+    private String getFilename () {
+        File file = new File(TableOfSymbols.filepath);
+        String absolutePath = file.getAbsolutePath();
+        String fileName = absolutePath.substring(absolutePath.lastIndexOf(File.separator), absolutePath.length());
+
+        return fileName;
     }
 
     public boolean eraseFile() {

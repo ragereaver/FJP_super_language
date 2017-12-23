@@ -38,7 +38,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 */
 	@Override public void exitCompilationUnit(SLLanguageParser.CompilationUnitContext ctx) {
 		EInstructionSet.doInstruction(EInstructionSet.RETURN, 0);
-		CreateFile createFile = new CreateFile(TableOfSymbols.filepath);
+		CreateFile createFile = new CreateFile(TableOfSymbols.destinationFilepath);
 		createFile.writeToFile(TableOfCodes.createString());
 		createFile.close();
 

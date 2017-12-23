@@ -1,9 +1,6 @@
 int [] pole = new int [5];
-int b = 5;
-b = 1;
-boolean ahoj = true;
-
-boolean ahoj3 = false;
+int b = 5 + ahoj;
+b = 1 + ahoj;
 
 boolean d = b < 5;
 int c = 3 + pole [1] * 3;

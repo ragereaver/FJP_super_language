@@ -19,8 +19,19 @@ public class Main {
 
         //1) load file
         //2) run with gramatic files in generated parser
+        if (args.length == 0) {
+            // TableOfSymbols.filepath = "testFiles/cy/testPole.sll";
+            TableOfSymbols.filepath = "testFiles/testFile.sll";
+            //TableOfSymbols.filepath = "testFiles/cykly/testCycles.sll";
+            TableOfSymbols.destinationFilepath = TableOfSymbols.filepath;
+        }else {
+            TableOfSymbols.filepath = args[0];
+            if (args.length > 1) {
+                TableOfSymbols.destinationFilepath = args[1];
+            }
+        }
 
-        TableOfSymbols.filepath = "testFiles/testFile.sll";
+
         //TableOfSymbols.filepath = "testFiles/zavorky/testZavorek.sll";
         //TableOfSymbols.filepath = "testFiles/cykly/testCycles.sll";
 

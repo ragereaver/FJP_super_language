@@ -1,2 +1,4 @@
 Warning: At line 25:4 - Variable on right side doesnt exist! 
 Warning: At line 25:4 - Variable with this name already exist! 
+Warning: At line 31:0 - Variable on right side doesnt exist! 
+Warning: At line 31:0 - Action is not allowed with these types! 

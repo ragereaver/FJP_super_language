@@ -24,6 +24,7 @@ public class TableOfSymbols {
     private static int objectID = 0;
     private static int actObjectID = 0;
     public static String filepath = "";
+    public static String destinationFilepath = "";
 
     public static class Symbol {
         private String name, variableType;
@@ -170,21 +171,26 @@ public class TableOfSymbols {
         int object = objectID;
         int pomObject = -1;
         boolean lastRound = true;
-
+        boolean someObjectExist = true;
+        System.out.println(" ------" + parentID + "    " +objectID);
         while (lastRound) {
-            if (parent == -1) {
+            if (parent == -1 || !someObjectExist) {
                 lastRound = false;
             }
+
+            someObjectExist = false;
             for (int i = 0; i < tableOfSymbols.size(); i++) {
                 Symbol symbol = tableOfSymbols.get(i);
 
                 if(symbol.getObjectID() == object) {
+                    someObjectExist = true;
                     parent = symbol.getParentID();
                     pomObject = symbol.getObjectID();
 
                     if (symbol.getName().equals(name) && (isVariable == symbol.isVariable())){
                         return symbol;
                     }
+
                 }
             }
 
