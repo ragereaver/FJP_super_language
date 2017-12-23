@@ -118,7 +118,7 @@ public class TableOfSymbols {
 
 
 
-        if (Validators.isArrayHere(variableType)) {
+        if (Validators.isArrayHere(variableType)) {//zapsani pole do prikazu
 
             TableOfCodes.updateInt(getObjectID(), size);
             for (int i = 0; i < size; i++) {
@@ -126,7 +126,10 @@ public class TableOfSymbols {
                 EInstructionSet.doInstruction(EInstructionSet.STORE, address + i);
             }
 
-        }else {
+        }else {//normalni promenna
+            //TODO: doplnit string - pokud bude
+
+
             if (isVariable) {
                 TableOfCodes.updateInt(getObjectID());
             }
