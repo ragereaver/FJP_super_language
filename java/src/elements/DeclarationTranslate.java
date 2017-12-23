@@ -1,6 +1,5 @@
 package elements;
 
-import Convertor.TypeConvertor;
 import Convertor.Validators;
 import enums.EErrorCodes;
 import enums.EInstructionSet;
@@ -9,10 +8,8 @@ import generatedParser.SLLanguageParser.InitDeclaratorListContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import tableClasses.ErrorHandle;
-import tableClasses.TableOfCodes;
 import tableClasses.TableOfSymbols;
 
-import java.util.ArrayList;
 
 import static generatedParser.SLLanguageParser.*;
 
@@ -20,10 +17,8 @@ import static generatedParser.SLLanguageParser.*;
  * Created by BobrZlosyn on 18.12.2017.
  */
 public class DeclarationTranslate {
-    private String type;
-    private ArrayList<String> variables = new ArrayList<>();
-    private ArrayList values = new ArrayList<>();
 
+    private String lastType = "";
     /**
      * zpracovava normalni deklarace ( vse krome pole)
      * @param ctx
@@ -69,14 +64,17 @@ public class DeclarationTranslate {
         String identifier;
         String value;
         identifier = ctx.initDeclarator().Identifier().getText();
-
         AssignmentExpressionContext assignmentExpCtx = ctx.initDeclarator().assignmentExpression();
+
         if (assignmentExpCtx != null) {
+
+
             value = assignmentExpCtx.getText();
 
             if (type.equals(Validators.VARIABLE_TYPE_BOOLEAN)) {
                 if (Validators.isTernalIfHere(value)) {
                     // obstara se jinde - trida IfTranslate
+                    System.out.println("-------- ternalni --------");
                     return;
                 }
             }
@@ -93,10 +91,15 @@ public class DeclarationTranslate {
                     TableOfSymbols.addSymbolVariable(ctx.getStart(), identifier, type, 0);
 
                 }else {// reseni prirazeni pole
-                    if (Validators.validateType(type, value)) {
+                    System.out.println("-----**********" + value + "   " + Validators.isSignHere(value));
+                    if (Validators.isSignHere(value)) {
+
+                        resolveMathProblems(ctx.initDeclarator().getChild(2), ctx.getStart(), 0, type);
+                    }else {
                         EInstructionSet.handleVariables(value, ctx.getStart(), type);
-                        TableOfSymbols.addSymbolVariable(ctx.getStart(), identifier, type, 0);
                     }
+
+                    TableOfSymbols.addSymbolVariable(ctx.getStart(), identifier, type, 0);
                 }
             }
 
@@ -166,15 +169,31 @@ public class DeclarationTranslate {
 
                     if (Validators.isArrayHere(sign)){
                         loadValueFromArray(left, ctx, right, defType + "[]");
+                        lastType = defType;
                     }else {
-                        loadValue(left, ctx, type);
-                        loadValue(right, ctx, type);
-                        EOperationCodes.doOperation(sign);
+                        String leftType = Validators.getType(ctx, left);
+                        String rightType = Validators.getType(ctx, left);
+
+                        if (leftType.isEmpty()) {
+                            leftType = lastType;
+                        }
+
+                        if (rightType.isEmpty()) {
+                            rightType = lastType;
+                        }
+
+                        boolean validAssig = Validators.validateAction(leftType, rightType, sign);
+                        if (validAssig) {
+                            loadValue(left, ctx, leftType);
+                            loadValue(right, ctx, leftType);
+                            EOperationCodes.doOperation(sign);
+                            lastType = leftType;
+                        }else {
+                            ErrorHandle.addError(EErrorCodes.INVALID_ACTION, ctx.getLine(), ctx.getCharPositionInLine());
+                        }
+
+
                     }
-
-
-                    System.out.println(left + "------------" + sign + "-----------" + right);
-
 
                     return res;
                 }
@@ -186,7 +205,7 @@ public class DeclarationTranslate {
 
     private void loadValue(String value, Token token, String type){
         if (!value.equals("")) {
-            EInstructionSet.loadIntegerVariable(value, token, type);
+            EInstructionSet.handleVariables(value, token, type);
         }
     }
 

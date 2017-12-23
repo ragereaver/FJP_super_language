@@ -13,6 +13,7 @@ public enum EErrorCodes {
     UNKNOW_ERROR("Some weird error happened while adding to arraylist!"),
     BAD_INDEX_ARRAY("Index must be number!"),
     OUT_OF_ARRAY("Index is out of array memory!"),
+    INVALID_ACTION("Action is not allowed with these types!"),
     ;
 
     private final String errorMessage;

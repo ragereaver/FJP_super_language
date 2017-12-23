@@ -125,7 +125,7 @@ public class TableOfSymbols {
                 EInstructionSet.doInstruction(EInstructionSet.LITERAL, 0);
                 EInstructionSet.doInstruction(EInstructionSet.STORE, address + i);
             }
-
+            System.out.println("last adress //////////// " + getNextSymbolVariableAddress());
         }else {//normalni promenna
             //TODO: doplnit string - pokud bude
 
@@ -253,9 +253,12 @@ public class TableOfSymbols {
         if (symbol == null) {
             return 3;
         }else {
-            return symbol.getAddress() + symbol.getSize() + 1;
+            if (symbol.getSize() == 0) {
+                return symbol.getAddress() + 1;
+            }else {
+                return symbol.getAddress() + symbol.getSize();
+            }
         }
-
     }
 
     public static int getObjectID() {

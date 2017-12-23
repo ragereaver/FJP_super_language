@@ -1,8 +1,10 @@
 package Convertor;
 
+import enums.EErrorCodes;
 import enums.EInstructionSet;
 import enums.EOperationCodes;
 import org.antlr.v4.runtime.Token;
+import tableClasses.ErrorHandle;
 import tableClasses.TableOfCodes;
 import tableClasses.TableOfSymbols;
 
@@ -54,6 +56,10 @@ public class Validators {
     }
 
     public static boolean isString(String value) {
+        if (value == null || value.length() < 2) {
+            return false;
+        }
+
         char startChar = value.charAt(0);
         char endChar = value.charAt(value.length() - 1);
         return (startChar == '"' && endChar == '"');
@@ -74,12 +80,7 @@ public class Validators {
     }
 
     public static boolean isBoolean(String value) {
-        if (!value.equals("true")) {
-            if (!value.equals("false")) {
-                return false;
-            }
-        }
-        return true;
+        return  (value.equals("true") || value.equals("false"));
     }
 
     public static boolean isDimHere(String value){
@@ -94,6 +95,11 @@ public class Validators {
         return value.contains("[");
     }
 
+    public static boolean isSignHere (String value){
+        String regex = "(.(<|>|=|\\*|-|\\+|/|%|&|\\|).)";
+        return  value.matches(regex);
+    }
+
     public static boolean isKeyWord(String value){
         switch (value){
             case "boolean": return true;
@@ -103,6 +109,112 @@ public class Validators {
             case "string": return true;
             default: return false;
         }
+    }
+
+    public static String getType (Token token, String variable) {
+        if (isVariableName(variable)) {
+            TableOfSymbols.Symbol sym = TableOfSymbols.findByNameAllLevels(variable, true);
+            if (sym == null) {
+                ErrorHandle.addError(EErrorCodes.VARIABLE_DOESNT_EXIST,
+                        token.getLine(), token.getCharPositionInLine());
+                return "";
+            }
+            return sym.getVariableType();
+        }else {
+            if (isInteger(variable)){
+                return VARIABLE_TYPE_INT;
+            }
+
+            if (isBoolean(variable)){
+                return VARIABLE_TYPE_BOOLEAN;
+            }
+
+            if (isString(variable)){
+                return VARIABLE_TYPE_STRING;
+            }
+        }
+        return "";
+    }
+
+    public static boolean validateAction(String leftType, String rightType, String sign) {
+        switch (sign) {
+                case "+": {
+                    return (leftType.equals(rightType) &&
+                            (leftType.equals(VARIABLE_TYPE_INT) ||
+                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT) ||
+                                    leftType.equals(VARIABLE_TYPE_STRING)));
+                }
+
+                case "-": {
+                    return (leftType.equals(rightType) &&
+                            (leftType.equals(VARIABLE_TYPE_INT) ||
+                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT)));
+                }
+
+                case "*": {
+                    return (leftType.equals(rightType) &&
+                            (leftType.equals(VARIABLE_TYPE_INT) ||
+                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT)));
+                }
+
+                case "/": {
+                    return (leftType.equals(rightType) &&
+                            (leftType.equals(VARIABLE_TYPE_INT) ||
+                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT)));
+                }
+
+                case "%": {
+                    return (leftType.equals(rightType) &&
+                            (leftType.equals(VARIABLE_TYPE_INT) ||
+                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT)));
+                }
+
+                case "==": {
+                    return (leftType.equals(rightType));
+                }
+
+                case "!=": {
+                    return (leftType.equals(rightType));
+                }
+
+                case "<": {
+                    return (leftType.equals(rightType) &&
+                            (leftType.equals(VARIABLE_TYPE_INT) ||
+                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT)));
+                }
+
+                case "<=": {
+                    return (leftType.equals(rightType) &&
+                            (leftType.equals(VARIABLE_TYPE_INT) ||
+                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT)));
+                }
+
+                case ">": {
+                    return (leftType.equals(rightType) &&
+                            (leftType.equals(VARIABLE_TYPE_INT) ||
+                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT)));
+                }
+
+                case ">=": {
+                    return (leftType.equals(rightType) &&
+                            (leftType.equals(VARIABLE_TYPE_INT) ||
+                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT)));
+                }
+
+                //String equal - musi se osetrit
+                case "===": {
+                    return (leftType.equals(rightType) &&
+                            (leftType.equals(VARIABLE_TYPE_STRING)));
+                }
+
+                //String equal - musi se osetrit
+                case "!==": {
+                    return (leftType.equals(rightType) &&
+                            (leftType.equals(VARIABLE_TYPE_STRING)));
+                }
+        }
+
+        return false;
     }
 
 }
