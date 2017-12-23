@@ -10,7 +10,7 @@ public class UntilTranslate extends WhileTranslate{
 
     public void runUntil(SLLanguageParser.CycleContext ctx) {
 
-        doCondition(ctx, ctx.expression()); // teoreticky by to melo byt stejne, navratova hodnota je obracene jen
+        doCondition(ctx.expression(), ctx.getStart()); // teoreticky by to melo byt stejne, navratova hodnota je obracene jen
         doBody(ctx.compoundStatement(0)); // melo by byt stejne
     }
 

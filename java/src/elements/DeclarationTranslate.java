@@ -174,8 +174,9 @@ public class DeclarationTranslate {
 
                         lastType = defType;
                     }else {
+                        System.out.println(ctx.getText());
                         String leftType = Validators.getType(ctx, left);
-                        String rightType = Validators.getType(ctx, left);
+                        String rightType = Validators.getType(ctx, right);
 
                         if (leftType.isEmpty()) {
                             leftType = lastType;

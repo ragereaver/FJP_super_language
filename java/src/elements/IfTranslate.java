@@ -4,6 +4,7 @@ import enums.EInstructionSet;
 import generatedParser.SLLanguageMainListener;
 import generatedParser.SLLanguageParser;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.Token;
 import Convertor.Validators;
 
 /**
@@ -16,17 +17,20 @@ public class IfTranslate extends DeclarationTranslate {
 
     public void runIf(SLLanguageParser.CycleContext ctx) {
         System.out.println("IF ------- " + ctx.getText());
-        doCondition(ctx, ctx.logicalOrExpression());
+
+        Token token = ctx.getStart();
+
+        doCondition(ctx.logicalOrExpression(), token);
         doBodyIf(ctx.compoundStatement(0));
         if (ctx.compoundStatement().size() > 1) {
             doBodyElse(ctx.compoundStatement(1));
         }
     }
 
-    public void doCondition(SLLanguageParser.CycleContext ctx, ParseTree condition){
+    public void doCondition(ParseTree condition, Token token){
         SLLanguageMainListener.isInCycleHeader = true; // musi byt vsude zatim
         //TODO: zpracovani podminky
-        resolveMathProblems(condition.getChild(0), ctx.getStart(), ctx.depth(), Validators.VARIABLE_TYPE_BOOLEAN);
+        resolveMathProblems(condition, token, 0, Validators.VARIABLE_TYPE_BOOLEAN);
         //EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP, 1); //přepsat adresu
 
         SLLanguageMainListener.isInCycleHeader = false;
