@@ -48,6 +48,13 @@ public enum EInstructionSet {
                 TableOfCodes.addCode(instruction, level, String.valueOf(address));
         }
 
+    /**
+     * nacte hodnotu prommenne a ulozi ji na vrchol zasobniku
+     * @param variable
+     * @param token
+     * @param type
+     * @return
+     */
         private static boolean loadVariableName(String variable, Token token, String type){
                 TableOfSymbols.Symbol sym = TableOfSymbols.findByNameAllLevels(variable, true);
                 if (sym == null) {
@@ -66,6 +73,13 @@ public enum EInstructionSet {
                 return true;
         }
 
+    /**
+     * porovna zda se jedna o prommenou nebo konstantni vyraz a da hodnotu na vrchol zasobniku
+     * @param variable
+     * @param token
+     * @param type
+     * @return
+     */
         public static boolean loadIntegerVariable (String variable, Token token, String type){
                 if (Validators.isVariableName(variable)){
 
@@ -82,6 +96,13 @@ public enum EInstructionSet {
             return false;
         }
 
+    /**
+     * porovna zda se jedna o prommenou nebo konstantni vyraz a da hodnotu na vrchol zasobniku
+     * @param variable
+     * @param token
+     * @param type
+     * @return
+     */
         public static boolean loadStringVariable (String variable, Token token, String type){
                 if (Validators.isVariableName(variable)){
                     return loadVariableName(variable, token, type);
@@ -95,6 +116,13 @@ public enum EInstructionSet {
             return false;
         }
 
+    /**
+     * porovna zda se jedna o prommenou nebo konstantni vyraz a da hodnotu na vrchol zasobniku
+     * @param variable
+     * @param token
+     * @param type
+     * @return
+     */
         public static boolean loadBooleanVariable (String variable, Token token, String type){
                 if (Validators.isVariableName(variable)){
                     return loadVariableName(variable, token, type);
@@ -108,6 +136,14 @@ public enum EInstructionSet {
             return false;
         }
 
+    /**
+     * melo by ziskat adresu podle indexu v poli a nasledne vytahnout hodnotu na vrchol zasobniku
+     * @param variable
+     * @param token
+     * @param index
+     * @param type
+     * @return
+     */
         public static boolean loadArrayVariable (String variable, Token token, String index, String type){
             if (Validators.isVariableName(variable)){
                 TableOfSymbols.Symbol sym = TableOfSymbols.findByNameAllLevels(variable, true);
