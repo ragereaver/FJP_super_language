@@ -149,7 +149,7 @@ public class DeclarationTranslate {
      * @param depth
      * @return
      */
-    private String resolveMathProblems(ParseTree nextChild, Token ctx, int depth, String defType ){
+    public String resolveMathProblems(ParseTree nextChild, Token ctx, int depth, String defType ){
         String res = "";
         for(int i = 0; i < 100; i++) {
             if (nextChild.getChildCount() == 1) {
