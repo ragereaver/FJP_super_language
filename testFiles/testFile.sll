@@ -1,4 +1,4 @@
-int ahoj = 5;
+int ahoj = 4;
 int b = 3;
 
 int a, c = 3 + 3, i = 5 + b;

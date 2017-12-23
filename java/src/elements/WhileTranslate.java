@@ -10,7 +10,7 @@ public class WhileTranslate extends IfTranslate{
 
     public void runWhile(SLLanguageParser.CycleContext ctx) {
 
-        doCondition(ctx.expression()); // teoreticky by to melo byt stejne
+        doCondition(ctx, ctx.expression()); // teoreticky by to melo byt stejne
         doBody(ctx.compoundStatement(0));
     }
 

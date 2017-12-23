@@ -158,17 +158,20 @@ public class DeclarationTranslate {
                     return nextChild.getText();
                 }
 
+
             }else {
+
                 if (nextChild.getChild(0).getText().equals("(")){
                     nextChild = nextChild.getChild(1);
                 }else {
-
                     String left = resolveMathProblems(nextChild.getChild(0), ctx, depth + 1, defType);
                     String sign = nextChild.getChild(1).getText();
                     String right = resolveMathProblems(nextChild.getChild(2), ctx, depth + 1, defType);
 
                     if (Validators.isArrayHere(sign)){
+
                         loadValueFromArray(left, ctx, right, defType + "[]");
+
                         lastType = defType;
                     }else {
                         String leftType = Validators.getType(ctx, left);
@@ -184,9 +187,11 @@ public class DeclarationTranslate {
 
                         boolean validAssig = Validators.validateAction(leftType, rightType, sign);
                         if (validAssig) {
+
                             loadValue(left, ctx, leftType);
                             loadValue(right, ctx, leftType);
                             EOperationCodes.doOperation(sign);
+
                             lastType = leftType;
                         }else {
                             ErrorHandle.addError(EErrorCodes.INVALID_ACTION, ctx.getLine(), ctx.getCharPositionInLine());

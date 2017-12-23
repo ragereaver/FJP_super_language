@@ -8,7 +8,7 @@ import generatedParser.SLLanguageParser;
 public class DoTranslate extends WhileTranslate {
 
     public void runDo(SLLanguageParser.CycleContext ctx) {
-        doCondition(ctx.expression());
+        doCondition(ctx, ctx.expression());
         doBody(ctx.compoundStatement(0));
     }
 }

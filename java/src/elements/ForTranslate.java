@@ -9,12 +9,12 @@ import org.antlr.v4.runtime.tree.ParseTree;
 public class ForTranslate extends WhileTranslate{
     public void runFor(SLLanguageParser.CycleContext ctx) {
 
-        doCondition(ctx.forCondition());
+        doCondition(ctx, ctx.forCondition());
         doBody(ctx.compoundStatement(0));
     }
 
     @Override
-    public void doCondition(ParseTree condition) {
+    public void doCondition(SLLanguageParser.CycleContext ctx, ParseTree condition) {
         //TODO: urcite jine zpracovani podminky
     }
 }

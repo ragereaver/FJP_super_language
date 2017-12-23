@@ -9,7 +9,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 public class SwitchTranslate extends WhileTranslate{
 
     public void runSwitch(SLLanguageParser.CycleContext ctx) {
-        doCondition(ctx.expression()); // asi bude potreba vlastni metoda
+        doCondition(ctx, ctx.expression()); // asi bude potreba vlastni metoda
         ctx.labeledStatement().forEach(labeledStatementContext -> doLabeledStatements(labeledStatementContext));
     }
 
