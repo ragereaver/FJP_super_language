@@ -226,6 +226,8 @@ primaryExpression
     |   Constant
     |   StringLiteral+
     |   '(' expression ')'
+    |   'true'
+    |   'false'
     ;
 
 argumentExpressionList

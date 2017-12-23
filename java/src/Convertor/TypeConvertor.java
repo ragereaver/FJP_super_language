@@ -1,19 +1,19 @@
 package Convertor;
 
-import enums.EErrorCodes;
-import enums.EInstructionSet;
-import org.antlr.v4.runtime.Token;
-import tableClasses.ErrorHandle;
-import tableClasses.TableOfCodes;
-import tableClasses.TableOfSymbols;
-
-import java.util.ArrayList;
 
 /**
  * Created by BobrZlosyn on 22.12.2017.
  */
 public class TypeConvertor {
 
+
+    public static int getBooleanValue(String value) {
+        if (value.equals("true")){
+            return 1;
+        }else {
+            return 0;
+        }
+    }
 /*
     public static boolean validateValue(Token ctxToken, String variableType, String value) {
         switch (variableType){

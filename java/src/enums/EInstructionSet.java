@@ -124,14 +124,14 @@ public enum EInstructionSet {
      * @return
      */
         public static boolean loadBooleanVariable (String variable, Token token, String type){
-                if (Validators.isVariableName(variable)){
-                    return loadVariableName(variable, token, type);
-                } else {
-                    if (Validators.isBoolean(variable)) {
-                        TableOfCodes.addCode(EInstructionSet.LITERAL, variable);
-                        return true;
-                    }
+            if (Validators.isVariableName(variable)){
+                return loadVariableName(variable, token, type);
+            } else {
+                if (Validators.isBoolean(variable)) {
+                    EInstructionSet.doInstruction(EInstructionSet.LITERAL, TypeConvertor.getBooleanValue(variable));
+                    return true;
                 }
+            }
             ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, token.getLine(), token.getCharPositionInLine());
             return false;
         }
