@@ -16,6 +16,12 @@ import tableClasses.TableOfSymbols;
  * of the available methods.
  */
 public class SLLanguageMainListener extends SLLanguageBaseListener {
+
+	public static boolean isInCycleHeader = false;
+	public static boolean isInAssignemt = false;
+	public static boolean isInDeclaration = false;
+
+
 	/**
 	 * {@inheritDoc}
 	 *
@@ -67,6 +73,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterConstDeclaration(SLLanguageParser.ConstDeclarationContext ctx) {
+		isInDeclaration = true;
 		ConstantDeclarationTranslate constantDeclarationTranslate = new ConstantDeclarationTranslate();
 		constantDeclarationTranslate.doConstantDeclaration(ctx);
 	}
@@ -75,13 +82,16 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConstDeclaration(SLLanguageParser.ConstDeclarationContext ctx) { }
+	@Override public void exitConstDeclaration(SLLanguageParser.ConstDeclarationContext ctx) {
+		isInDeclaration = false;
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterArrayDeclaration(SLLanguageParser.ArrayDeclarationContext ctx) {
+		isInDeclaration = true;
 		ArrayDeclarationTranslate declarationTranslate = new ArrayDeclarationTranslate();
 		declarationTranslate.doArrayDeclaration(ctx);
 	}
@@ -90,7 +100,9 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArrayDeclaration(SLLanguageParser.ArrayDeclarationContext ctx) { }
+	@Override public void exitArrayDeclaration(SLLanguageParser.ArrayDeclarationContext ctx) {
+		isInDeclaration = false;
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -98,6 +110,8 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 */
 	@Override public void enterFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) {
 		TableOfSymbols.setLevel(true);
+		FunctionTranslate functionTranslate = new FunctionTranslate();
+		functionTranslate.doFunctionDefinition(ctx);
 		System.out.println("zacatek funkce");
 		System.out.println(ctx.getText());
 	}
@@ -284,6 +298,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterDeclaration(SLLanguageParser.DeclarationContext ctx) {
+		isInDeclaration = true;
 		DeclarationTranslate declarationTranslate = new DeclarationTranslate();
 		declarationTranslate.doStandardDeclaration(ctx);
 		System.out.println("deklarace");
@@ -293,7 +308,9 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclaration(SLLanguageParser.DeclarationContext ctx) { }
+	@Override public void exitDeclaration(SLLanguageParser.DeclarationContext ctx) {
+		isInDeclaration = false;
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -371,7 +388,13 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFunctionCall(SLLanguageParser.FunctionCallContext ctx) { }
+	@Override public void enterFunctionCall(SLLanguageParser.FunctionCallContext ctx) {
+
+		if (!isInDeclaration && !isInAssignemt) {
+			CallFunctionTranslate callFunctionTranslate = new CallFunctionTranslate();
+			callFunctionTranslate.doFunctionCalling(ctx);
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -419,7 +442,13 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAssignmentExpression(SLLanguageParser.AssignmentExpressionContext ctx) { }
+	@Override public void enterAssignmentExpression(SLLanguageParser.AssignmentExpressionContext ctx) {
+
+		if (!isInCycleHeader && !isInDeclaration) {
+			SimpleAssigmentTranslate assigmentTranslate = new SimpleAssigmentTranslate();
+			assigmentTranslate.doAssigmentTranslate(ctx);
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -563,7 +592,9 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterForCondition(SLLanguageParser.ForConditionContext ctx) { }
+	@Override public void enterForCondition(SLLanguageParser.ForConditionContext ctx) {
+		isInCycleHeader = true;
+	}
 	/**
 	 * {@inheritDoc}
 	 *

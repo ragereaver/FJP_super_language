@@ -20,9 +20,9 @@ public class Main {
         //1) load file
         //2) run with gramatic files in generated parser
 
-        //TableOfSymbols.filepath = "testFiles/testPole.sll";
-        //TableOfSymbols.filepath = "testZavorek.sll";
-        TableOfSymbols.filepath = "testFiles/cykly/testCycles.sll";
+        TableOfSymbols.filepath = "testFiles/pole/testPole.sll";
+        //TableOfSymbols.filepath = "testFiles/zavorky/testZavorek.sll";
+        //TableOfSymbols.filepath = "testFiles/cykly/testCycles.sll";
 
         File file = new File(TableOfSymbols.filepath);
         if (!file.exists() || file.isDirectory()) {

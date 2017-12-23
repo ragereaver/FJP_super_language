@@ -1,5 +1,6 @@
 package elements;
 
+import generatedParser.SLLanguageMainListener;
 import generatedParser.SLLanguageParser;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -22,7 +23,10 @@ public class IfTranslate {
     }
 
     public void doCondition(ParseTree condition){
+        SLLanguageMainListener.isInCycleHeader = true; // musi byt vsude zatim
         //TODO: zpracovani podminky
+
+        SLLanguageMainListener.isInCycleHeader = false;
     }
 
     public void doBodyIf(ParseTree body) {

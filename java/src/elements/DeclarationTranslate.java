@@ -165,7 +165,7 @@ public class DeclarationTranslate {
                     String right = resolveMathProblems(nextChild.getChild(2), ctx, depth + 1, defType);
 
                     if (Validators.isArrayHere(sign)){
-                        loadValueFromArray(left, ctx, right, defType);
+                        loadValueFromArray(left, ctx, right, defType + "[]");
                     }else {
                         loadValue(left, ctx, type);
                         loadValue(right, ctx, type);

@@ -8,8 +8,7 @@ import generatedParser.SLLanguageParser;
  */
 public class FunctionTranslate extends SLLanguageBaseListener{
 
-    @Override
-    public void exitCompilationUnit(SLLanguageParser.CompilationUnitContext ctx) {
-        System.out.println("ahojky");
+    public void doFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) {
+
     }
 }

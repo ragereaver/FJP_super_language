@@ -68,14 +68,16 @@ public enum EInstructionSet {
 
         public static boolean loadIntegerVariable (String variable, Token token, String type){
                 if (Validators.isVariableName(variable)){
-                        return loadVariableName(variable, token, type);
+
+                    boolean r = loadVariableName(variable, token, type);
+
+                        return r;
                 } else {
                         if (Validators.isInteger(variable)) {
                                 TableOfCodes.addCode(EInstructionSet.LITERAL, variable);
                             return true;
                         }
                 }
-
             ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, token.getLine(), token.getCharPositionInLine());
             return false;
         }
