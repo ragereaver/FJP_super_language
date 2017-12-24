@@ -16,7 +16,7 @@ import java.io.*;
 /**
  * Created by BobrZlosyn on 17.12.2017.
  */
-public class runTests {
+public class RunTests {
     private static String ext = ".sll";
     private static String absolutePath = "";
     private static String testFolderPath = "";
