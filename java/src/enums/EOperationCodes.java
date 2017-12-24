@@ -79,6 +79,8 @@ public enum EOperationCodes {
             }break;
 
             case "&&": {
+                TableOfCodes.addCode(EInstructionSet.OPERATION, EOperationCodes.MULLTIPLY.getOperationName());
+                EInstructionSet.doInstruction(EInstructionSet.LITERAL, 1);
                 TableOfCodes.addCode(EInstructionSet.OPERATION, EOperationCodes.EQUAL.getOperationName());
             }break;
 
