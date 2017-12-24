@@ -96,7 +96,7 @@ public class Validators {
     }
 
     public static boolean isSignHere (String value){
-        String regex = "(.(<|>|=|\\*|-|\\+|/|%|&|\\|).)";
+        String regex = "((.+)(<|>|==|-|/|%|&&|\\*|\\|\\||<=|>=|!=|!==|===|\\+)(.+))";
         return  value.matches(regex);
     }
 

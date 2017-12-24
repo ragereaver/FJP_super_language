@@ -183,9 +183,12 @@ public class TableOfSymbols {
                 Symbol symbol = tableOfSymbols.get(i);
 
                 if(symbol.getObjectID() == object || symbol.getObjectID() == parent) {
-                    someObjectExist = true;
-                    parent = symbol.getParentID();
-                    pomObject = symbol.getObjectID();
+                    if (symbol.getObjectID() == parent) {
+                        someObjectExist = true;
+                        parent = symbol.getParentID();
+                        pomObject = symbol.getObjectID();
+                    }
+
 
                     if (symbol.getName().equals(name) && (isVariable == symbol.isVariable())){
                         System.out.println("Variable is found " + symbol.getName());

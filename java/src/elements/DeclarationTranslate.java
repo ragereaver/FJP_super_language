@@ -93,8 +93,8 @@ public class DeclarationTranslate {
                 }else {// reseni prirazeni pole
                     System.out.println("-----**********" + value + "   " + Validators.isSignHere(value));
                     if (Validators.isSignHere(value)) {
-
                         resolveMathProblems(ctx.initDeclarator().getChild(2), ctx.getStart(), 0, type);
+
                     }else {
                         EInstructionSet.handleVariables(value, ctx.getStart(), type);
                     }
@@ -173,10 +173,13 @@ public class DeclarationTranslate {
                         lastType = defType;
 
                     }else {
-                        System.out.println(ctx.getText());
                         String leftType = Validators.getType(ctx, left);
                         String rightType = Validators.getType(ctx, right);
 
+                        System.out.println("Ltype " + leftType + " value " + left);
+                        System.out.println("Rtype " + rightType + " value " + right);
+                        System.out.println("Lasttype " + lastType + " sign " + sign);
+                        System.out.println("---------------------------------------");
                         if (leftType.isEmpty()) {
                             leftType = lastType;
                         }
