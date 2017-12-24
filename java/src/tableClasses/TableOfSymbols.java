@@ -172,7 +172,7 @@ public class TableOfSymbols {
         int pomObject = -1;
         boolean lastRound = true;
         boolean someObjectExist = true;
-        System.out.println(" ------" + parentID + "    " +objectID);
+
         while (lastRound) {
             if (parent == -1 || !someObjectExist) {
                 lastRound = false;
@@ -182,15 +182,15 @@ public class TableOfSymbols {
             for (int i = 0; i < tableOfSymbols.size(); i++) {
                 Symbol symbol = tableOfSymbols.get(i);
 
-                if(symbol.getObjectID() == object) {
+                if(symbol.getObjectID() == object || symbol.getObjectID() == parent) {
                     someObjectExist = true;
                     parent = symbol.getParentID();
                     pomObject = symbol.getObjectID();
 
                     if (symbol.getName().equals(name) && (isVariable == symbol.isVariable())){
+                        System.out.println("Variable is found " + symbol.getName());
                         return symbol;
                     }
-
                 }
             }
 

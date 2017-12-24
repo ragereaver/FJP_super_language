@@ -185,14 +185,14 @@ public class DeclarationTranslate {
                             rightType = lastType;
                         }
 
-                        boolean validAssig = Validators.validateAction(leftType, rightType, sign);
-                        if (validAssig) {
+                        String resultType = Validators.validateAction(leftType, rightType, sign);
+                        if (resultType != null) {
+                            lastType = resultType;
 
                             loadValue(left, ctx, leftType);
                             loadValue(right, ctx, leftType);
                             EOperationCodes.doOperation(sign);
 
-                            lastType = leftType;
                         }else {
                             ErrorHandle.addError(EErrorCodes.INVALID_ACTION, ctx.getLine(), ctx.getCharPositionInLine());
                         }

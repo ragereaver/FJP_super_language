@@ -137,97 +137,131 @@ public class Validators {
         return "";
     }
 
-    public static boolean validateAction(String leftType, String rightType, String sign) {
+    public static String validateAction(String leftType, String rightType, String sign) {
         switch (sign) {
                 case "+": {
-                    return (leftType.equals(rightType) &&
+                    if (leftType.equals(rightType) &&
                             (leftType.equals(VARIABLE_TYPE_INT) ||
-                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT) ||
-                                    leftType.equals(VARIABLE_TYPE_STRING)));
-                }
+                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT))) {
+                        return VARIABLE_TYPE_INT;
+                    }
+
+                    if ((leftType.equals(rightType) &&
+                            (leftType.equals(VARIABLE_TYPE_STRING)))){
+                        return VARIABLE_TYPE_STRING;
+                    }
+                }break;
 
                 case "-": {
-                    return (leftType.equals(rightType) &&
+                    if (leftType.equals(rightType) &&
                             (leftType.equals(VARIABLE_TYPE_INT) ||
-                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT)));
-                }
+                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT))) {
+                        return VARIABLE_TYPE_INT;
+                    }
+                }break;
 
                 case "*": {
-                    return (leftType.equals(rightType) &&
+                    if (leftType.equals(rightType) &&
                             (leftType.equals(VARIABLE_TYPE_INT) ||
-                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT)));
-                }
+                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT))) {
+                        return VARIABLE_TYPE_INT;
+                    }
+                }break;
 
                 case "/": {
-                    return (leftType.equals(rightType) &&
+                    if (leftType.equals(rightType) &&
                             (leftType.equals(VARIABLE_TYPE_INT) ||
-                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT)));
-                }
+                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT))) {
+                        return VARIABLE_TYPE_INT;
+                    }
+                }break;
 
                 case "%": {
-                    return (leftType.equals(rightType) &&
+                    if (leftType.equals(rightType) &&
                             (leftType.equals(VARIABLE_TYPE_INT) ||
-                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT)));
-                }
+                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT))) {
+                        return VARIABLE_TYPE_INT;
+                    }
+                }break;
 
                 case "==": {
-                    return (leftType.equals(rightType));
-                }
+                    if (leftType.equals(rightType)) {
+                        return VARIABLE_TYPE_BOOLEAN;
+                    }
+                }break;
 
                 case "!=": {
-                    return (leftType.equals(rightType));
-                }
+                    if (leftType.equals(rightType)) {
+                        return VARIABLE_TYPE_BOOLEAN;
+                    }
+                }break;
 
                 case "<": {
-                    return (leftType.equals(rightType) &&
+                    if (leftType.equals(rightType) &&
                             (leftType.equals(VARIABLE_TYPE_INT) ||
-                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT)));
-                }
+                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT))) {
+                        return VARIABLE_TYPE_BOOLEAN;
+                    }
+                }break;
 
                 case "<=": {
-                    return (leftType.equals(rightType) &&
+                    if (leftType.equals(rightType) &&
                             (leftType.equals(VARIABLE_TYPE_INT) ||
-                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT)));
-                }
+                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT))) {
+                        return VARIABLE_TYPE_BOOLEAN;
+                    }
+                }break;
 
                 case ">": {
-                    return (leftType.equals(rightType) &&
+                    if (leftType.equals(rightType) &&
                             (leftType.equals(VARIABLE_TYPE_INT) ||
-                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT)));
-                }
+                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT))) {
+                        return VARIABLE_TYPE_BOOLEAN;
+                    }
+                }break;
 
                 case ">=": {
-                    return (leftType.equals(rightType) &&
+                    if (leftType.equals(rightType) &&
                             (leftType.equals(VARIABLE_TYPE_INT) ||
-                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT)));
-                }
+                                    leftType.equals(VARIABLE_TYPE_ARRAY_INT))) {
+                        return VARIABLE_TYPE_BOOLEAN;
+                    }
+                }break;
 
                 case "&&": {
-                    return (leftType.equals(rightType) &&
+                    if (leftType.equals(rightType) &&
                             (leftType.equals(VARIABLE_TYPE_BOOLEAN) ||
-                                    leftType.equals(VARIABLE_TYPE_ARRAY_BOOLEAN)));
-                }
+                                    leftType.equals(VARIABLE_TYPE_ARRAY_BOOLEAN))) {
+                        return VARIABLE_TYPE_BOOLEAN;
+                    }
+                }break;
 
                 case "||": {
-                    return (leftType.equals(rightType) &&
+                    if (leftType.equals(rightType) &&
                             (leftType.equals(VARIABLE_TYPE_BOOLEAN) ||
-                                    leftType.equals(VARIABLE_TYPE_ARRAY_BOOLEAN)));
-                }
+                                    leftType.equals(VARIABLE_TYPE_ARRAY_BOOLEAN))) {
+                        return VARIABLE_TYPE_BOOLEAN;
+                    }
+                }break;
 
                 //String equal - musi se osetrit
                 case "===": {
-                    return (leftType.equals(rightType) &&
-                            (leftType.equals(VARIABLE_TYPE_STRING)));
-                }
+                    if (leftType.equals(rightType) &&
+                            (leftType.equals(VARIABLE_TYPE_STRING))){
+                        return VARIABLE_TYPE_BOOLEAN;
+                    }
+                }break;
 
                 //String equal - musi se osetrit
                 case "!==": {
-                    return (leftType.equals(rightType) &&
-                            (leftType.equals(VARIABLE_TYPE_STRING)));
-                }
+                    if (leftType.equals(rightType) &&
+                            (leftType.equals(VARIABLE_TYPE_STRING))){
+                        return VARIABLE_TYPE_BOOLEAN;
+                    }
+                }break;
         }
 
-        return false;
+        return null;
     }
 
 }

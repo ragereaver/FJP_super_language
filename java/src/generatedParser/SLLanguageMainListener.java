@@ -4,6 +4,7 @@ package generatedParser;
 import createFilePL0.CreateFile;
 import elements.*;
 import enums.EInstructionSet;
+import javafx.scene.control.Tab;
 import tableClasses.TableOfCodes;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -182,6 +183,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 		TableOfSymbols.setLevel(true);
 		System.out.println("--------zacatek cyklu-------");
 		String type = ctx.getChild(0).getText();
+		System.out.println("Object " + TableOfSymbols.getObjectID() + " level " + TableOfSymbols.getActualLevel() + " parent " + TableOfSymbols.getParentLevel());
 		switch (type) {
 			case "for":{
 				ForTranslate forTranslate = new ForTranslate();

@@ -1,3 +1,4 @@
+int ahoj = 5;
 if (ahoj > 5 && ahoj < 12) {
     c = (10 > ahoj) ? b = 5 : b = 1;
 }
