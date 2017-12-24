@@ -126,4 +126,10 @@ public class TableOfCodes {
         });
     }
 
+    public static void clean() {
+        tableOfCalls.clear();
+        tableOfCodes.clear();
+        tableOfIntsJump.clear();
+    }
+
 }

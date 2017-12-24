@@ -2,10 +2,12 @@ import Convertor.TypeConvertor;
 import createFilePL0.CreateFile;
 import elements.FunctionTranslate;
 import generatedParser.*;
+import javafx.scene.control.Tab;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import tableClasses.ErrorHandle;
+import tableClasses.TableOfCodes;
 import tableClasses.TableOfSymbols;
 
 import java.io.File;
@@ -20,9 +22,9 @@ public class Main {
         //1) load file
         //2) run with gramatic files in generated parser
         if (args.length == 0) {
-            // TableOfSymbols.filepath = "testFiles/cy/testPole.sll";
-            TableOfSymbols.filepath = "testFiles/testFile.sll";
-            //TableOfSymbols.filepath = "testFiles/cykly/testCycles.sll";
+             TableOfSymbols.filepath = "tests/testFiles/pole/testPole.sll";
+            //TableOfSymbols.filepath = "tests/testFiles/testFile.sll";
+            //TableOfSymbols.filepath = "tests/testFiles/cykly/testCycles.sll";
             TableOfSymbols.destinationFilepath = TableOfSymbols.filepath;
         }else {
             TableOfSymbols.filepath = args[0];
@@ -30,7 +32,6 @@ public class Main {
                 TableOfSymbols.destinationFilepath = args[1];
             }
         }
-
 
         //TableOfSymbols.filepath = "testFiles/zavorky/testZavorek.sll";
         //TableOfSymbols.filepath = "testFiles/cykly/testCycles.sll";
@@ -60,8 +61,9 @@ public class Main {
 
 
         if(ErrorHandle.hasError()) {
-            CreateFile errorFile = new CreateFile(TableOfSymbols.filepath);
+            CreateFile errorFile = new CreateFile(TableOfSymbols.destinationFilepath);
             errorFile.writeToFile("");
+            errorFile.close();
         } else {
 
             // Walk it and attach our listener
@@ -69,5 +71,11 @@ public class Main {
             SLLanguageMainListener listener = new SLLanguageMainListener();
             walker.walk(listener, tree);
         }
+
+
+        //cisteni dat
+        TableOfCodes.clean();
+        TableOfSymbols.clean();
+        ErrorHandle.clean();
     }
 }

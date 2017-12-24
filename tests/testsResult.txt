@@ -1,0 +1,35 @@
+-------------------- Testing file: D:\projekty\FJP_super_language\tests\testOutput\cykly\testCycles.pl --------------------
+Error --- File couldnt be translate to PL0
+Error --- Warning: At line 1:0 - Variable on right side doesnt exist! 
+Error --- Warning: At line 1:0 - Action is not allowed with these types! 
+Error --- Warning: At line 1:0 - Variable on right side doesnt exist! 
+Error --- Warning: At line 1:0 - Action is not allowed with these types! 
+Error --- Warning: At line 1:0 - Action is not allowed with these types! 
+
+
+
+
+-------------------- Testing file: D:\projekty\FJP_super_language\tests\testOutput\pole\testPole.pl --------------------
+-------------------- NO ERRORS FOUND --------------------
+
+
+
+
+-------------------- Testing file: D:\projekty\FJP_super_language\tests\testOutput\testFile.pl --------------------
+Error --- File couldnt be translate to PL0
+Error --- Warning: At line 25:4 - Variable on right side doesnt exist! 
+Error --- Warning: At line 25:4 - Variable with this name already exist! 
+Error --- Warning: At line 31:0 - Variable on right side doesnt exist! 
+Error --- Warning: At line 31:0 - Action is not allowed with these types! 
+
+
+
+
+-------------------- Testing file: D:\projekty\FJP_super_language\tests\testOutput\zavorky\testZavorek.pl --------------------
+-------------------- NO ERRORS FOUND --------------------
+
+
+
+
+-------------------- Number of tests: 4, successful tests:2, failed tests: 2 --------------------
+-------------------- Folder with tests: D:\projekty\FJP_super_language\tests\testOutput --------------------

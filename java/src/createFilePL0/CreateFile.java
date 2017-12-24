@@ -20,6 +20,7 @@ public class CreateFile {
     private String newFilename;
 
     public CreateFile(String filename){
+        System.out.println("--------" + filename);
         this.filename = filename;
         this.newFilename = "";
     }
@@ -29,20 +30,23 @@ public class CreateFile {
             close();
         }
 
-        File file = new File(filename);
-        if (file.exists() && file.isFile()) {
-            writerFile = new BufferedWriter(new FileWriter(newFilename, isAppend));
-        }else {
-            if (file.exists() && file.isDirectory() ) {
-                String name = getFilename();
-                filename += name;
-                writerFile = new BufferedWriter(new FileWriter(newFilename, isAppend));
-            }
-        }
+        writerFile = new BufferedWriter(new FileWriter(newFilename, isAppend));
 
     }
 
+    private void validateFilename(){
+        File file = new File(filename);
+
+        if (file.exists() && file.isDirectory() ) {
+            String name = getFilename(TableOfSymbols.filepath);
+            filename += name;
+        }
+    }
+
     public boolean writeToFile(String buffer){
+        System.out.println("--------" + filename);
+        validateFilename();
+        System.out.println("--------" + filename);
         try {
             if(ErrorHandle.hasError()){
                 newFilename = getNewFilePath("-errors", "log");
@@ -76,15 +80,28 @@ public class CreateFile {
         String filePath = absolutePath.substring(0,absolutePath.lastIndexOf(File.separator));
         String origName = absolutePath.substring(
                     absolutePath.lastIndexOf(File.separator), absolutePath.lastIndexOf("."));
-        filePath += File.separator + origName + newName + "." + ext;
+        filePath += origName + newName + "." + ext;
 
         return filePath;
     }
 
-    private String getFilename () {
-        File file = new File(TableOfSymbols.filepath);
+    public String getFilename (String path) {
+        File file = new File(path);
         String absolutePath = file.getAbsolutePath();
         String fileName = absolutePath.substring(absolutePath.lastIndexOf(File.separator), absolutePath.length());
+
+        return fileName;
+    }
+
+    public static String getFilenameWithoutExtension (String path) {
+        File file = new File(path);
+        String absolutePath = file.getAbsolutePath();
+        String fileName = absolutePath.substring(absolutePath.lastIndexOf(File.separator), absolutePath.length());
+
+        if (fileName.contains(".")){
+            fileName = fileName.substring(0, fileName.lastIndexOf("."));
+        }
+
 
         return fileName;
     }
@@ -111,5 +128,15 @@ public class CreateFile {
             System.err.println("couldnt close file: " + filename);
             e.printStackTrace();
         }
+    }
+
+    public static String getExtension(File file){
+        String absolutePath = file.getAbsolutePath();
+        if (absolutePath.lastIndexOf(".") > 0) {
+            String ext = absolutePath.substring(absolutePath.lastIndexOf("."), absolutePath.length());
+            return ext;
+        }
+
+        return null;
     }
 }

@@ -270,4 +270,8 @@ public class TableOfSymbols {
     public static int getObjectID() {
         return objectID;
     }
+
+    public static void clean() {
+        tableOfSymbols.clear();
+    }
 }

@@ -46,4 +46,8 @@ public class ErrorHandle {
     public static boolean hasError() {
         return !errorArray.isEmpty();
     }
+
+    public static void clean() {
+        errorArray.clear();
+    }
 }

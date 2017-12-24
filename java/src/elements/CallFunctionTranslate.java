@@ -8,6 +8,7 @@ import generatedParser.SLLanguageParser;
 public class CallFunctionTranslate {
 
     public void doFunctionCalling(SLLanguageParser.FunctionCallContext ctx) {
+        System.out.println("aaaaaaaaaaaaaa " + ctx.getText());
 
     }
 }
