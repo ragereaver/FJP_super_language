@@ -202,6 +202,18 @@ public class Validators {
                                     leftType.equals(VARIABLE_TYPE_ARRAY_INT)));
                 }
 
+                case "&&": {
+                    return (leftType.equals(rightType) &&
+                            (leftType.equals(VARIABLE_TYPE_BOOLEAN) ||
+                                    leftType.equals(VARIABLE_TYPE_ARRAY_BOOLEAN)));
+                }
+
+                case "||": {
+                    return (leftType.equals(rightType) &&
+                            (leftType.equals(VARIABLE_TYPE_BOOLEAN) ||
+                                    leftType.equals(VARIABLE_TYPE_ARRAY_BOOLEAN)));
+                }
+
                 //String equal - musi se osetrit
                 case "===": {
                     return (leftType.equals(rightType) &&
