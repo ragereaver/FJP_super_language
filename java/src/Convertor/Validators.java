@@ -107,6 +107,21 @@ public class Validators {
             case "true": return true;
             case "int": return true;
             case "string": return true;
+            case "for": return true;
+            case "if": return true;
+            case "while": return true;
+            case "until": return true;
+            case "do": return true;
+            case "case": return true;
+            case "new": return true;
+            case "switch": return true;
+            case "return": return true;
+            case "default": return true;
+            case "else": return true;
+            case "void": return true;
+            case "const": return true;
+            case "break": return true;
+            case "continue": return true;
             default: return false;
         }
     }

@@ -54,7 +54,7 @@ stringSpecifier
     ;
 
 emptySpecifier
-    :'void'
+    :   'void'
     ;
 
 cycle
@@ -267,9 +267,7 @@ Else : 'else';
 For : 'for';
 If : 'if';
 Int : 'int';
-Long : 'long';
 Return : 'return';
-Short : 'short';
 Switch : 'switch';
 Void : 'void';
 While : 'while';
