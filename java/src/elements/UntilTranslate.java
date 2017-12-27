@@ -1,5 +1,6 @@
 package elements;
 
+import enums.EInstructionSet;
 import generatedParser.SLLanguageParser;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -14,4 +15,7 @@ public class UntilTranslate extends WhileTranslate{
         doBody(ctx.compoundStatement(0)); // melo by byt stejne
     }
 
+    public void exitUntil(SLLanguageParser.CycleContext ctx) {
+      //  EInstructionSet.doInstruction(EInstructionSet.JUMP, 18); //přepsat adresu na začátek until?
+    }
 }

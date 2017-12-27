@@ -1,5 +1,6 @@
 package elements;
 
+import enums.EInstructionSet;
 import generatedParser.SLLanguageParser;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.Token;
@@ -16,6 +17,11 @@ public class ForTranslate extends WhileTranslate{
 
     @Override
     public void doCondition(ParseTree condition, Token token) {
+
         //TODO: urcite jine zpracovani podminky
+    }
+
+    public void exitFor(SLLanguageParser.CycleContext ctx) {
+        //EInstructionSet.doInstruction(EInstructionSet.JUMP, 18); //přepsat adresu na začátek for
     }
 }

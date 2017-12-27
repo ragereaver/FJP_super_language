@@ -1,5 +1,6 @@
 package elements;
 
+import enums.EInstructionSet;
 import generatedParser.SLLanguageParser;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -18,4 +19,7 @@ public class SwitchTranslate extends WhileTranslate{
         //switch mame jen pro cisla
     }
 
+    public void exitSwitch(SLLanguageParser.CycleContext ctx) {
+        //EInstructionSet.doInstruction(EInstructionSet.JUMP, 18); //přepsat adresu na konec switch?
+    }
 }

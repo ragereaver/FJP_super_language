@@ -23,11 +23,11 @@ int function neee(int first, int second){
 const int CON = 5;
 
 
-while(ahoj > 6){
+while(ahoj > 5){
     int pokus = 5;
 }
 
-if (ahoj > 5 && ahoj < 10) {
+if (ahoj > 5) {
     int tesst = 2;
     c = (10 > ahoj) ? b = 5 : b = 1;
 }
