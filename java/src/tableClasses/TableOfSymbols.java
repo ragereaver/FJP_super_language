@@ -215,7 +215,6 @@ public class TableOfSymbols {
             someObjectExist = false;
             for (int i = 0; i < tableOfSymbols.size(); i++) {
                 Symbol symbol = tableOfSymbols.get(i);
-                System.out.println("hledam v " + symbol.getName() + "  object " + symbol.getObjectID() + "   " + objectID);
                 if(symbol.getObjectID() == object || symbol.getObjectID() == parent) {
                     if (symbol.getObjectID() == parent) {
                         someObjectExist = true;
@@ -275,6 +274,7 @@ public class TableOfSymbols {
             parentID = changesInParentID.pop();
             objectID = changesInObjectID.pop();
         }
+        System.out.println("object" + objectID + " parent " + parentID);
     }
 
     public static int getActualLevel() {

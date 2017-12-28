@@ -1,27 +1,8 @@
 int ahoj = 5;
-int s = -20;
-if (ahoj > 5 && ahoj < 12) {
+if (ahoj > 5) {
     int b = 3;
     int d = ahoj;
 
-    if (ahoj > b){
-        int d = 5;
-        int x = 5;
-    }
-
-
-    int c = b + 5 + ahoj;
-    c = (10 > ahoj) ? b = 5 : b = 1;
-}
-
-switch (5) {
-    case 5: b = 3; break;
-    case 4: b = 2; break;
-    default: b = 5;
-}
-
-int i;
-i = 22;
-for (i = 0; i < 5; i++) {
-    ahoj = 5 * i + ahoj;
+} else {
+    int b = 9;
 }

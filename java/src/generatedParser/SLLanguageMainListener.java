@@ -185,7 +185,6 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterCycle(SLLanguageParser.CycleContext ctx) {
-
 		TableOfSymbols.setObject(true);
 		System.out.println("--------zacatek cyklu-------");
 		String type = ctx.getChild(0).getText();

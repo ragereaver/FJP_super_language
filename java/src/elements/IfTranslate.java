@@ -6,6 +6,7 @@ import generatedParser.SLLanguageParser;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.Token;
 import Convertor.Validators;
+import tableClasses.TableOfSymbols;
 
 /**
  * Created by BobrZlosyn on 22.12.2017.

@@ -199,10 +199,6 @@ public class DeclarationTranslate {
                         String leftType = Validators.getType(ctx, left);
                         String rightType = Validators.getType(ctx, right);
 
-                        System.out.println("Ltype " + leftType + " value " + left);
-                        System.out.println("Rtype " + rightType + " value " + right);
-                        System.out.println("Lasttype " + lastType + " sign " + sign);
-                        System.out.println("---------------------------------------");
                         if (leftType.isEmpty()) {
                             leftType = lastType;
                         }
