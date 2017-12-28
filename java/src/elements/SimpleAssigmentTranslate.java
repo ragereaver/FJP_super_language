@@ -3,7 +3,7 @@ package elements;
 import Convertor.Validators;
 import enums.EErrorCodes;
 import enums.EInstructionSet;
-import generatedParser.SLLanguageParser;
+import org.antlr.v4.runtime.ParserRuleContext;
 import tableClasses.ErrorHandle;
 import tableClasses.TableOfSymbols;
 
@@ -12,7 +12,7 @@ import tableClasses.TableOfSymbols;
  */
 public class SimpleAssigmentTranslate extends DeclarationTranslate{
 
-    public void doAssigmentTranslate(SLLanguageParser.AssignmentExpressionContext ctx) {
+    public void doAssigmentTranslate(ParserRuleContext ctx) {
 
         if (!Validators.isAssignmentHere(ctx.getText())) {
             return;
