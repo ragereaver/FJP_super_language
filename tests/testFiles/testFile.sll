@@ -1,4 +1,4 @@
-int ahoj = 4;
+int ahoj = 6;
 int b = 3;
 
 int a, c = 3 + 3, i = 5 + b;
@@ -20,16 +20,19 @@ int function neee(int first, int second){
 }
 
 
-
-
-int b = pole [2];
-
 const int CON = 5;
 
-string test = "ahoj";
+
+while(ahoj > 5){
+    int pokus = 5;
+}
 
 if (ahoj > 5) {
+    int tesst = 2;
     c = (10 > ahoj) ? b = 5 : b = 1;
+}
+else {
+    int test = 3;
 }
 
 switch (5) {

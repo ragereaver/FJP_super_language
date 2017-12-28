@@ -224,9 +224,31 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCycle(SLLanguageParser.CycleContext ctx) {
-
-		TableOfSymbols.setObject(false);
-		System.out.println("konec cyklu");
+        String type = ctx.getChild(0).getText();
+		System.out.println("Ukonceni cyklu: " + type);
+		switch (type) {
+			case "for":{
+				ForTranslate forTranslate = new ForTranslate();
+				forTranslate.exitFor(ctx);
+			}; break;
+			case "while":{
+				WhileTranslate whileTranslate = new WhileTranslate();
+				whileTranslate.exitWhile(ctx);
+			}; break;
+			case "do":{
+				DoTranslate doTranslate = new DoTranslate();
+				doTranslate.exitDo(ctx);
+			}; break;
+			case "until":{
+				UntilTranslate untilTranslate = new UntilTranslate();
+				untilTranslate.exitUntil(ctx);
+			}; break;
+			case "switch":{
+				SwitchTranslate switchTranslate = new SwitchTranslate();
+				switchTranslate.exitSwitch(ctx);
+			}; break;
+		}
+        TableOfSymbols.setObject(false);
 		System.out.println();
 	}
 	/**

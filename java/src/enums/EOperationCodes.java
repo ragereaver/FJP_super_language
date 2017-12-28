@@ -5,7 +5,8 @@ import tableClasses.TableOfCodes;
 /**
  * Created by BobrZlosyn on 17.12.2017.
  */
-public enum EOperationCodes {
+public enum
+EOperationCodes {
     UNARY_MINUS("1"),
     PLUS("2"),
     MINUS("3"),
