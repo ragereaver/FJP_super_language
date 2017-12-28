@@ -1,1 +1,3 @@
-Warning: At line 33:0 - Parsing code wasnt possible! no viable alternative at input 'if(ahoj>5&&ahoj<10){inttesst=2;c=(10>ahoj)?b=5:b=1;}else{s}'
+Warning: At line 5:0 - Function dont exist! 
+Warning: At line 9:0 - Variable is not convertable! 
+Warning: At line 9:0 - Action is not allowed with these types! 

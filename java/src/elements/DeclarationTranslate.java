@@ -51,7 +51,6 @@ public class DeclarationTranslate {
     public String doDeclarationInner(String type, ParseTree children, boolean isDeclaration){
 
         ParserRuleContext ctx = (ParserRuleContext) children;
-
         if (ctx.getChildCount() == 1) {
                 singleAssignment(type, ctx, isDeclaration);
 
