@@ -1,8 +1,10 @@
 int ahoj = 5;
-if (ahoj > 5) {
+if (ahoj == 5) {
     int b = 3;
     int d = ahoj;
 
 } else {
-    int b = 9;
+    for(int i = 1; i < ahoj; i = i + 1){
+
+    }
 }

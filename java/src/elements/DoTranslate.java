@@ -8,12 +8,16 @@ import generatedParser.SLLanguageParser;
  */
 public class DoTranslate extends WhileTranslate {
 
+    public int beginAdress;
+    public int endAdress;
+
     public void runDo(SLLanguageParser.CycleContext ctx) {
-        doCondition(ctx.expression(), ctx.getStart());
+
         doBody(ctx.compoundStatement(0));
     }
 
     public void exitDo(SLLanguageParser.CycleContext ctx) {
+        doCondition(ctx.expression(), ctx.getStart());
        // EInstructionSet.doInstruction(EInstructionSet.JUMP, 18); //přepsat adresu na začátek do
     }
 }
