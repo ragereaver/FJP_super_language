@@ -279,4 +279,13 @@ public class Validators {
         return null;
     }
 
+    public static boolean isAssignmentHere(String value) {
+        String pattern = "((\\w+)(=)(\\w+)(.*))";
+        return (value != null && value.matches(pattern));
+    }
+
+    public static boolean isCommaHere(String value) {
+        String pattern = "((.+)(,)(.+))";
+        return (value != null && value.matches(pattern));
+    }
 }

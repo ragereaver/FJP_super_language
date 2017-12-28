@@ -30,7 +30,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 */
 	@Override public void enterCompilationUnit(SLLanguageParser.CompilationUnitContext ctx) {
 		EInstructionSet.doInstruction(EInstructionSet.JUMP, 1);
-		EInstructionSet.doInstruction(EInstructionSet.INT, 1);
+		EInstructionSet.doInstruction(EInstructionSet.INT, 3);
 	}
 	/**
 	 * {@inheritDoc}
@@ -110,10 +110,13 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) {
-		TableOfSymbols.setLevel(true);
+
+		System.out.println("zacatek funkce");
+
+		TableOfSymbols.setObject(true);
+		EInstructionSet.doInstruction(EInstructionSet.INT, 3);
 		FunctionTranslate functionTranslate = new FunctionTranslate();
 		functionTranslate.doFunctionDefinition(ctx);
-		System.out.println("zacatek funkce");
 		System.out.println(ctx.getText());
 	}
 	/**
@@ -123,6 +126,8 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 */
 	@Override public void exitFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) {
 		TableOfSymbols.setLevel(false);
+		TableOfSymbols.setObject(false);
+		EInstructionSet.doInstruction(EInstructionSet.RETURN, 0, 0);
 		System.out.println("konec funkce");
 		System.out.println();
 	}
@@ -180,7 +185,8 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterCycle(SLLanguageParser.CycleContext ctx) {
-		TableOfSymbols.setLevel(true);
+
+		TableOfSymbols.setObject(true);
 		System.out.println("--------zacatek cyklu-------");
 		String type = ctx.getChild(0).getText();
 		System.out.println("Object " + TableOfSymbols.getObjectID() + " level " + TableOfSymbols.getActualLevel() + " parent " + TableOfSymbols.getParentLevel());
@@ -218,7 +224,8 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCycle(SLLanguageParser.CycleContext ctx) {
-		TableOfSymbols.setLevel(false);
+
+		TableOfSymbols.setObject(false);
 		System.out.println("konec cyklu");
 		System.out.println();
 	}
@@ -301,9 +308,11 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 */
 	@Override public void enterDeclaration(SLLanguageParser.DeclarationContext ctx) {
 		isInDeclaration = true;
+		System.out.println("deklarace");
+		System.out.println(ctx.getText());
 		DeclarationTranslate declarationTranslate = new DeclarationTranslate();
 		declarationTranslate.doStandardDeclaration(ctx);
-		System.out.println("deklarace");
+
 	}
 	/**
 	 * {@inheritDoc}
@@ -311,6 +320,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitDeclaration(SLLanguageParser.DeclarationContext ctx) {
+		System.out.println("deklarace - exit");
 		isInDeclaration = false;
 	}
 	/**
@@ -392,7 +402,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 */
 	@Override public void enterFunctionCall(SLLanguageParser.FunctionCallContext ctx) {
 
-		if (!isInDeclaration && !isInAssignemt) {
+		if (!isInDeclaration || !isInAssignemt) {
 			CallFunctionTranslate callFunctionTranslate = new CallFunctionTranslate();
 			callFunctionTranslate.doFunctionCalling(ctx);
 		}

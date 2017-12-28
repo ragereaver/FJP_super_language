@@ -30,6 +30,9 @@ public class TableOfSymbols {
         private String name, variableType;
         private boolean isVariable, isConst;
         private int level, address, size, parentID, objectID;
+        private int countParam;
+        private ArrayList <String> params;
+        private ArrayList <String> types;
 
         public Symbol(int parentID, int objectID, String name, boolean isVariable, int level, int address,
                                                     String variableType, int size, boolean isConst){
@@ -43,6 +46,9 @@ public class TableOfSymbols {
             this.isConst = isConst;
             this.parentID = parentID;
             this.objectID = objectID;
+            params = new ArrayList();
+            types = new ArrayList();
+            countParam = 0;
         }
 
         public int getLevel() {
@@ -81,7 +87,25 @@ public class TableOfSymbols {
             return parentID;
         }
 
+        public int getCountParam() {
+            return countParam;
+        }
+
+        public String getParamAtIndex(int index) {
+            if (params.size() <= index) {
+                return null;
+            }
+            return params.get(index);
+        }
+
+        public String getTypeAtIndex(int index) {
+            if (types.size() <= index) {
+                return null;
+            }
+            return types.get(index);
+        }
     }
+
 
     public static boolean addSymbolConst(Token ctxToken, String name, String variableType, int size){
 
@@ -93,8 +117,8 @@ public class TableOfSymbols {
         return addSymbol(ctxToken, name, true, getNextSymbolVariableAddress(), variableType, size, false, false);
     }
 
-    public static boolean addSymbolFunction(Token ctxToken, String name, String variableType, int size){
-        return addSymbol(ctxToken, name, false, getNextSymbolVariableAddress(), variableType, size, false, false);
+    public static boolean addSymbolFunction(Token ctxToken, String name, String variableType){
+        return addSymbol(ctxToken, name, false, TableOfCodes.getAddressInt(objectID) , variableType, 0, false, false);
     }
 
     public static boolean addSymbol(Token ctxToken, String name, boolean isVariable, String variableType, int size, boolean isConst, boolean isEmpty){
@@ -117,8 +141,6 @@ public class TableOfSymbols {
         }
 
 
-
-
         if (Validators.isArrayHere(variableType)) {//zapsani pole do prikazu
 
             TableOfCodes.updateInt(getObjectID(), size);
@@ -139,8 +161,6 @@ public class TableOfSymbols {
                 EInstructionSet.doInstruction(EInstructionSet.STORE, address);
             }
         }
-
-
 
         return true;
     }
@@ -165,6 +185,20 @@ public class TableOfSymbols {
         return null;
     }
 
+    public static Symbol findFunction(String name, int params, ArrayList <String> types){
+
+        int size = tableOfSymbols.size();
+        Symbol symbol;
+        for (int i = 0; i < size; i++){
+            symbol = tableOfSymbols.get(i);
+            if (symbol.getName().equals(name)
+                    && !symbol.isVariable()) {
+               return tableOfSymbols.get(i);
+            }
+        }
+        return null;
+    }
+
     public static Symbol findByNameAllLevels(String name, boolean isVariable){
 
         int parent = parentID;
@@ -181,7 +215,7 @@ public class TableOfSymbols {
             someObjectExist = false;
             for (int i = 0; i < tableOfSymbols.size(); i++) {
                 Symbol symbol = tableOfSymbols.get(i);
-
+                System.out.println("hledam v " + symbol.getName() + "  object " + symbol.getObjectID() + "   " + objectID);
                 if(symbol.getObjectID() == object || symbol.getObjectID() == parent) {
                     if (symbol.getObjectID() == parent) {
                         someObjectExist = true;
@@ -216,6 +250,15 @@ public class TableOfSymbols {
 
     public static void setLevel(boolean isDeeper){
         if(isDeeper) {
+            actualLevel++;
+
+        }else {
+            actualLevel--;
+        }
+    }
+
+    public static void setObject(boolean isDeeper) {
+        if(isDeeper) {
             if(parentID == 0) {
                 changesInParentID.push(parentID);
                 parentID = objectID;
@@ -227,10 +270,8 @@ public class TableOfSymbols {
 
             changesInObjectID.push(objectID);
             objectID = ++actObjectID;
-            actualLevel++;
 
         }else {
-            actualLevel--;
             parentID = changesInParentID.pop();
             objectID = changesInObjectID.pop();
         }
@@ -276,5 +317,17 @@ public class TableOfSymbols {
 
     public static void clean() {
         tableOfSymbols.clear();
+    }
+
+    public static void updateFunction(ArrayList <String> params, ArrayList <String> paramsTypes){
+        int size = tableOfSymbols.size();
+        for (int i = 0; i < size; i++){
+            if (tableOfSymbols.get(i).getObjectID() == objectID && !tableOfSymbols.get(i).isVariable()) {
+                tableOfSymbols.get(i).countParam = params.size();
+                tableOfSymbols.get(i).params = params;
+                tableOfSymbols.get(i).types = paramsTypes;
+            }
+        }
+
     }
 }

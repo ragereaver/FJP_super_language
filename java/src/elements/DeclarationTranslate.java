@@ -5,11 +5,14 @@ import enums.EErrorCodes;
 import enums.EInstructionSet;
 import enums.EOperationCodes;
 import generatedParser.SLLanguageParser.InitDeclaratorListContext;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import tableClasses.ErrorHandle;
 import tableClasses.TableOfSymbols;
 
+
+import java.util.ArrayList;
 
 import static generatedParser.SLLanguageParser.*;
 
@@ -18,58 +21,61 @@ import static generatedParser.SLLanguageParser.*;
  */
 public class DeclarationTranslate {
 
-    private String lastType = "";
+    private String lastType;
+
+    public DeclarationTranslate () {
+        lastType = "";
+    }
+
     /**
      * zpracovava normalni deklarace ( vse krome pole)
      * @param ctx
      * @return
      */
     public void doStandardDeclaration(DeclarationContext ctx){
-        System.out.println(ctx.getText());
-
-        // preskoceni deklarace poli
-        if (ctx.getChildCount() > 1) {
-            String type = ctx.typeSpecifier().getText();
-
-            String value = doDeclarationInner(type, ctx.getChild(1), 1);
-
-        }else {
-
+        if (ctx.getChildCount() <= 1) {
+            return; // preskoceni deklarace poli
         }
+
+        String type = ctx.typeSpecifier().getText();
+        doDeclarationInner(type, ctx.getChild(1), true);
     }
 
     /**
      * vraci hodnotu
      * @param type
      * @param children
-     * @param depth
+     * @param isDeclaration
      * @return
      */
-    private String doDeclarationInner(String type, ParseTree children, int depth){
+    public String doDeclarationInner(String type, ParseTree children, boolean isDeclaration){
 
-        InitDeclaratorListContext ctx = (InitDeclaratorListContext) children;
-        if (children.getChildCount() == 1) {
-            singleAssignment(type, ctx);
+        ParserRuleContext ctx = (ParserRuleContext) children;
+
+        if (ctx.getChildCount() == 1) {
+                singleAssignment(type, ctx, isDeclaration);
 
         }else {
-            innerMultipleAssigment(ctx, ctx.getStart(), type);
+            System.out.println("mnohhhooooooooooooo  " + ctx.getText());
+            innerMultipleAssigment(ctx, ctx.getStart(), type, isDeclaration);
         }
 
-        System.out.println("konec \n");
         return "";
     }
 
 
-    public void singleAssignment (String type, InitDeclaratorListContext ctx) {
+    private void singleAssignment (String type, ParserRuleContext ctx, boolean isDeclaration) {
         String identifier;
         String value;
-        identifier = ctx.initDeclarator().Identifier().getText();
-        AssignmentExpressionContext assignmentExpCtx = ctx.initDeclarator().assignmentExpression();
+        identifier = ctx.getChild(0).getChild(0).getText();
+        ParserRuleContext assignmentExpCtx = (ParserRuleContext) ctx.getChild(0).getChild(2);
+        boolean isEmpty = true;
+        boolean isConst = false;
+        boolean isVariable = true;
 
         if (assignmentExpCtx != null) {
-
-
             value = assignmentExpCtx.getText();
+            isEmpty = false;
 
             if (type.equals(Validators.VARIABLE_TYPE_BOOLEAN)) {
                 if (Validators.isTernalIfHere(value)) {
@@ -79,35 +85,19 @@ public class DeclarationTranslate {
                 }
             }
 
-            if(Validators.isDimHere(value)) { // reseni zavorkovych vyrazu
+            if (Validators.isDimHere(value)
+                    || Validators.isArrayHere(value)
+                    || Validators.isSignHere(value)) { // reseni zavorkovych vyrazu
                 resolveMathProblems(assignmentExpCtx, ctx.getStart(), 0, type);
-                TableOfSymbols.addSymbolVariable(ctx.getStart(), identifier, type, 0);
 
             }else {
-                if (Validators.isArrayHere(value)) {// reseni prirazeni pole
-                    identifier = ctx.initDeclarator().Identifier().getText();
-
-                    resolveMathProblems(ctx.initDeclarator().getChild(2), ctx.getStart(), 0, type);
-                    TableOfSymbols.addSymbolVariable(ctx.getStart(), identifier, type, 0);
-
-                }else {// reseni prirazeni pole
-                    System.out.println("-----**********" + value + "   " + Validators.isSignHere(value));
-                    if (Validators.isSignHere(value)) {
-                        resolveMathProblems(ctx.initDeclarator().getChild(2), ctx.getStart(), 0, type);
-
-                    }else {
-                        EInstructionSet.handleVariables(value, ctx.getStart(), type);
-                    }
-
-                    TableOfSymbols.addSymbolVariable(ctx.getStart(), identifier, type, 0);
-                }
+                EInstructionSet.handleVariables(value, ctx.getStart(), type);
             }
-
-
-        }else {
-            TableOfSymbols.addSymbol(ctx.getStart(), identifier, true, type, 0, false, true);
         }
 
+        if (isDeclaration) {
+            TableOfSymbols.addSymbol(ctx.getStart(), identifier, isVariable, type, 0, isConst, isEmpty);
+        }
     }
 
 
@@ -117,7 +107,7 @@ public class DeclarationTranslate {
      * @param token
      * @param type
      */
-    private void innerMultipleAssigment(ParseTree child, Token token, String type) {
+    private void innerMultipleAssigment(ParseTree child, Token token, String type, boolean isDeclaration) {
         if (child.getChildCount() != 1) {
             if (child.getChild(1).getText().equals("=")) {
                 String left = child.getChild(0).getText();
@@ -125,20 +115,53 @@ public class DeclarationTranslate {
 
                 if (child.getChildCount() > 1) {
                     resolveMathProblems(child.getChild(2), token, 0, type);
-                    TableOfSymbols.addSymbolVariable(token, left, type, 0);
-
                 }else {
                     EInstructionSet.handleVariables(right, token, type);
+                }
+
+                if (isDeclaration) {
                     TableOfSymbols.addSymbolVariable(token, left, type, 0);
                 }
 
+
             }else {
-                innerMultipleAssigment(child.getChild(0), token, type);
-                innerMultipleAssigment(child.getChild(2), token, type);
+                innerMultipleAssigment(child.getChild(0), token, type, isDeclaration);
+                innerMultipleAssigment(child.getChild(2), token, type, isDeclaration);
             }
         }else {
-            String identifier = child.getText();
-            TableOfSymbols.addSymbol(token, identifier, true, type, 0, false, true);
+            if (isDeclaration) {
+                String identifier = child.getText();
+                TableOfSymbols.addSymbol(token, identifier, true, type, 0, false, true);
+            }
+        }
+    }
+
+    private void innerMultipleValueAssignemnt(ParseTree child, Token token, String type, boolean isDeclaration) {
+        if (child.getChildCount() != 1) {
+            if (child.getChild(1).getText().equals("=")) {
+                String left = child.getChild(0).getText();
+                String right = child.getChild(2).getText();
+
+                if (child.getChildCount() > 1) {
+                    resolveMathProblems(child.getChild(2), token, 0, type);
+                }else {
+                    EInstructionSet.handleVariables(right, token, type);
+                }
+
+                if (isDeclaration) {
+                    TableOfSymbols.addSymbolVariable(token, left, type, 0);
+                }
+
+
+            }else {
+                innerMultipleAssigment(child.getChild(0), token, type, isDeclaration);
+                innerMultipleAssigment(child.getChild(2), token, type, isDeclaration);
+            }
+        }else {
+            if (isDeclaration) {
+                String identifier = child.getText();
+                TableOfSymbols.addSymbol(token, identifier, true, type, 0, false, true);
+            }
         }
     }
 

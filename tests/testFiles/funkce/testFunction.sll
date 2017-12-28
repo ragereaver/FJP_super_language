@@ -1,0 +1,6 @@
+int function name (int l, int o) {
+    int a = 5;
+    int c = 0 + a / 1;
+}
+
+name(1, 2);

@@ -78,7 +78,10 @@ public class TableOfCodes {
     }
 
     public static  void addCode (EInstructionSet code, int level, String value) {
-        if (code.equals(EInstructionSet.INT) || code.equals(EInstructionSet.JUMP)) {
+        if (code.equals(EInstructionSet.INT)
+                || code.equals(EInstructionSet.JUMP)
+                || code.equals(EInstructionSet.JUMP_COMP)) {
+
             tableOfIntsJump.add(new IntWait(TableOfSymbols.getObjectID(),tableOfCodes.size(), code));
         }
 
@@ -100,6 +103,17 @@ public class TableOfCodes {
         return code.toString();
     }
 
+    public static int getAddressInt(int objectID) {
+        int defaultObject = -1;
+        for (IntWait intWait : tableOfIntsJump) {
+            if (intWait.getCode().equals(EInstructionSet.INT) && intWait.getObjectID() == objectID) {
+                return intWait.getCodeIndex();
+            }
+        }
+
+        return defaultObject;
+    }
+
     public static void updateInt(int objectID) {
         TableOfCodes.updateInt(objectID, 1);
     }
@@ -119,6 +133,16 @@ public class TableOfCodes {
     public static void updateJump(int objectID, String address) {
         tableOfIntsJump.forEach(intWait -> {
             if ( intWait.getCode().equals(EInstructionSet.JUMP) && intWait.getObjectID() == objectID) {
+                int index = intWait.getCodeIndex();
+                TableOfCodes.updateCode(index, address);
+                return;
+            }
+        });
+    }
+
+    public static void updateJumpCompare(int objectID, String address) {
+        tableOfIntsJump.forEach(intWait -> {
+            if ( intWait.getCode().equals(EInstructionSet.JUMP_COMP) && intWait.getObjectID() == objectID) {
                 int index = intWait.getCodeIndex();
                 TableOfCodes.updateCode(index, address);
                 return;
