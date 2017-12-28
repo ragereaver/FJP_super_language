@@ -295,9 +295,14 @@ public class TableOfSymbols {
     public static int getNextSymbolVariableAddress(){
         Symbol symbol = null;
         for (Symbol sym : tableOfSymbols){
-            if (sym.getObjectID() == objectID && (sym.isVariable())){
+            if (sym.getLevel() == 0 && (sym.isVariable())) {
                 symbol = sym;
+            } else {
+                if (sym.getObjectID() == objectID && (sym.isVariable())){
+                    symbol = sym;
+                }
             }
+
         }
 
         if (symbol == null) {
