@@ -5,6 +5,7 @@ import createFilePL0.CreateFile;
 import elements.*;
 import enums.EInstructionSet;
 import javafx.scene.control.Tab;
+import org.antlr.v4.runtime.Token;
 import tableClasses.TableOfCodes;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -22,6 +23,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	public static boolean isInAssignemt = false;
 	public static boolean isInDeclaration = false;
 
+	public static Token variable;
 
 	/**
 	 * {@inheritDoc}
@@ -271,13 +273,21 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLabeledStatement(SLLanguageParser.LabeledStatementContext ctx) { }
+	@Override public void enterLabeledStatement(SLLanguageParser.LabeledStatementContext ctx) {
+		if(ctx.getChild(0).getText().equals("case")){
+			CaseTranslate casetranslate = new CaseTranslate();
+			casetranslate.doCase(ctx, variable);
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLabeledStatement(SLLanguageParser.LabeledStatementContext ctx) { }
+	@Override public void exitLabeledStatement(SLLanguageParser.LabeledStatementContext ctx) {
+		CaseTranslate label = new CaseTranslate();
+		label.exitLabel(ctx);
+	}
 	/**
 	 * {@inheritDoc}
 	 *
