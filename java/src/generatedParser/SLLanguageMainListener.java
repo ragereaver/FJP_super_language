@@ -293,13 +293,18 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterElseStatement(SLLanguageParser.ElseStatementContext ctx) { }
+	@Override public void enterElseStatement(SLLanguageParser.ElseStatementContext ctx) {
+		IfTranslate iftranslate = new IfTranslate();
+		iftranslate.doElse(ctx);
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitElseStatement(SLLanguageParser.ElseStatementContext ctx) { }
+	@Override public void exitElseStatement(SLLanguageParser.ElseStatementContext ctx) {
+
+	}
 	/**
 	 * {@inheritDoc}
 	 *

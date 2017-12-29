@@ -46,15 +46,16 @@ public class IfTranslate extends DeclarationTranslate {
 
 
     public void exitIf(SLLanguageParser.CycleContext ctx){
-        EInstructionSet.doInstruction(EInstructionSet.JUMP, 10); // skok za else větev
+       // EInstructionSet.doInstruction(EInstructionSet.JUMP, 10); // skok za else větev
     }
 
     public void doBodyIf(ParseTree body) {
 
         //TODO: pravdive vetve
     }
-    public void doBodyElse(ParseTree body) {
-        //TODO: else vetve
-        //TODO: otestovat zda se nevykona sama jiz v jinych listenerech
+
+    public void doElse(SLLanguageParser.ElseStatementContext ctx) {
+        EInstructionSet.doInstruction(EInstructionSet.JUMP, 10); //skok za else větev
     }
+
 }

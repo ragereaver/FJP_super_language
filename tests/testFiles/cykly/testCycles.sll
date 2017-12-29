@@ -1,6 +1,13 @@
 int ahoj = 5;
 int c = 3;
 
+if (c < ahoj){
+    c = ahoj;
+}
+else{
+    c = c - 1;
+}
+
 switch(ahoj){
 case 1:
     ahoj = ahoj + 1;
