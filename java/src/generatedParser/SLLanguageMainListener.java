@@ -230,6 +230,10 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 				ForTranslate forTranslate = new ForTranslate();
 				forTranslate.exitFor(ctx);
 			}; break;
+			case "if":{
+				IfTranslate ifTranslate = new IfTranslate();
+				ifTranslate.exitIf(ctx);
+			}; break;
 			case "while":{
 				WhileTranslate whileTranslate = new WhileTranslate();
 				whileTranslate.exitWhile(ctx);

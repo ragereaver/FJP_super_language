@@ -200,7 +200,6 @@ public class TableOfSymbols {
     }
 
     public static Symbol findByNameAllLevels(String name, boolean isVariable){
-
         int parent = parentID;
         int object = objectID;
         int pomObject = -1;
