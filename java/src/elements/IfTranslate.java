@@ -23,10 +23,10 @@ public class IfTranslate extends DeclarationTranslate {
 
         doCondition(ctx.logicalOrExpression(), token);
         EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP,1); //přepsat adresu, pro skok za if
-        doBodyIf(ctx.compoundStatement(0));
-        if (ctx.compoundStatement().size() > 1) {
+        doBodyIf(ctx.compoundStatement());
+        /*if (ctx.compoundStatement().size() > 1) {
             doBodyElse(ctx.compoundStatement(1));
-        }
+        }*/
     }
 
     public void doCondition(ParseTree condition, Token token){

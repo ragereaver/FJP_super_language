@@ -83,6 +83,12 @@ public interface SLLanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCycle(SLLanguageParser.CycleContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SLLanguageParser#elseStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitElseStatement(SLLanguageParser.ElseStatementContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SLLanguageParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

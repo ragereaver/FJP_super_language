@@ -15,7 +15,7 @@ public class WhileTranslate extends IfTranslate{
 
 
         doCondition(ctx.expression(), ctx.getStart()); // teoreticky by to melo byt stejne
-        doBody(ctx.compoundStatement(0));
+        doBody(ctx.compoundStatement());
         //momentalně se body překládá po while
         EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP, 25); //přepsat adresu na dalsi instrukci po while
     }

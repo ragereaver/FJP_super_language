@@ -13,7 +13,7 @@ public class DoTranslate extends WhileTranslate {
 
     public void runDo(SLLanguageParser.CycleContext ctx) {
 
-        doBody(ctx.compoundStatement(0));
+        doBody(ctx.compoundStatement());
     }
 
     public void exitDo(SLLanguageParser.CycleContext ctx) {

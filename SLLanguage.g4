@@ -58,14 +58,18 @@ emptySpecifier
     ;
 
 cycle
-    : 'for' '(' forCondition ')' compoundStatement
-    | 'while' '(' expression ')' compoundStatement
-    | 'do' compoundStatement 'while' '(' expression ')' ';'
-    | 'until' compoundStatement 'until' '(' expression ')' ';'
-    | 'if' '(' logicalOrExpression ')' compoundStatement ('else' compoundStatement)?
-    | 'switch' '(' expression ')' '{' (labeledStatement)* '}'
+    :   'for' '(' forCondition ')' compoundStatement
+    |   'while' '(' expression ')' compoundStatement
+    |   'do' compoundStatement 'while' '(' expression ')' ';'
+    |   'until' compoundStatement 'until' '(' expression ')' ';'
+    |   'if' '(' logicalOrExpression ')' compoundStatement elseStatement?
+    |   'switch' '(' expression ')' '{' (labeledStatement)* '}'
     ;
 
+elseStatement
+    :   'else' compoundStatement
+    ;
+    
 statement
     :   labeledStatement
     |   compoundStatement
