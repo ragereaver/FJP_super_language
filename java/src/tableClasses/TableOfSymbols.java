@@ -176,7 +176,6 @@ public class TableOfSymbols {
     }
 
     public static Symbol findByNameActLevel(String name, boolean isVariable){
-        System.out.println("Hledam: " + name);
         for (Symbol symbol : tableOfSymbols){
             if (symbol.getObjectID() == objectID && symbol.getName().equals(name) && (isVariable == symbol.isVariable())){
                 return symbol;

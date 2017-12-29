@@ -22,7 +22,7 @@ public class IfTranslate extends DeclarationTranslate {
         Token token = ctx.getStart();
 
         doCondition(ctx.logicalOrExpression(), token);
-        EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP,1); //přepsat adresu, pro skok za if
+        EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP,1); //přepsat adresu, pro skok za IF, za další JUMP na konci IF
         doBodyIf(ctx.compoundStatement(0));
         if (ctx.compoundStatement().size() > 1) {
             doBodyElse(ctx.compoundStatement(1));
@@ -35,6 +35,11 @@ public class IfTranslate extends DeclarationTranslate {
         resolveMathProblems(condition, token, 0, Validators.VARIABLE_TYPE_BOOLEAN);
 
         SLLanguageMainListener.isInCycleHeader = false;
+    }
+
+
+    public void exitIf(SLLanguageParser.CycleContext ctx){
+        EInstructionSet.doInstruction(EInstructionSet.JUMP, 10); // skok za else větev
     }
 
     public void doBodyIf(ParseTree body) {
