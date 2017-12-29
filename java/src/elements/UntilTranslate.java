@@ -13,9 +13,10 @@ public class UntilTranslate extends WhileTranslate{
 
         doCondition(ctx.expression(), ctx.getStart()); // teoreticky by to melo byt stejne, navratova hodnota je obracene jen
         doBody(ctx.compoundStatement(0)); // melo by byt stejne
+        EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP, 25); //zatim je to while, dokud nebudem umět negaci
     }
 
     public void exitUntil(SLLanguageParser.CycleContext ctx) {
-      //  EInstructionSet.doInstruction(EInstructionSet.JUMP, 18); //přepsat adresu na začátek until?
+        EInstructionSet.doInstruction(EInstructionSet.JUMP, 14); //prepsat adresu na začátek until, před podmínku
     }
 }

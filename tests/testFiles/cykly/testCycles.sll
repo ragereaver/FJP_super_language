@@ -1,10 +1,19 @@
 int ahoj = 5;
-if (ahoj == 5) {
+int c = 3;
+
+do{
+    ahoj = ahoj + 1;
+}while(ahoj < 8);
+
+if (c == ahoj) {
     int b = 3;
     int d = ahoj;
 
 } else {
     for(int i = 1; i < ahoj; i = i + 1){
+        int test;
+        if(test == c){
 
+        }
     }
 }

@@ -186,6 +186,7 @@ public class DeclarationTranslate {
                 if (nextChild.getChild(0).getText().equals("(")){
                     nextChild = nextChild.getChild(1);
                 }else {
+
                     String left = resolveMathProblems(nextChild.getChild(0), ctx, depth + 1, defType);
                     String sign = nextChild.getChild(1).getText();
                     String right = resolveMathProblems(nextChild.getChild(2), ctx, depth + 1, defType);
