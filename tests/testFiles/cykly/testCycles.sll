@@ -1,6 +1,13 @@
 int ahoj = 5;
 int c = 3;
 
+switch(2){
+case 1:
+    ahoj = ahoj + 1;
+case 2: break;
+case 3: break;
+}
+
 do{
     ahoj = ahoj + 1;
 }while(ahoj < 8);
@@ -11,9 +18,6 @@ if (c == ahoj) {
 
 } else {
     for(int i = 1; i < ahoj; i = i + 1){
-        int test;
-        if(test == c){
 
-        }
     }
 }
