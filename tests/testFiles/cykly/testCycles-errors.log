@@ -1,3 +1,1 @@
-Warning: At line 4:0 - Variable is not convertable! 
-Warning: At line 4:0 - Variable is not convertable! 
-Warning: At line 4:0 - Variable is not convertable! 
+Warning: At line 4:0 - This condition has bad syntax! I can't decide if it's true or false 
