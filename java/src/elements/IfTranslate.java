@@ -1,5 +1,6 @@
 package elements;
 
+import enums.EErrorCodes;
 import enums.EInstructionSet;
 import generatedParser.SLLanguageMainListener;
 import generatedParser.SLLanguageParser;
@@ -7,6 +8,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.Token;
 import Convertor.Validators;
+import tableClasses.ErrorHandle;
 import tableClasses.TableOfSymbols;
 
 /**
@@ -39,7 +41,11 @@ public class IfTranslate extends DeclarationTranslate {
     public void doCondition(ParseTree condition, Token token){
         SLLanguageMainListener.isInCycleHeader = true; // musi byt vsude zatim
         //TODO: zpracovani podminky
-        resolveMathProblems(condition, token, 0, Validators.VARIABLE_TYPE_BOOLEAN);
+        if(!resolveMathProblems(condition, token, 0, Validators.VARIABLE_TYPE_BOOLEAN).equals("")) {
+            //proc program neskonci? :O
+            ErrorHandle.addError(EErrorCodes.BAD_SYNTAX_CONDITION, token.getLine(), token.getCharPositionInLine());
+            return;
+        }
 
         SLLanguageMainListener.isInCycleHeader = false;
     }

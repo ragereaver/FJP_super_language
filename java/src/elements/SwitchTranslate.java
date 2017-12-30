@@ -23,12 +23,11 @@ public class SwitchTranslate extends WhileTranslate{
 
     public void doLabeledStatements(SLLanguageParser.LabeledStatementContext statement){
 
-        //TODO: rozdelat cases
+        //case ma vlastni translate
         //switch mame jen pro cisla
     }
 
     public void exitSwitch(SLLanguageParser.CycleContext ctx) {
         //asi nebude potreba
-       // EInstructionSet.doInstruction(EInstructionSet.JUMP, 13); //přepsat adresu na konec case?
     }
 }

@@ -182,7 +182,6 @@ public class DeclarationTranslate {
 
 
             }else {
-
                 if (nextChild.getChild(0).getText().equals("(")){
                     nextChild = nextChild.getChild(1);
                 }else {
@@ -196,6 +195,7 @@ public class DeclarationTranslate {
                         lastType = defType;
 
                     }else {
+                        System.out.println(left + "    " + right);
                         String leftType = Validators.getType(ctx, left);
                         String rightType = Validators.getType(ctx, right);
 

@@ -1,11 +1,13 @@
 package elements;
 
 import Convertor.Validators;
+import enums.EErrorCodes;
 import enums.EInstructionSet;
 import generatedParser.SLLanguageParser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.Token;
+import tableClasses.ErrorHandle;
 
 /**
  * Created by BobrZlosyn on 22.12.2017.
@@ -22,8 +24,18 @@ public class ForTranslate extends WhileTranslate{
     public void doCondition(ParseTree condition, Token token) {
         DeclarationTranslate declaration = new DeclarationTranslate();
         //deklarace proměnné na začátku cyklu
-        declaration.doDeclarationInner(condition.getChild(0).getChild(0).getText(), condition.getChild(0).getChild(1), true);
+        if(condition.getChild(0).getChildCount() < 2){
+            ErrorHandle.addError(EErrorCodes.MISSING_DECLARATION_STATEMENT, token.getLine(), token.getCharPositionInLine());
+            return;
+        }
+        else{
+            declaration.doDeclarationInner(condition.getChild(0).getChild(0).getText(), condition.getChild(0).getChild(1), true);
+        }
 
+        if(condition.getChildCount() < 3){
+            ErrorHandle.addError(EErrorCodes.BAD_SYNTAX, token.getLine(), token.getCharPositionInLine());
+            return;
+        }
         resolveMathProblems(condition.getChild(2), token, 0, Validators.VARIABLE_TYPE_BOOLEAN);
         EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP,23); //přepsat adresu, pro skok za for, další instrukce za JMP
         //TODO: urcite jine zpracovani podminky
@@ -32,6 +44,10 @@ public class ForTranslate extends WhileTranslate{
     public void exitFor(SLLanguageParser.CycleContext ctx) {
         //udělat inkrementaci
         SimpleAssigmentTranslate assigment = new SimpleAssigmentTranslate();
+        if(ctx.getChildCount() < 3 || ctx.getChild(2).getChildCount() < 5){
+            ErrorHandle.addError(EErrorCodes.BAD_SYNTAX, ctx.start.getLine(), ctx.start.getCharPositionInLine());
+            return;
+        }
         assigment.doAssigmentTranslate((ParserRuleContext)ctx.getChild(2).getChild(4).getChild(0));
 
         EInstructionSet.doInstruction(EInstructionSet.JUMP, 14); //přepsat adresu na začátek for, po deklaraci proměnné

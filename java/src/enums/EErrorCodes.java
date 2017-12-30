@@ -17,7 +17,9 @@ public enum EErrorCodes {
     INVALID_ACTION("Action is not allowed with these types!"),
     FUNCTION_NOT_EXIST("Function dont exist!"),
     FUNCTION_EXISTS("This function already exists!"),
-    BAD_SYNTAX("This syntax isn't allowed!")
+    BAD_SYNTAX("This syntax isn't allowed!"),
+    MISSING_DECLARATION_STATEMENT("Missing declaration statement in cycle for"),
+    BAD_SYNTAX_CONDITION("This condition has bad syntax! I can't decide if it's true or false")
     ;
 
     private final String errorMessage;
