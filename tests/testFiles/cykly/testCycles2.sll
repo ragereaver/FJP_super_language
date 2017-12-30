@@ -1,0 +1,11 @@
+int ahoj = 5;
+int c = 3;
+boolean neco;
+
+switch(c){
+case 1:
+    ahoj = ahoj + 1;
+case 2: break;
+case 3: break;
+default: c = c - 1;
+}

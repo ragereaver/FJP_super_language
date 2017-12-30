@@ -5,6 +5,7 @@ import generatedParser.SLLanguageMainListener;
 import generatedParser.SLLanguageParser;
 import org.antlr.v4.runtime.tree.ParseTree;
 import tableClasses.TableOfCodes;
+import tableClasses.TableOfSymbols;
 
 /**
  * Created by BobrZlosyn on 22.12.2017.
@@ -28,6 +29,6 @@ public class SwitchTranslate extends WhileTranslate{
     }
 
     public void exitSwitch(SLLanguageParser.CycleContext ctx) {
-        //asi nebude potreba
+        TableOfCodes.updateJump(TableOfSymbols.getObjectID(), String.valueOf(TableOfCodes.getTableOfMainCode().size()));
     }
 }

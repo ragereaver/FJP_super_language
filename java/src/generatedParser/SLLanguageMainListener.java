@@ -29,6 +29,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 
 	public static Token variable;
 
+    private static String firstAddress;
 
 	public static void setCompileFunctions(boolean compileFunctions) {
 		SLLanguageMainListener.compileFunctions = compileFunctions;
@@ -356,12 +357,12 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterElseStatement(SLLanguageParser.ElseStatementContext ctx) {
-		if (hasAccess()) {
-			return;
-		}
+        if (hasAccess()) {
+            return;
+        }
 
-		IfTranslate iftranslate = new IfTranslate();
-		iftranslate.doElse(ctx);
+        IfTranslate iftranslate = new IfTranslate();
+        iftranslate.doElse(ctx);
 	}
 	/**
 	 * {@inheritDoc}

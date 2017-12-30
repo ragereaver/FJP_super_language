@@ -2,6 +2,7 @@ package elements;
 
 import enums.EInstructionSet;
 import generatedParser.SLLanguageParser;
+import tableClasses.TableOfCodes;
 
 /**
  * Created by BobrZlosyn on 22.12.2017.
@@ -9,7 +10,6 @@ import generatedParser.SLLanguageParser;
 public class DoTranslate extends WhileTranslate {
 
     public void runDo(SLLanguageParser.CycleContext ctx) {
-
         doBody(ctx.compoundStatement());
     }
 

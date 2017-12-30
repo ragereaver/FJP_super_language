@@ -165,23 +165,35 @@ public class TableOfCodes {
     }
 
     public static void updateJump(int objectID, String address) {
-        tableOfIntsJump.forEach(intWait -> {
-            if ( intWait.getCode().equals(EInstructionSet.JUMP) && intWait.getObjectID() == objectID) {
-                int index = intWait.getCodeIndex();
+        int size = tableOfIntsJump.size();
+
+        for (int i = 0; i < size; i++) {
+            IntWait jump = tableOfIntsJump.get(i);
+            if ( jump.getCode().equals(EInstructionSet.JUMP)
+                    && jump.getObjectID() == objectID) {
+
+                int index = jump.getCodeIndex();
                 TableOfCodes.updateCode(index, address);
-                return;
+                tableOfIntsJump.remove(i--);
+                size--;
             }
-        });
+        }
     }
 
     public static void updateJumpCompare(int objectID, String address) {
-        tableOfIntsJump.forEach(intWait -> {
-            if ( intWait.getCode().equals(EInstructionSet.JUMP_COMP) && intWait.getObjectID() == objectID) {
-                int index = intWait.getCodeIndex();
+        int size = tableOfIntsJump.size();
+
+        for (int i = 0; i < size; i++) {
+            IntWait jump = tableOfIntsJump.get(i);
+            if ( jump.getCode().equals(EInstructionSet.JUMP_COMP)
+                    && jump.getObjectID() == objectID) {
+
+                int index = jump.getCodeIndex();
                 TableOfCodes.updateCode(index, address);
-                return;
+                tableOfIntsJump.remove(i--);
+                size--;
             }
-        });
+        }
     }
 
     public static void updateCall(ArrayList<String> types, String name, String address) {
@@ -202,7 +214,7 @@ public class TableOfCodes {
                 }
 
                 if(exists) {
-                    tableOfMainCode.get(call.getCodeIndex()).setValue(address);
+                    TableOfCodes.updateCode(call.getCodeIndex(), address);
                     tableOfCalls.remove(i--);
                     size--;
                 }
