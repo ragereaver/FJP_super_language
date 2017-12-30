@@ -1,0 +1,58 @@
+% Možné jazyky práce: czech, english
+% Možné typy práce: BP (bakalářská), DP (diplomová)
+\documentclass[czech]{thesiskiv}
+
+%alternativa: 
+%\declarationfemale
+
+% Název práce
+\title{Překladač jazyka do PL/0}
+
+% Zařadit literaturu do obsahu
+\usepackage[nottoc,notlot,notlof]{tocbibind}
+
+% Umožňuje vkládání obrázků
+\usepackage[pdftex]{graphicx}
+
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{float}
+
+\usepackage{ctable}
+\usepackage{dsfont}
+\usepackage{placeins}
+
+% Odkazy v PDF jsou aktivní; navíc se automaticky vkládá
+% balíček 'url', který umožňuje např. dělení slov
+% uvnitř URL
+\usepackage[pdftex]{hyperref}
+\hypersetup{colorlinks=true,
+  unicode=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=black,
+  bookmarksopen=true}
+
+% Při používání citačního stylu csplainnatkiv
+% (odvozen z csplainnat, http://repo.or.cz/w/csplainnat.git)
+% lze snadno modifikovat vzhled citací v textu
+\usepackage[numbers,sort&compress]{natbib}
+
+\begin{document}
+%
+\maketitle
+\thispagestyle{empty} 
+\pagestyle{empty}
+\tableofcontents
+\addtocontents{toc}{\protect\thispagestyle{empty}}
+
+\chapter{Úvod}
+\pagestyle{plain}
+\setcounter{page}{1}
+
+\chapter{Gramatika}
+
+\chapter{Závěr}
+
+
+\end{document}
