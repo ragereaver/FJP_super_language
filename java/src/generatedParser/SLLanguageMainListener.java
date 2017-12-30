@@ -20,17 +20,35 @@ import tableClasses.TableOfSymbols;
 public class SLLanguageMainListener extends SLLanguageBaseListener {
 
 	public static boolean isInCycleHeader = false;
-	public static boolean isInAssignemt = false;
-	public static boolean isInDeclaration = false;
+	private static boolean isInAssignemt = false;
+	private static boolean isInDeclaration = false;
+
+
+	private static boolean compileFunctions = false;
+	private static boolean isInFunction = false;
 
 	public static Token variable;
 
+
+	public static void setCompileFunctions(boolean compileFunctions) {
+		SLLanguageMainListener.compileFunctions = compileFunctions;
+	}
+
+
+    public static boolean hasAccess() {
+        return (isInFunction && !compileFunctions)
+                || (!isInFunction && compileFunctions);
+    }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterCompilationUnit(SLLanguageParser.CompilationUnitContext ctx) {
+		if (compileFunctions) {
+			return;
+		}
+
 		EInstructionSet.doInstruction(EInstructionSet.JUMP, 1);
 		EInstructionSet.doInstruction(EInstructionSet.INT, 3);
 	}
@@ -40,11 +58,13 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCompilationUnit(SLLanguageParser.CompilationUnitContext ctx) {
-		EInstructionSet.doInstruction(EInstructionSet.RETURN, 0);
-		CreateFile createFile = new CreateFile(TableOfSymbols.destinationFilepath);
-		createFile.writeToFile(TableOfCodes.createString());
-		createFile.close();
-
+		if (compileFunctions) {
+			CreateFile createFile = new CreateFile(TableOfSymbols.destinationFilepath);
+			createFile.writeToFile(TableOfCodes.createString());
+			createFile.close();
+		}else {
+			EInstructionSet.doInstruction(EInstructionSet.RETURN, 0);
+		}
 	}
 	/**
 	 * {@inheritDoc}
@@ -76,6 +96,10 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterConstDeclaration(SLLanguageParser.ConstDeclarationContext ctx) {
+		if (compileFunctions) {
+			return;
+		}
+
 		isInDeclaration = true;
 		ConstantDeclarationTranslate constantDeclarationTranslate = new ConstantDeclarationTranslate();
 		constantDeclarationTranslate.doConstantDeclaration(ctx);
@@ -86,6 +110,10 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitConstDeclaration(SLLanguageParser.ConstDeclarationContext ctx) {
+		if (compileFunctions) {
+			return;
+		}
+
 		isInDeclaration = false;
 	}
 	/**
@@ -94,6 +122,10 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterArrayDeclaration(SLLanguageParser.ArrayDeclarationContext ctx) {
+		if (hasAccess()) {
+			return;
+		}
+
 		isInDeclaration = true;
 		ArrayDeclarationTranslate declarationTranslate = new ArrayDeclarationTranslate();
 		declarationTranslate.doArrayDeclaration(ctx);
@@ -104,6 +136,10 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitArrayDeclaration(SLLanguageParser.ArrayDeclarationContext ctx) {
+		if (hasAccess()) {
+			return;
+		}
+
 		isInDeclaration = false;
 	}
 	/**
@@ -112,6 +148,10 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) {
+		isInFunction = true;
+		if (!compileFunctions) {
+			return;
+		}
 
 		System.out.println("zacatek funkce");
 
@@ -127,7 +167,12 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) {
-		TableOfSymbols.setLevel(false);
+		isInFunction = false;
+		if (!compileFunctions) {
+			return;
+		}
+
+		//TableOfSymbols.setLevel(false);
 		TableOfSymbols.setObject(false);
 		EInstructionSet.doInstruction(EInstructionSet.RETURN, 0, 0);
 		System.out.println("konec funkce");
@@ -187,6 +232,11 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterCycle(SLLanguageParser.CycleContext ctx) {
+
+		if (hasAccess()) {
+			return;
+		}
+
 		TableOfSymbols.setObject(true);
 		System.out.println("--------zacatek cyklu-------");
 		String type = ctx.getChild(0).getText();
@@ -225,6 +275,10 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCycle(SLLanguageParser.CycleContext ctx) {
+		if (hasAccess()) {
+			return;
+		}
+
         String type = ctx.getChild(0).getText();
 		System.out.println("Ukonceni cyklu: " + type);
 		switch (type) {
@@ -274,6 +328,10 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterLabeledStatement(SLLanguageParser.LabeledStatementContext ctx) {
+		if (hasAccess()) {
+			return;
+		}
+
 		if(ctx.getChild(0).getText().equals("case")){
 			CaseTranslate casetranslate = new CaseTranslate();
 			casetranslate.doCase(ctx, variable);
@@ -285,6 +343,10 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLabeledStatement(SLLanguageParser.LabeledStatementContext ctx) {
+		if (hasAccess()) {
+			return;
+		}
+
 		CaseTranslate label = new CaseTranslate();
 		label.exitLabel(ctx);
 	}
@@ -294,6 +356,10 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterElseStatement(SLLanguageParser.ElseStatementContext ctx) {
+		if (hasAccess()) {
+			return;
+		}
+
 		IfTranslate iftranslate = new IfTranslate();
 		iftranslate.doElse(ctx);
 	}
@@ -359,6 +425,10 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterDeclaration(SLLanguageParser.DeclarationContext ctx) {
+		if (hasAccess()) {
+			return;
+		}
+
 		isInDeclaration = true;
 		System.out.println("deklarace");
 		System.out.println(ctx.getText());
@@ -372,6 +442,10 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitDeclaration(SLLanguageParser.DeclarationContext ctx) {
+		if (hasAccess()) {
+			return;
+		}
+
 		System.out.println("deklarace - exit");
 		isInDeclaration = false;
 	}
@@ -453,8 +527,12 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterFunctionCall(SLLanguageParser.FunctionCallContext ctx) {
+		if (hasAccess()) {
+			return;
+		}
 
-		if (!isInDeclaration || !isInAssignemt) {
+        System.out.println("ahooooooj ------------------------------------------------");
+        if (!isInDeclaration || !isInAssignemt) {
 			CallFunctionTranslate callFunctionTranslate = new CallFunctionTranslate();
 			callFunctionTranslate.doFunctionCalling(ctx);
 		}
@@ -507,6 +585,9 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterAssignmentExpression(SLLanguageParser.AssignmentExpressionContext ctx) {
+		if (hasAccess()) {
+			return;
+		}
 
 		if (!isInCycleHeader && !isInDeclaration) {
 			SimpleAssigmentTranslate assigmentTranslate = new SimpleAssigmentTranslate();
@@ -639,24 +720,17 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPrimaryExpression(SLLanguageParser.PrimaryExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterArgumentExpressionList(SLLanguageParser.ArgumentExpressionListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitArgumentExpressionList(SLLanguageParser.ArgumentExpressionListContext ctx) { }
+
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterForCondition(SLLanguageParser.ForConditionContext ctx) {
+		if (hasAccess()) {
+			return;
+		}
+
 		isInCycleHeader = true;
 	}
 	/**
@@ -664,7 +738,13 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitForCondition(SLLanguageParser.ForConditionContext ctx) { }
+	@Override public void exitForCondition(SLLanguageParser.ForConditionContext ctx) {
+		if (hasAccess()) {
+			return;
+		}
+
+		isInCycleHeader = false;
+	}
 	/**
 	 * {@inheritDoc}
 	 *

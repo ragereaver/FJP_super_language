@@ -17,6 +17,7 @@ public class TableOfSymbols {
 
 
     private static ArrayList <Symbol> tableOfSymbols = new ArrayList<>();
+    private static ArrayList <Symbol> registerFunctions = new ArrayList<>();
     private static Stack <Integer> changesInParentID = new Stack<>();
     private static Stack <Integer> changesInObjectID = new Stack<>();
     private static int actualLevel = 0;
@@ -117,8 +118,18 @@ public class TableOfSymbols {
         return addSymbol(ctxToken, name, true, getNextSymbolVariableAddress(), variableType, size, false, false);
     }
 
-    public static boolean addSymbolFunction(Token ctxToken, String name, String variableType){
-        return addSymbol(ctxToken, name, false, TableOfCodes.getAddressInt(objectID) , variableType, 0, false, false);
+    public static boolean addSymbolFunction(Token ctxToken, String name, String variableType, ArrayList <String> types, ArrayList <String> params){
+       if( !addSymbol(ctxToken, name, false, TableOfCodes.getAddressInt(objectID) , variableType, 0, false, false)) {
+            return false;
+       }
+
+        Symbol function = tableOfSymbols.get(tableOfSymbols.size() - 1);
+        function.params = params;
+        function.types = types;
+        function.countParam = types.size();
+
+        TableOfCodes.updateCall(types, name, String.valueOf(function.getAddress()));
+        return true;
     }
 
     public static boolean addSymbol(Token ctxToken, String name, boolean isVariable, String variableType, int size, boolean isConst, boolean isEmpty){
@@ -166,6 +177,59 @@ public class TableOfSymbols {
     }
 
 
+    public static boolean registerFunction(Token ctxToken, String name, String variableType, ArrayList <String> types, ArrayList <String> variables){
+        if (functionExist(name, types)){
+            ErrorHandle.addError(EErrorCodes.FUNCTION_EXISTS,
+                    ctxToken.getLine(), ctxToken.getCharPositionInLine());
+            return false;
+        }
+
+        boolean isVariable = false;
+        boolean isConst = false;
+        int address = -1;
+        int size = -1;
+
+        Symbol newFunction = new Symbol(parentID, objectID, name, isVariable, actualLevel, address, variableType, size, isConst);
+        newFunction.params = variables;
+        newFunction.types = types;
+        newFunction.countParam = types.size();
+
+        if (!registerFunctions.add(newFunction)) {
+            ErrorHandle.addError(EErrorCodes.UNKNOW_ERROR,
+                    ctxToken.getLine(), ctxToken.getCharPositionInLine());
+            return false;
+        }
+        return true;
+
+    }
+
+    public static boolean functionExist(String name, ArrayList <String> types){
+        boolean exists;
+        int size = registerFunctions.size();
+
+        for (int i = 0; i < size; i++) {
+            Symbol symbol = registerFunctions.get(i);
+            if (symbol.getName().equals(name)
+                    && symbol.getCountParam() == types.size()) {
+
+                exists = true;
+                for (int j = 0; j < symbol.getCountParam(); j++) {
+
+                    if (!symbol.getTypeAtIndex(j).equals(types.get(j))){
+                        exists = false;
+                        break;
+                    }
+                }
+
+                if (exists) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public static Symbol findByAdress(int address){
         for (Symbol symbol : tableOfSymbols){
             if (symbol.getAddress() == address){
@@ -185,15 +249,26 @@ public class TableOfSymbols {
         return null;
     }
 
-    public static Symbol findFunction(String name, int params, ArrayList <String> types){
-
+    public static Symbol findFunction(String name, ArrayList <String> types){
         int size = tableOfSymbols.size();
-        Symbol symbol;
-        for (int i = 0; i < size; i++){
-            symbol = tableOfSymbols.get(i);
-            if (symbol.getName().equals(name)
-                    && !symbol.isVariable()) {
-               return tableOfSymbols.get(i);
+        boolean exists;
+
+        for (int i = 0; i < size; i++) {
+            Symbol function = tableOfSymbols.get(i);
+            if (function.getName().equals(name)
+                    && types.size() == function.getCountParam()){
+
+                exists = true;
+                for (int j = 0; j < types.size(); j++){
+                    if (!types.get(j).equals(function.getTypeAtIndex(j))){
+                        exists = false;
+                        break;
+                    }
+                }
+
+                if(exists) {
+                    return function;
+                }
             }
         }
         return null;
@@ -323,15 +398,4 @@ public class TableOfSymbols {
         tableOfSymbols.clear();
     }
 
-    public static void updateFunction(ArrayList <String> params, ArrayList <String> paramsTypes){
-        int size = tableOfSymbols.size();
-        for (int i = 0; i < size; i++){
-            if (tableOfSymbols.get(i).getObjectID() == objectID && !tableOfSymbols.get(i).isVariable()) {
-                tableOfSymbols.get(i).countParam = params.size();
-                tableOfSymbols.get(i).params = params;
-                tableOfSymbols.get(i).types = paramsTypes;
-            }
-        }
-
-    }
 }

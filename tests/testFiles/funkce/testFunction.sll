@@ -3,4 +3,26 @@ int function name (int l, int o) {
     int c = 0 + a / 1;
 }
 
+int function name (int l) {
+    int a = 5;
+    int c = 0 + a / 1;
+}
+
+int function name (int l, boolean o) {
+    int a = 5;
+    int c = 0 + a / 1;
+    d (5,6,7);
+}
+
+int function name (int l, int o, int k) {
+    int a = 5;
+    int c = 0 + a / 1;
+}
+
+int function d (int l, int o, int k) {
+    int a = 5;
+    int c = 0 + a / 1;
+    name (5, true);
+}
+
 name(1, 2);

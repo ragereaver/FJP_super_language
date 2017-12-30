@@ -23,9 +23,9 @@ public class Main {
         //2) run with gramatic files in generated parser
         if (args.length == 0) {
              //TableOfSymbols.filepath = "tests/testFiles/assigment/testAssignment.sll";
-           // TableOfSymbols.filepath = "tests/testFiles/funkce/testFunction.sll";
+            TableOfSymbols.filepath = "tests/testFiles/funkce/testFunction.sll";
             //TableOfSymbols.filepath = "tests/testFiles/testFile.sll";
-            TableOfSymbols.filepath = "tests/testFiles/cykly/testCycles.sll";
+            //TableOfSymbols.filepath = "tests/testFiles/cykly/testCycles.sll";
             TableOfSymbols.destinationFilepath = TableOfSymbols.filepath;
         }else {
             TableOfSymbols.filepath = args[0];
@@ -61,22 +61,38 @@ public class Main {
         ParserRuleContext tree = parser.compilationUnit();
 
 
-        if(ErrorHandle.hasError()) {
+        if(!compile(tree)) {
             CreateFile errorFile = new CreateFile(TableOfSymbols.destinationFilepath);
             errorFile.writeToFile("");
             errorFile.close();
-        } else {
-
-            // Walk it and attach our listener
-            ParseTreeWalker walker = new ParseTreeWalker();
-            SLLanguageMainListener listener = new SLLanguageMainListener();
-            walker.walk(listener, tree);
         }
-
 
         //cisteni dat
         TableOfCodes.clean();
         TableOfSymbols.clean();
         ErrorHandle.clean();
+    }
+
+
+    private static boolean compile(ParserRuleContext tree){
+        //register functions
+        ParseTreeWalker walker = new ParseTreeWalker();
+        SLLanguageRegisterFunctions register = new SLLanguageRegisterFunctions();
+        walker.walk(register, tree);
+
+        if (ErrorHandle.hasError()) {
+            return false;
+        }
+
+
+        SLLanguageMainListener listener = new SLLanguageMainListener();
+        listener.setCompileFunctions(false);
+        walker.walk(listener, tree);
+
+
+        listener.setCompileFunctions(true);
+        walker.walk(listener, tree);
+
+        return !ErrorHandle.hasError();
     }
 }

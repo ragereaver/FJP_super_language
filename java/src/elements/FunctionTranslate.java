@@ -14,8 +14,13 @@ import java.util.ArrayList;
  */
 public class FunctionTranslate extends SLLanguageBaseListener{
     private boolean hasToReturn;
+    private ArrayList <String> types;
+    private ArrayList <String> variables;
+
     public FunctionTranslate () {
         hasToReturn = false;
+        types = new ArrayList<>();
+        variables = new ArrayList<>();
     }
 
     private String createReturnableName(String name){
@@ -25,13 +30,9 @@ public class FunctionTranslate extends SLLanguageBaseListener{
     public void doFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) {
         String type = ctx.typeSpecifier().getText();
         String name = ctx.Identifier().getText();
-        SLLanguageParser.InitListContext variables = ctx.initList();
+        SLLanguageParser.InitListContext list = ctx.initList();
 
-        boolean success = TableOfSymbols.addSymbolFunction(ctx.getStart(), name, type);
-        if (!success) {
-            return;
-        }
-        TableOfSymbols.setLevel(true);
+        //TableOfSymbols.setLevel(true);
 
 
         if (!type.equals("void")) {
@@ -39,12 +40,53 @@ public class FunctionTranslate extends SLLanguageBaseListener{
         }
 
         if (variables != null) {
-            createVariables(variables);
+            createVariables(list);
+        }
+
+        TableOfSymbols.addSymbolFunction(ctx.getStart(), name, type, types, variables);
+    }
+
+
+    private void createVariables(SLLanguageParser.InitListContext list) {
+        String type;
+        String name;
+        ParseTree child = list;
+
+        while (child != null) {
+            if (child.getChildCount() > 2) {
+                type = child.getChild(0).getText();
+                name = child.getChild(1).getText();
+                child = child.getChild(3);
+            }else {
+                type = child.getChild(0).getText();
+                name = child.getChild(1).getText();
+                child = null;
+            }
+
+            types.add(type);
+            variables.add(name);
+
+            TableOfSymbols.addSymbolVariable(list.getStart(), name, type, 0);
+        }
+
+    }
+
+    public void registerFunction(SLLanguageParser.FunctionDefinitionContext ctx) {
+        String type = ctx.typeSpecifier().getText();
+        String name = ctx.Identifier().getText();
+        SLLanguageParser.InitListContext variables = ctx.initList();
+
+        TableOfSymbols.setLevel(true);
+
+        if (variables != null) {
+            getVariables(variables, name, type);
+        }else {
+            TableOfSymbols.registerFunction(variables.getStart(), name, type, null, null);
         }
     }
 
 
-    private void createVariables(SLLanguageParser.InitListContext variables) {
+    private void getVariables(SLLanguageParser.InitListContext variables, String nameFunction, String typeFunction) {
         String type;
         String name;
         ParseTree child = variables;
@@ -55,7 +97,7 @@ public class FunctionTranslate extends SLLanguageBaseListener{
             if (child.getChildCount() > 2) {
                 type = child.getChild(0).getText();
                 name = child.getChild(1).getText();
-                child = variables.getChild(3);
+                child = child.getChild(3);
             }else {
                 type = child.getChild(0).getText();
                 name = child.getChild(1).getText();
@@ -64,11 +106,10 @@ public class FunctionTranslate extends SLLanguageBaseListener{
 
             types.add(type);
             params.add(name);
-
-            TableOfSymbols.addSymbolVariable(variables.getStart(), name, type, 0);
         }
 
-        TableOfSymbols.updateFunction(params, types);
+        TableOfSymbols.registerFunction(variables.getStart(), nameFunction, typeFunction, types, params);
 
     }
+
 }

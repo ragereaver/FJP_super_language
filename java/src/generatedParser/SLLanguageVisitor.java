@@ -257,12 +257,6 @@ public interface SLLanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPrimaryExpression(SLLanguageParser.PrimaryExpressionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SLLanguageParser#argumentExpressionList}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArgumentExpressionList(SLLanguageParser.ArgumentExpressionListContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link SLLanguageParser#forCondition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

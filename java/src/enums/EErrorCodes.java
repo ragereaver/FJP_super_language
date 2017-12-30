@@ -16,6 +16,7 @@ public enum EErrorCodes {
     OUT_OF_ARRAY("Index is out of array memory!"),
     INVALID_ACTION("Action is not allowed with these types!"),
     FUNCTION_NOT_EXIST("Function dont exist!"),
+    FUNCTION_EXISTS("This function already exists!"),
     BAD_SYNTAX("This syntax isn't allowed!")
     ;
 

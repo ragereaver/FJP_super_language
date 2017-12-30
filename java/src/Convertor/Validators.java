@@ -17,6 +17,7 @@ public class Validators {
     public static final String VARIABLE_TYPE_BOOLEAN = "boolean";
     public static final String VARIABLE_TYPE_ARRAY_INT = "int[]";
     public static final String VARIABLE_TYPE_ARRAY_BOOLEAN = "boolean[]";
+    public static final String UNKNOWN_TYPE = "none";
 
     public static boolean validateType (String variableType, String value){
         boolean isVariable = false;
@@ -53,6 +54,38 @@ public class Validators {
                 return false;
             }
         }
+    }
+
+    public static String getType (String value){
+        boolean isVariable = false;
+        TableOfSymbols.Symbol var = null;
+        if (isVariableName(value)) {
+            var = TableOfSymbols.findByNameAllLevels(value, true);
+            isVariable = true;
+        }
+
+        if (isVariable && var == null) {
+            return UNKNOWN_TYPE;
+        }
+
+
+        if (isVariable) {
+            return var.getVariableType();
+        }
+
+        if (isInteger(value)){
+            return VARIABLE_TYPE_INT;
+        }
+
+        if (isString(value)){
+            return VARIABLE_TYPE_STRING;
+        }
+
+        if (isBoolean(value)){
+            return VARIABLE_TYPE_BOOLEAN;
+        }
+
+        return UNKNOWN_TYPE;
     }
 
     public static boolean isString(String value) {

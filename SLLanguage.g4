@@ -73,10 +73,10 @@ elseStatement
 statement
     :   labeledStatement
     |   compoundStatement
+    |   functionCall
     |   expressionStatement
     |   cycle
     |   jumpStatement
-    |   functionCall
     ;
 
 labeledStatement
@@ -133,7 +133,7 @@ conditionalExpression
     ;
 
 assignmentOperator
-    :   '=' | '/=' | '%=' | '+=' | '-='
+    :   '='
     ;
 
 functionCall
@@ -147,6 +147,10 @@ functionValues
     |   Constant ',' functionValues
     |   DigitSequence
     |   DigitSequence ',' functionValues
+    |   'false'
+    |   'false' ',' functionValues
+    |   'true'
+    |   'true' ',' functionValues
     ;
 
 /**
@@ -208,8 +212,6 @@ castExpression
 
 unaryExpression
     :   postfixExpression
-    |   '++' unaryExpression
-    |   '--' unaryExpression
     |   unaryOperator castExpression
     ;
 
@@ -220,24 +222,16 @@ unaryOperator
 postfixExpression
     :   primaryExpression
     |   postfixExpression '[' expression ']'
-    |   postfixExpression '(' argumentExpressionList? ')'
-    |   postfixExpression '++'
-    |   postfixExpression '--'
     ;
 
 primaryExpression
     :   Identifier
     |   Constant
-    |   StringLiteral+
     |   '(' expression ')'
     |   'true'
     |   'false'
     ;
 
-argumentExpressionList
-    :   assignmentExpression
-    |   argumentExpressionList ',' assignmentExpression
-    ;
 
 /**
 *   For condition
