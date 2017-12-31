@@ -3,11 +3,14 @@ package elements;
 import Convertor.Validators;
 import enums.EErrorCodes;
 import enums.EInstructionSet;
+import generatedParser.SLLanguageMainListener;
 import generatedParser.SLLanguageParser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.Token;
 import tableClasses.ErrorHandle;
+import tableClasses.TableOfCodes;
+import tableClasses.TableOfSymbols;
 
 /**
  * Created by BobrZlosyn on 22.12.2017.
@@ -15,7 +18,7 @@ import tableClasses.ErrorHandle;
 public class ForTranslate extends WhileTranslate{
 
     public void runFor(SLLanguageParser.CycleContext ctx) {
-
+        SLLanguageMainListener.addAddress(TableOfCodes.getTableOfMainCode().size());
         doCondition(ctx.forCondition(), ctx.getStart());
         doBody(ctx.compoundStatement());
     }
@@ -37,7 +40,7 @@ public class ForTranslate extends WhileTranslate{
             return;
         }
         resolveMathProblems(condition.getChild(2), token, 0, Validators.VARIABLE_TYPE_BOOLEAN);
-        EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP,23); //přepsat adresu, pro skok za for, další instrukce za JMP
+        EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP,-1); //přepsat adresu, pro skok za for, další instrukce za JMP
         //TODO: urcite jine zpracovani podminky
     }
 
@@ -50,6 +53,7 @@ public class ForTranslate extends WhileTranslate{
         }
         assigment.doAssigmentTranslate((ParserRuleContext)ctx.getChild(2).getChild(4).getChild(0));
 
-        EInstructionSet.doInstruction(EInstructionSet.JUMP, 14); //přepsat adresu na začátek for, po deklaraci proměnné
+        EInstructionSet.doInstruction(EInstructionSet.JUMP, SLLanguageMainListener.getAddress()); //přepsat adresu na začátek for, po deklaraci proměnné
+        TableOfCodes.updateJumpCompare(TableOfSymbols.getObjectID(), String.valueOf(TableOfCodes.getTableOfMainCode().size()));
     }
 }

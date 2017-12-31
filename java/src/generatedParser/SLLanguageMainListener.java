@@ -12,6 +12,8 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import tableClasses.TableOfSymbols;
 
+import java.util.ArrayList;
+
 /**
  * This class provides an empty implementation of {@link SLLanguageListener},
  * which can be extended to create a listener which only needs to handle a subset
@@ -29,17 +31,26 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 
 	public static Token variable;
 
-    private static String firstAddress;
+    private static ArrayList firstAddress = new ArrayList<>();
 
 	public static void setCompileFunctions(boolean compileFunctions) {
 		SLLanguageMainListener.compileFunctions = compileFunctions;
 	}
 
 
+	public static void addAddress (int address) {
+        firstAddress.add(address);
+    }
+
+    public static int getAddress () {
+        return (int) firstAddress.remove(firstAddress.size() - 1);
+    }
+
     public static boolean hasAccess() {
         return (isInFunction && !compileFunctions)
                 || (!isInFunction && compileFunctions);
     }
+
 	/**
 	 * {@inheritDoc}
 	 *
@@ -370,7 +381,12 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitElseStatement(SLLanguageParser.ElseStatementContext ctx) {
+        if (hasAccess()) {
+            return;
+        }
 
+        IfTranslate iftranslate = new IfTranslate();
+        iftranslate.exitElse(ctx);
 	}
 	/**
 	 * {@inheritDoc}

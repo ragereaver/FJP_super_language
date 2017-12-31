@@ -9,6 +9,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.Token;
 import Convertor.Validators;
 import tableClasses.ErrorHandle;
+import tableClasses.TableOfCodes;
 import tableClasses.TableOfSymbols;
 
 /**
@@ -31,11 +32,9 @@ public class IfTranslate extends DeclarationTranslate {
         Token token = ctx.getStart();
 
         doCondition(ctx.logicalOrExpression(), token);
-        EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP,1); //přepsat adresu, pro skok za if
+        EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP,-1); //přepsat adresu, pro skok za if
         doBodyIf(ctx.compoundStatement());
-        /*if (ctx.compoundStatement().size() > 1) {
-            doBodyElse(ctx.compoundStatement(1));
-        }*/
+
     }
 
     public void doCondition(ParseTree condition, Token token){
@@ -52,6 +51,7 @@ public class IfTranslate extends DeclarationTranslate {
 
 
     public void exitIf(SLLanguageParser.CycleContext ctx){
+        TableOfCodes.updateJumpCompare(TableOfSymbols.getObjectID(), String.valueOf(TableOfCodes.getTableOfMainCode().size()));
        // EInstructionSet.doInstruction(EInstructionSet.JUMP, 10); // skok za else větev
     }
 
@@ -61,7 +61,10 @@ public class IfTranslate extends DeclarationTranslate {
     }
 
     public void doElse(SLLanguageParser.ElseStatementContext ctx) {
-        EInstructionSet.doInstruction(EInstructionSet.JUMP, 10); //skok za else větev
+        EInstructionSet.doInstruction(EInstructionSet.JUMP, -1); //skok za else větev
     }
 
+    public void exitElse(SLLanguageParser.ElseStatementContext ctx) {
+        TableOfCodes.updateJump(TableOfSymbols.getObjectID(), String.valueOf(TableOfCodes.getTableOfMainCode().size()));
+    }
 }
