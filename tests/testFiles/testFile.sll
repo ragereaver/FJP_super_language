@@ -2,41 +2,8 @@ int ahoj = 6;
 int b = 3;
 
 int a, c = 3 + 3, i = 5 + b;
-neee(3,b);
 
 b = 5;
 
-b = ahoj = c;
+b = ahoj = c = 15 + b;
 
-
-int function neee(int first, int second){
-    int ahoj = 8;
-    int i;
-    i = 22;
-    for (i = 0; i < 5; i = i + 1) {
-        ahoj = 5 * i + ahoj;
-    }
-    return ahoj;
-}
-
-
-const int CON = 5;
-
-
-while(ahoj > 5){
-    int pokus = 5;
-}
-
-if (ahoj > 5) {
-    int tesst = 2;
-    c = (10 > ahoj) ? b = 5 : b = 1;
-}
-else {
-    int test = 3;
-}
-
-switch (5) {
-    case 5: b = 3; break;
-    case 4: b = 2; break;
-    default: b = 5;
-}

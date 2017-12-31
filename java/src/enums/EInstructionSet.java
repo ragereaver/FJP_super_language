@@ -41,11 +41,21 @@ public enum EInstructionSet {
         }
 
         public static void doInstruction(EInstructionSet instruction, int address) {
-                TableOfCodes.addCode(instruction, String.valueOf(address));
+            TableOfCodes.addCode(instruction, String.valueOf(address));
         }
 
         public static void doInstruction(EInstructionSet instruction, int level, int address) {
-                TableOfCodes.addCode(instruction, level, String.valueOf(address));
+            TableOfCodes.addCode(instruction, level, String.valueOf(address));
+        }
+
+        public static boolean storeInstruction(String identifier){
+            TableOfSymbols.Symbol symbol = TableOfSymbols.findByNameAllLevels(identifier, true);
+            if (symbol == null){
+                return false;
+            }
+
+            doInstruction(EInstructionSet.STORE, symbol.getAddress());
+            return true;
         }
 
     /**
@@ -82,15 +92,13 @@ public enum EInstructionSet {
      */
         public static boolean loadIntegerVariable (String variable, Token token, String type){
                 if (Validators.isVariableName(variable)){
+                    return loadVariableName(variable, token, type);
 
-                    boolean r = loadVariableName(variable, token, type);
-
-                        return r;
                 } else {
-                        if (Validators.isInteger(variable)) {
-                                TableOfCodes.addCode(EInstructionSet.LITERAL, variable);
-                            return true;
-                        }
+                    if (Validators.isInteger(variable)) {
+                            TableOfCodes.addCode(EInstructionSet.LITERAL, variable);
+                        return true;
+                    }
                 }
             ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, token.getLine(), token.getCharPositionInLine());
             return false;

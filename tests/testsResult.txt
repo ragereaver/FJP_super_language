@@ -31,7 +31,9 @@ Error at line 2:9 --- Expected line: "1	INT	0	9", but received: "1	INT	0	11"
 
 
 -------------------- Testing file error file: D:\projekty\FJP_super_language\tests\testOutput\testFile-errors.log --------------------
--------------------- NO ERRORS FOUND --------------------
+Error at line 1:44 --- Expected line: "Warning: At line 9:0 - Variable is not convertable! ", but received: "Warning: At line 5:0 - Function dont exist! "
+Error --- File couldnt be translate to PL0
+Error --- Warning: At line 5:0 - Function dont exist! 
 
 
 
@@ -42,5 +44,5 @@ Error at line 2:8 --- Expected line: "1	INT	0	3", but received: "1	INT	0	5"
 
 
 
--------------------- Number of tests: 7, successful tests:1, failed tests: 6 --------------------
+-------------------- Number of tests: 7, successful tests:0, failed tests: 7 --------------------
 -------------------- Folder with tests: D:\projekty\FJP_super_language\tests\testOutput --------------------

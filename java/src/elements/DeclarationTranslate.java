@@ -9,6 +9,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import tableClasses.ErrorHandle;
+import tableClasses.TableOfCodes;
 import tableClasses.TableOfSymbols;
 
 
@@ -51,12 +52,11 @@ public class DeclarationTranslate {
     public String doDeclarationInner(String type, ParseTree children, boolean isDeclaration){
 
         ParserRuleContext ctx = (ParserRuleContext) children;
-        if (ctx.getChildCount() == 1) {
-                singleAssignment(type, ctx, isDeclaration);
+         if (ctx.getChildCount() == 1) {
+             singleAssignment(type, ctx, isDeclaration);
 
         }else {
-            System.out.println("mnohhhooooooooooooo  " + ctx.getText());
-            innerMultipleAssigment(ctx, ctx.getStart(), type, isDeclaration);
+             innerMultipleAssigment(ctx, ctx.getStart(), type, isDeclaration);
         }
 
         return "";
@@ -83,15 +83,16 @@ public class DeclarationTranslate {
                     return;
                 }
             }
-
-            if (Validators.isDimHere(value)
-                    || Validators.isArrayHere(value)
-                    || Validators.isSignHere(value)) { // reseni zavorkovych vyrazu
-                resolveMathProblems(assignmentExpCtx, ctx.getStart(), 0, type);
-
-            }else {
-                EInstructionSet.handleVariables(value, ctx.getStart(), type);
+            System.out.println("---------------------------- test --------------- negate " + assignmentExpCtx.getText());
+            if (Validators.isAssignmentHere(assignmentExpCtx.getText())){
+                multipleValueAssigment(assignmentExpCtx, assignmentExpCtx.getStart(), type, isDeclaration, identifier);
+                EInstructionSet.handleVariables(identifier, assignmentExpCtx.getStart(), type);
+                return;
             }
+
+
+            getValue(value, type, assignmentExpCtx, ctx.getStart());
+
         }
 
         if (isDeclaration) {
@@ -99,7 +100,55 @@ public class DeclarationTranslate {
         }
     }
 
+    private void getValue(String value, String type, ParseTree assignmentExpCtx, Token token ) {
+        if (Validators.isDimHere(value)
+                || Validators.isArrayHere(value)
+                || Validators.isSignHere(value)) { // reseni zavorkovych vyrazu
+            resolveMathProblems(assignmentExpCtx, token, 0, type);
 
+        }else {
+            System.out.println("value   " + value);
+            EInstructionSet.handleVariables(value, token, type);
+        }
+    }
+
+    private void negate(ParseTree negate) {
+
+    }
+
+    private void multipleValueAssigment (ParseTree child, Token token, String type, boolean isDeclaration, String identifier) {
+        if (child.getChildCount() != 1) {
+            if (child.getChild(1).getText().equals("=")) {
+                String left = child.getChild(0).getText();
+
+                if (child.getChildCount() > 1) {
+                    multipleValueAssigment(child.getChild(2), token, type, false, left);
+                }
+
+                //nacteni hodnoty ktera ma byt prirazena
+                if (Validators.validateType(type, identifier)) {
+                    System.out.println("-----------" + identifier);
+                    EInstructionSet.handleVariables(left, token, type);
+                }
+
+
+                //prirazeni do dalsi promenne
+                if (isDeclaration) {
+                    TableOfSymbols.addSymbolVariable(token, identifier, type, 0);
+                }else {
+                    if (Validators.validateType(type, identifier)) {
+                        EInstructionSet.storeInstruction(identifier);
+                    }
+                }
+            }
+        }else {
+            getValue(child.getText(), type, child, token);
+
+            if (Validators.validateType(type, identifier)) {
+                EInstructionSet.storeInstruction(identifier);
+            }
+        }
+    }
     /**
      * rekurzivni procházení listu deklarací
      * @param child
@@ -107,35 +156,6 @@ public class DeclarationTranslate {
      * @param type
      */
     private void innerMultipleAssigment(ParseTree child, Token token, String type, boolean isDeclaration) {
-        if (child.getChildCount() != 1) {
-            if (child.getChild(1).getText().equals("=")) {
-                String left = child.getChild(0).getText();
-                String right = child.getChild(2).getText();
-
-                if (child.getChildCount() > 1) {
-                    resolveMathProblems(child.getChild(2), token, 0, type);
-                }else {
-                    EInstructionSet.handleVariables(right, token, type);
-                }
-
-                if (isDeclaration) {
-                    TableOfSymbols.addSymbolVariable(token, left, type, 0);
-                }
-
-
-            }else {
-                innerMultipleAssigment(child.getChild(0), token, type, isDeclaration);
-                innerMultipleAssigment(child.getChild(2), token, type, isDeclaration);
-            }
-        }else {
-            if (isDeclaration) {
-                String identifier = child.getText();
-                TableOfSymbols.addSymbol(token, identifier, true, type, 0, false, true);
-            }
-        }
-    }
-
-    private void innerMultipleValueAssignemnt(ParseTree child, Token token, String type, boolean isDeclaration) {
         if (child.getChildCount() != 1) {
             if (child.getChild(1).getText().equals("=")) {
                 String left = child.getChild(0).getText();

@@ -27,29 +27,24 @@ public class Validators {
             isVariable = true;
         }
 
+        if (var == null) {
+            return false;
+        }
+
+        if (isVariable) {
+            return (var.getVariableType().equals(variableType));
+        }
+
         switch (variableType){
             case VARIABLE_TYPE_STRING: {
-                if (isVariable && var != null) {
-                    return  (var.getVariableType().equals(variableType));
-                }else {
-                    return isString(value);
-                }
+                return isString(value);
             }
             case VARIABLE_TYPE_INT: {
-                if (isVariable && var != null) {
-                    return var.getVariableType().equals(variableType);
-                }else {
-                    return isInteger(value);
-                }
+                return isInteger(value);
             }
             case VARIABLE_TYPE_BOOLEAN: {
-                if (isVariable && var != null) {
-                    return var.getVariableType().equals(variableType);
-                }else {
-                    return isBoolean(value);
-                }
+                return isBoolean(value);
             }
-
             default: {
                 return false;
             }
@@ -130,6 +125,11 @@ public class Validators {
 
     public static boolean isSignHere (String value){
         String regex = "((.+)(<|>|==|-|/|%|&&|\\*|\\|\\||<=|>=|!=|!==|===|\\+)(.+))";
+        return  value.matches(regex);
+    }
+
+    public static boolean isNegateSignHere (String value){
+        String regex = "((.+)(!)(\\w+))";
         return  value.matches(regex);
     }
 
@@ -313,7 +313,7 @@ public class Validators {
     }
 
     public static boolean isAssignmentHere(String value) {
-        String pattern = "((\\w+)(=)(\\w+)(.*))";
+        String pattern = "((\\w+)(=)((-|\\+|!)?)(\\w+)(.*))";
         return (value != null && value.matches(pattern));
     }
 

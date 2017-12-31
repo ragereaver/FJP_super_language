@@ -606,9 +606,11 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 			return;
 		}
 
-		if (!isInCycleHeader && !isInDeclaration) {
+		if (!isInCycleHeader && !isInDeclaration && !isInAssignemt) {
+			isInAssignemt = true;
 			SimpleAssigmentTranslate assigmentTranslate = new SimpleAssigmentTranslate();
 			assigmentTranslate.doAssigmentTranslate(ctx);
+
 		}
 	}
 	/**
@@ -616,7 +618,15 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAssignmentExpression(SLLanguageParser.AssignmentExpressionContext ctx) { }
+	@Override public void exitAssignmentExpression(SLLanguageParser.AssignmentExpressionContext ctx) {
+		if (hasAccess()) {
+			return;
+		}
+
+		if (!isInCycleHeader && !isInDeclaration && isInAssignemt) {
+			isInAssignemt = false;
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 *
