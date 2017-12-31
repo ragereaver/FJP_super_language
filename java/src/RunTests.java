@@ -77,7 +77,7 @@ public class RunTests {
                         destination += testFile.getAbsolutePath().substring(absolutePath.length());
 
                         String [] paths = {testFile.getAbsolutePath(), destination};
-
+                        addInfo("Testing parsing with file: " + testFile.getAbsolutePath());
                         //catching all exception possible in test -- > we dont need to destroy all tests because of one mistake
                         try {
                             Main.main(paths);
@@ -115,7 +115,7 @@ public class RunTests {
             String path = files[i].getPath();
 
             if (path.contains(errorName)){
-                addInfo("Testing file error file: " + path);
+                addInfo("Testing error file: " + path);
                 if (errorFiles(path)) {
 
                     succesCount++;
@@ -128,7 +128,7 @@ public class RunTests {
                 addSeparator();
 
             } else if (path.contains(pl0Name)){
-                addInfo("Testing file pl0 file: " + path);
+                addInfo("Testing pl0 file: " + path);
                 if (pl0Files(path)) {
                     succesCount++;
                     addInfo("NO ERRORS FOUND");

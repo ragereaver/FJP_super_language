@@ -1,5 +1,6 @@
 package elements;
 
+import Convertor.Validators;
 import enums.EInstructionSet;
 import generatedParser.SLLanguageMainListener;
 import generatedParser.SLLanguageParser;
@@ -15,7 +16,7 @@ public class UntilTranslate extends WhileTranslate{
     public void runUntil(SLLanguageParser.CycleContext ctx) {
         SLLanguageMainListener.addAddress(TableOfCodes.getTableOfMainCode().size());
         doCondition(ctx.expression(), ctx.getStart()); // teoreticky by to melo byt stejne, navratova hodnota je obracene jen
-        doBody(ctx.compoundStatement()); // melo by byt stejne
+        negate(Validators.VARIABLE_TYPE_BOOLEAN, ctx.getStart());
         EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP, -1); //zatim je to while, dokud nebudem umět negaci
     }
 

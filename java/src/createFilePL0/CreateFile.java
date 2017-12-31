@@ -20,7 +20,6 @@ public class CreateFile {
     private String newFilename;
 
     public CreateFile(String filename){
-        System.out.println("--------" + filename);
         this.filename = filename;
         this.newFilename = "";
     }
@@ -44,9 +43,7 @@ public class CreateFile {
     }
 
     public boolean writeToFile(String buffer){
-        System.out.println("--------" + filename);
         validateFilename();
-        System.out.println("--------" + filename);
         try {
             if(ErrorHandle.hasError()){
                 newFilename = getNewFilePath("-errors", "log");

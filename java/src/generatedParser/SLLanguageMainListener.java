@@ -447,7 +447,6 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 		}
 
 		isInDeclaration = true;
-		System.out.println("deklarace");
 		System.out.println(ctx.getText());
 		DeclarationTranslate declarationTranslate = new DeclarationTranslate();
 		declarationTranslate.doStandardDeclaration(ctx);
@@ -463,7 +462,6 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 			return;
 		}
 
-		System.out.println("deklarace - exit");
 		isInDeclaration = false;
 	}
 	/**
@@ -548,7 +546,6 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 			return;
 		}
 
-        System.out.println("ahooooooj ------------------------------------------------");
         if (!isInDeclaration || !isInAssignemt) {
 			CallFunctionTranslate callFunctionTranslate = new CallFunctionTranslate();
 			callFunctionTranslate.doFunctionCalling(ctx);

@@ -83,16 +83,16 @@ public class DeclarationTranslate {
                     return;
                 }
             }
-            System.out.println("---------------------------- test --------------- negate " + assignmentExpCtx.getText());
+
             if (Validators.isAssignmentHere(assignmentExpCtx.getText())){
                 multipleValueAssigment(assignmentExpCtx, assignmentExpCtx.getStart(), type, isDeclaration, identifier);
-                EInstructionSet.handleVariables(identifier, assignmentExpCtx.getStart(), type);
+                if (!isDeclaration) {
+                    EInstructionSet.handleVariables(identifier, assignmentExpCtx.getStart(), type);
+                }
                 return;
             }
 
-
             getValue(value, type, assignmentExpCtx, ctx.getStart());
-
         }
 
         if (isDeclaration) {
@@ -104,15 +104,30 @@ public class DeclarationTranslate {
         if (Validators.isDimHere(value)
                 || Validators.isArrayHere(value)
                 || Validators.isSignHere(value)) { // reseni zavorkovych vyrazu
-            resolveMathProblems(assignmentExpCtx, token, 0, type);
-
+            resolveMathProblems(assignmentExpCtx, token, type);
         }else {
-            System.out.println("value   " + value);
+            boolean negate = false;
+            if (Validators.isNegateSignHere(value)){
+                value = value.substring(1);
+                negate = true;
+            }
+
             EInstructionSet.handleVariables(value, token, type);
+
+            if (negate) {
+                negate(type, token);
+            }
         }
     }
 
-    private void negate(ParseTree negate) {
+    public void negate(String type, Token token) {
+        if (!type.equals(Validators.VARIABLE_TYPE_BOOLEAN)) {
+            ErrorHandle.addError(EErrorCodes.INVALID_ACTION, token.getLine(), token.getCharPositionInLine());
+            return;
+        }
+
+        EInstructionSet.doInstruction(EInstructionSet.LITERAL, 1);
+        EOperationCodes.doOperation("%");
 
     }
 
@@ -126,15 +141,14 @@ public class DeclarationTranslate {
                 }
 
                 //nacteni hodnoty ktera ma byt prirazena
-                if (Validators.validateType(type, identifier)) {
-                    System.out.println("-----------" + identifier);
+                if (Validators.validateType(type, left)) {
                     EInstructionSet.handleVariables(left, token, type);
                 }
-
 
                 //prirazeni do dalsi promenne
                 if (isDeclaration) {
                     TableOfSymbols.addSymbolVariable(token, identifier, type, 0);
+
                 }else {
                     if (Validators.validateType(type, identifier)) {
                         EInstructionSet.storeInstruction(identifier);
@@ -162,7 +176,7 @@ public class DeclarationTranslate {
                 String right = child.getChild(2).getText();
 
                 if (child.getChildCount() > 1) {
-                    resolveMathProblems(child.getChild(2), token, 0, type);
+                    resolveMathProblems(child.getChild(2), token, type);
                 }else {
                     EInstructionSet.handleVariables(right, token, type);
                 }
@@ -188,58 +202,41 @@ public class DeclarationTranslate {
      * resi problem se zavorkami (zatim jen cisla)
      * @param nextChild
      * @param ctx
-     * @param depth
      * @return
      */
-    public String resolveMathProblems(ParseTree nextChild, Token ctx, int depth, String defType ){
+    public String resolveMathProblems(ParseTree nextChild, Token ctx, String defType ){
         String res = "";
         for(int i = 0; i < 100; i++) {
             if (nextChild.getChildCount() == 1) {
                 nextChild = nextChild.getChild(0);
+
                 if (nextChild.getChild(0) == null) {
                     return nextChild.getText();
                 }
-
 
             }else {
                 if (nextChild.getChild(0).getText().equals("(")){
                     nextChild = nextChild.getChild(1);
                 }else {
 
-                    String left = resolveMathProblems(nextChild.getChild(0), ctx, depth + 1, defType);
-                    String sign = nextChild.getChild(1).getText();
-                    String right = resolveMathProblems(nextChild.getChild(2), ctx, depth + 1, defType);
-
-                    if (Validators.isArrayHere(sign)){
-                        loadValueFromArray(left, ctx, right, defType + "[]");
-                        lastType = defType;
-
-                    }else {
-                        System.out.println(left + "    " + right);
-                        String leftType = Validators.getType(ctx, left);
-                        String rightType = Validators.getType(ctx, right);
-
-                        if (leftType.isEmpty()) {
-                            leftType = lastType;
-                        }
-
-                        if (rightType.isEmpty()) {
-                            rightType = lastType;
-                        }
-
-                        String resultType = Validators.validateAction(leftType, rightType, sign);
-                        if (resultType != null) {
-                            lastType = resultType;
-
-                            loadValue(left, ctx, leftType);
-                            loadValue(right, ctx, leftType);
-                            EOperationCodes.doOperation(sign);
-
+                    String left = resolveMathProblems(nextChild.getChild(0), ctx, defType);
+                    if (left.equals("!")) {
+                        String mid = nextChild.getChild(1).getText();
+                        if (Validators.isDimHere(mid)
+                                || Validators.isArrayHere(mid)
+                                || Validators.isSignHere(mid)) {
+                            resolveMathProblems(nextChild.getChild(1), ctx, defType);
                         }else {
-                            ErrorHandle.addError(EErrorCodes.INVALID_ACTION, ctx.getLine(), ctx.getCharPositionInLine());
+                            String type = Validators.getType(mid);
+                            EInstructionSet.handleVariables(mid, ctx, type);
+                            lastType = type;
                         }
 
+                        negate(lastType, ctx);
 
+                    } else {
+
+                        innerResolveMath(left, nextChild, ctx, defType);
                     }
 
                     return res;
@@ -248,6 +245,40 @@ public class DeclarationTranslate {
         }
 
         return res;
+    }
+
+    private void innerResolveMath(String left, ParseTree nextChild, Token ctx, String defType) {
+        String sign = nextChild.getChild(1).getText();
+        String right = resolveMathProblems(nextChild.getChild(2), ctx, defType);
+
+        if (Validators.isArrayHere(sign)){
+            loadValueFromArray(left, ctx, right, defType + "[]");
+            lastType = defType;
+
+        }else {
+            String leftType = Validators.getType(ctx, left);
+            String rightType = Validators.getType(ctx, right);
+
+            if (leftType.isEmpty()) {
+                leftType = lastType;
+            }
+
+            if (rightType.isEmpty()) {
+                rightType = lastType;
+            }
+
+            String resultType = Validators.validateAction(leftType, rightType, sign);
+            if (resultType != null) {
+                lastType = resultType;
+
+                loadValue(left, ctx, leftType);
+                loadValue(right, ctx, leftType);
+                EOperationCodes.doOperation(sign);
+
+            }else {
+                ErrorHandle.addError(EErrorCodes.INVALID_ACTION, ctx.getLine(), ctx.getCharPositionInLine());
+            }
+        }
     }
 
     private void loadValue(String value, Token token, String type){

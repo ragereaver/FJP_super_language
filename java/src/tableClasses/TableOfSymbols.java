@@ -144,7 +144,6 @@ public class TableOfSymbols {
             return false;
         }
 
-        System.out.println("VKLADAMA DO TABLE_OF_SYMBOLS>" + parentID +", " + objectID+", " + name+", " +isVariable +", " + actualLevel+", " + address +", " + variableType +", " + size+", " + isConst );
         if (!tableOfSymbols.add(new Symbol(parentID, objectID, name, isVariable, actualLevel, address, variableType, size, isConst))) {
             ErrorHandle.addError(EErrorCodes.UNKNOW_ERROR,
                     ctxToken.getLine(), ctxToken.getCharPositionInLine());
@@ -159,7 +158,7 @@ public class TableOfSymbols {
                 EInstructionSet.doInstruction(EInstructionSet.LITERAL, 0);
                 EInstructionSet.doInstruction(EInstructionSet.STORE, address + i);
             }
-            System.out.println("last adress //////////// " + getNextSymbolVariableAddress());
+
         }else {//normalni promenna
             //TODO: doplnit string - pokud bude
 
@@ -298,7 +297,6 @@ public class TableOfSymbols {
 
 
                     if (symbol.getName().equals(name) && (isVariable == symbol.isVariable())){
-                        System.out.println("Variable is found " + symbol.getName());
                         return symbol;
                     }
                 }

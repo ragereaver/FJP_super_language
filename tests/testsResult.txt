@@ -1,10 +1,12 @@
--------------------- Testing file pl0 file: D:\projekty\FJP_super_language\tests\testOutput\assigment\testAssignment.pl --------------------
+-------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\assigment\testAssignment.sll --------------------
+-------------------- Testing pl0 file: D:\projekty\FJP_super_language\tests\testOutput\assigment\testAssignment.pl --------------------
 Error --- Valid test is directory D:\projekty\FJP_super_language\tests\testValidation\assigment\testAssignment.pl
 
 
 
 
--------------------- Testing file pl0 file: D:\projekty\FJP_super_language\tests\testOutput\cykly\testCycles.pl --------------------
+-------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\cykly\testCycles.sll --------------------
+-------------------- Testing pl0 file: D:\projekty\FJP_super_language\tests\testOutput\cykly\testCycles.pl --------------------
 Error at line 2:8 --- Expected line: "1	INT	0	2", but received: "1	INT	0	6"
 Error at line 3:2 --- Expected line: "2	RET	0	0", but received: "2	LIT	0	5"
 Error --- Valid test is shorter than the new one, line: 4
@@ -12,37 +14,68 @@ Error --- Valid test is shorter than the new one, line: 4
 
 
 
--------------------- Testing file pl0 file: D:\projekty\FJP_super_language\tests\testOutput\cykly\testCycles2.pl --------------------
+-------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\cykly\testCycles2.sll --------------------
+-------------------- Testing pl0 file: D:\projekty\FJP_super_language\tests\testOutput\cykly\testCycles2.pl --------------------
 Error --- Valid test is directory D:\projekty\FJP_super_language\tests\testValidation\cykly\testCycles2.pl
 
 
 
 
--------------------- Testing file pl0 file: D:\projekty\FJP_super_language\tests\testOutput\funkce\testFunction.pl --------------------
+-------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\funkce\testFunction.sll --------------------
+-------------------- Testing pl0 file: D:\projekty\FJP_super_language\tests\testOutput\funkce\testFunction.pl --------------------
 Error --- Valid test is directory D:\projekty\FJP_super_language\tests\testValidation\funkce\testFunction.pl
 
 
 
 
--------------------- Testing file pl0 file: D:\projekty\FJP_super_language\tests\testOutput\pole\testPole.pl --------------------
+-------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\pole\testPole.sll --------------------
+-------------------- Testing pl0 file: D:\projekty\FJP_super_language\tests\testOutput\pole\testPole.pl --------------------
 Error at line 2:9 --- Expected line: "1	INT	0	9", but received: "1	INT	0	11"
 
 
 
 
--------------------- Testing file error file: D:\projekty\FJP_super_language\tests\testOutput\testFile-errors.log --------------------
-Error at line 1:44 --- Expected line: "Warning: At line 9:0 - Variable is not convertable! ", but received: "Warning: At line 5:0 - Function dont exist! "
+-------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\testFile.sll --------------------
+Error --- java.lang.NullPointerException
+	at elements.DeclarationTranslate.resolveMathProblems(DeclarationTranslate.java:210)
+	at elements.DeclarationTranslate.resolveMathProblems(DeclarationTranslate.java:225)
+	at elements.DeclarationTranslate.getValue(DeclarationTranslate.java:107)
+	at elements.DeclarationTranslate.singleAssignment(DeclarationTranslate.java:95)
+	at elements.DeclarationTranslate.doDeclarationInner(DeclarationTranslate.java:56)
+	at elements.SimpleAssigmentTranslate.doAssigmentTranslate(SimpleAssigmentTranslate.java:38)
+	at generatedParser.SLLanguageMainListener.enterAssignmentExpression(SLLanguageMainListener.java:609)
+	at generatedParser.SLLanguageParser$AssignmentExpressionContext.enterRule(SLLanguageParser.java:2550)
+	at org.antlr.v4.runtime.tree.ParseTreeWalker.enterRule(ParseTreeWalker.java:42)
+	at org.antlr.v4.runtime.tree.ParseTreeWalker.walk(ParseTreeWalker.java:25)
+	at org.antlr.v4.runtime.tree.ParseTreeWalker.walk(ParseTreeWalker.java:28)
+	at org.antlr.v4.runtime.tree.ParseTreeWalker.walk(ParseTreeWalker.java:28)
+	at org.antlr.v4.runtime.tree.ParseTreeWalker.walk(ParseTreeWalker.java:28)
+	at org.antlr.v4.runtime.tree.ParseTreeWalker.walk(ParseTreeWalker.java:28)
+	at org.antlr.v4.runtime.tree.ParseTreeWalker.walk(ParseTreeWalker.java:28)
+	at org.antlr.v4.runtime.tree.ParseTreeWalker.walk(ParseTreeWalker.java:28)
+	at org.antlr.v4.runtime.tree.ParseTreeWalker.walk(ParseTreeWalker.java:28)
+	at org.antlr.v4.runtime.tree.ParseTreeWalker.walk(ParseTreeWalker.java:28)
+	at org.antlr.v4.runtime.tree.ParseTreeWalker.walk(ParseTreeWalker.java:28)
+	at org.antlr.v4.runtime.tree.ParseTreeWalker.walk(ParseTreeWalker.java:28)
+	at org.antlr.v4.runtime.tree.ParseTreeWalker.walk(ParseTreeWalker.java:28)
+	at Main.compile(Main.java:90)
+	at Main.main(Main.java:64)
+	at RunTests.innerCalls(RunTests.java:83)
+	at RunTests.main(RunTests.java:47)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at com.intellij.rt.execution.application.AppMain.main(AppMain.java:147)
+
+-------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\zavorky\testZavorek.sll --------------------
+-------------------- Testing error file: D:\projekty\FJP_super_language\tests\testOutput\zavorky\testZavorek-errors.log --------------------
+Error --- Valid test is directory D:\projekty\FJP_super_language\tests\testValidation\zavorky\testZavorek-errors.log
 Error --- File couldnt be translate to PL0
-Error --- Warning: At line 5:0 - Function dont exist! 
+Error --- Warning: At line 1:4 - Variable with this name already exist! 
 
 
 
 
--------------------- Testing file pl0 file: D:\projekty\FJP_super_language\tests\testOutput\zavorky\testZavorek.pl --------------------
-Error at line 2:8 --- Expected line: "1	INT	0	3", but received: "1	INT	0	5"
-
-
-
-
--------------------- Number of tests: 7, successful tests:0, failed tests: 7 --------------------
+-------------------- Number of tests: 7, successful tests:0, failed tests: 6 --------------------
 -------------------- Folder with tests: D:\projekty\FJP_super_language\tests\testOutput --------------------

@@ -129,7 +129,7 @@ public class Validators {
     }
 
     public static boolean isNegateSignHere (String value){
-        String regex = "((.+)(!)(\\w+))";
+        String regex = "((!)(.+))";
         return  value.matches(regex);
     }
 
@@ -313,7 +313,7 @@ public class Validators {
     }
 
     public static boolean isAssignmentHere(String value) {
-        String pattern = "((\\w+)(=)((-|\\+|!)?)(\\w+)(.*))";
+        String pattern = "((\\w+)(=)(.*)(\\w+)(.*))";
         return (value != null && value.matches(pattern));
     }
 

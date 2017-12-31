@@ -17,7 +17,7 @@ import tableClasses.TableOfSymbols;
  */
 public class IfTranslate extends DeclarationTranslate {
     public void doTernalIf (ParseTree condition, ParseTree trueSide, ParseTree falseSide, Token token) {
-        resolveMathProblems(condition, token, 0, Validators.VARIABLE_TYPE_BOOLEAN);
+        resolveMathProblems(condition, token, Validators.VARIABLE_TYPE_BOOLEAN);
         EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP, 2); //skok na falseSide
         SimpleAssigmentTranslate assigment = new SimpleAssigmentTranslate();
         assigment.doAssigmentTranslate((ParserRuleContext) trueSide);   //prirazeni, nutno dodělat komu přiřadit
@@ -40,7 +40,7 @@ public class IfTranslate extends DeclarationTranslate {
     public void doCondition(ParseTree condition, Token token){
         SLLanguageMainListener.isInCycleHeader = true; // musi byt vsude zatim
         //TODO: zpracovani podminky
-        if(!resolveMathProblems(condition, token, 0, Validators.VARIABLE_TYPE_BOOLEAN).equals("")) {
+        if(!resolveMathProblems(condition, token, Validators.VARIABLE_TYPE_BOOLEAN).equals("")) {
             //proc program neskonci? :O
             ErrorHandle.addError(EErrorCodes.BAD_SYNTAX_CONDITION, token.getLine(), token.getCharPositionInLine());
             return;

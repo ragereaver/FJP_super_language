@@ -39,7 +39,7 @@ public class ForTranslate extends WhileTranslate{
             ErrorHandle.addError(EErrorCodes.BAD_SYNTAX, token.getLine(), token.getCharPositionInLine());
             return;
         }
-        resolveMathProblems(condition.getChild(2), token, 0, Validators.VARIABLE_TYPE_BOOLEAN);
+        resolveMathProblems(condition.getChild(2), token, Validators.VARIABLE_TYPE_BOOLEAN);
         EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP,-1); //přepsat adresu, pro skok za for, další instrukce za JMP
         //TODO: urcite jine zpracovani podminky
     }
