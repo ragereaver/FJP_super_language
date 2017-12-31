@@ -13,7 +13,7 @@ int function neee(int first, int second){
     int ahoj = 8;
     int i;
     i = 22;
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < 5; i = i + 1) {
         ahoj = 5 * i + ahoj;
     }
     return ahoj;

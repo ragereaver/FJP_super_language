@@ -77,8 +77,17 @@ public class RunTests {
                         destination += testFile.getAbsolutePath().substring(absolutePath.length());
 
                         String [] paths = {testFile.getAbsolutePath(), destination};
-                        Main.main(paths);
 
+                        //catching all exception possible in test -- > we dont need to destroy all tests because of one mistake
+                        try {
+                            Main.main(paths);
+
+                        }catch (Exception e) {
+                            StringWriter sw = new StringWriter();
+                            PrintWriter pw = new PrintWriter(sw);
+                            e.printStackTrace(pw);
+                            addError(sw.toString());
+                        }
 
                         validateTest(CreateFile.getFilenameWithoutExtension(testFile.getAbsolutePath()), new File(destination));
                     }
@@ -87,28 +96,39 @@ public class RunTests {
         }
     }
 
+    /**
+     * validuje novy vytvoreny pl soubor se spravnym souborem ve slozce testValidation
+     * @param filename
+     * @param file
+     */
     private static void validateTest(String filename, File file){
         testCount ++;
         File parent = new File (file.getParent());
         File [] files = parent.listFiles();
         String errorName = filename + errorExt;
         String pl0Name = filename + pl0Ext;
-        String testedFile = parent.getAbsolutePath() + filename + ".pl";
-
         for (int i = 0; i < files.length; i++) {
             if (!files[i].isFile()){
                 continue;
             }
 
             String path = files[i].getPath();
-            addInfo("Testing file: " + testedFile);
 
             if (path.contains(errorName)){
-                failCount++;
-                addError("File couldnt be translate to PL0");
-                readErrorFile(files[i]);
+                addInfo("Testing file error file: " + path);
+                if (errorFiles(path)) {
+
+                    succesCount++;
+                    addInfo("NO ERRORS FOUND");
+                }else {
+                    failCount++;
+                    addError("File couldnt be translate to PL0");
+                    readErrorFile(files[i]);
+                }
+                addSeparator();
 
             } else if (path.contains(pl0Name)){
+                addInfo("Testing file pl0 file: " + path);
                 if (pl0Files(path)) {
                     succesCount++;
                     addInfo("NO ERRORS FOUND");
@@ -116,11 +136,43 @@ public class RunTests {
                 }else {
                     failCount++;
                 }
+                addSeparator();
             }
-            addSeparator();
+
         }
     }
 
+    private static boolean errorFiles(String path) {
+        if (!validTests.exists()) {
+            addError("Valid test examples root directory doesnt exists " + validFiles);
+            return false;
+        }
+
+
+        try {
+
+            File newTest = new File(path);
+            File output = new File(testOutput);
+            int length = output.getAbsolutePath().length();
+            String pathToValidTest = validTests.getAbsolutePath() + newTest.getAbsolutePath().substring(length);
+
+            File validTest = new File (pathToValidTest);
+            if (!validTest.exists() || validTest.isDirectory()){
+                addError("Valid test is directory " + pathToValidTest);
+                return false;
+            }
+
+            BufferedReader newTestsReader = new BufferedReader(new FileReader(newTest));
+            BufferedReader validTestsReader = new BufferedReader(new FileReader(validTest));
+            return comparePL0Files(newTestsReader, validTestsReader);
+
+        }catch (IOException e) {
+            addError("Error with reading pl0 files");
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 
     private static boolean pl0Files(String path) {
         if (!validTests.exists()) {
@@ -133,10 +185,10 @@ public class RunTests {
 
             File newTest = new File(path);
             File output = new File(testOutput);
-            int lenght = output.getAbsolutePath().length();
-            String pathToValidTest = validTests.getAbsolutePath() + newTest.getAbsolutePath().substring(lenght);
+            int length = output.getAbsolutePath().length();
+            String pathToValidTest = validTests.getAbsolutePath() + newTest.getAbsolutePath().substring(length);
 
-            File validTest =new File (pathToValidTest);
+            File validTest = new File (pathToValidTest);
             if (!validTest.exists() || validTest.isDirectory()){
                 addError("Valid test is directory " + pathToValidTest);
                 return false;

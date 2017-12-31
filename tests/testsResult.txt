@@ -1,35 +1,46 @@
--------------------- Testing file: D:\projekty\FJP_super_language\tests\testOutput\cykly\testCycles.pl --------------------
-Error --- File couldnt be translate to PL0
-Error --- Warning: At line 1:0 - Variable on right side doesnt exist! 
-Error --- Warning: At line 1:0 - Action is not allowed with these types! 
-Error --- Warning: At line 1:0 - Variable on right side doesnt exist! 
-Error --- Warning: At line 1:0 - Action is not allowed with these types! 
-Error --- Warning: At line 1:0 - Action is not allowed with these types! 
+-------------------- Testing file pl0 file: D:\projekty\FJP_super_language\tests\testOutput\assigment\testAssignment.pl --------------------
+Error --- Valid test is directory D:\projekty\FJP_super_language\tests\testValidation\assigment\testAssignment.pl
 
 
 
 
--------------------- Testing file: D:\projekty\FJP_super_language\tests\testOutput\pole\testPole.pl --------------------
+-------------------- Testing file pl0 file: D:\projekty\FJP_super_language\tests\testOutput\cykly\testCycles.pl --------------------
+Error at line 2:8 --- Expected line: "1	INT	0	2", but received: "1	INT	0	6"
+Error at line 3:2 --- Expected line: "2	RET	0	0", but received: "2	LIT	0	5"
+Error --- Valid test is shorter than the new one, line: 4
+
+
+
+
+-------------------- Testing file pl0 file: D:\projekty\FJP_super_language\tests\testOutput\cykly\testCycles2.pl --------------------
+Error --- Valid test is directory D:\projekty\FJP_super_language\tests\testValidation\cykly\testCycles2.pl
+
+
+
+
+-------------------- Testing file pl0 file: D:\projekty\FJP_super_language\tests\testOutput\funkce\testFunction.pl --------------------
+Error --- Valid test is directory D:\projekty\FJP_super_language\tests\testValidation\funkce\testFunction.pl
+
+
+
+
+-------------------- Testing file pl0 file: D:\projekty\FJP_super_language\tests\testOutput\pole\testPole.pl --------------------
+Error at line 2:9 --- Expected line: "1	INT	0	9", but received: "1	INT	0	11"
+
+
+
+
+-------------------- Testing file error file: D:\projekty\FJP_super_language\tests\testOutput\testFile-errors.log --------------------
 -------------------- NO ERRORS FOUND --------------------
 
 
 
 
--------------------- Testing file: D:\projekty\FJP_super_language\tests\testOutput\testFile.pl --------------------
-Error --- File couldnt be translate to PL0
-Error --- Warning: At line 25:4 - Variable on right side doesnt exist! 
-Error --- Warning: At line 25:4 - Variable with this name already exist! 
-Error --- Warning: At line 31:0 - Variable on right side doesnt exist! 
-Error --- Warning: At line 31:0 - Action is not allowed with these types! 
+-------------------- Testing file pl0 file: D:\projekty\FJP_super_language\tests\testOutput\zavorky\testZavorek.pl --------------------
+Error at line 2:8 --- Expected line: "1	INT	0	3", but received: "1	INT	0	5"
 
 
 
 
--------------------- Testing file: D:\projekty\FJP_super_language\tests\testOutput\zavorky\testZavorek.pl --------------------
--------------------- NO ERRORS FOUND --------------------
-
-
-
-
--------------------- Number of tests: 4, successful tests:2, failed tests: 2 --------------------
+-------------------- Number of tests: 7, successful tests:1, failed tests: 6 --------------------
 -------------------- Folder with tests: D:\projekty\FJP_super_language\tests\testOutput --------------------

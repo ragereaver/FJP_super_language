@@ -1,5 +1,5 @@
 0	JMP	0	1
-1	INT	0	9
+1	INT	0	11
 2	LIT	0	0
 3	STO	0	3
 4	LIT	0	0
