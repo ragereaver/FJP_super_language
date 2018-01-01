@@ -162,12 +162,12 @@ public class TableOfSymbols {
         }else {//normalni promenna
             //TODO: doplnit string - pokud bude
 
+            if (isEmpty) {
+                EInstructionSet.doInstruction(EInstructionSet.LITERAL, 0);
+            }
 
             if (isVariable) {
                 TableOfCodes.updateInt(getObjectID());
-            }
-
-            if (isVariable && !isEmpty) {
                 EInstructionSet.doInstruction(EInstructionSet.STORE, address);
             }
         }
@@ -288,13 +288,13 @@ public class TableOfSymbols {
             someObjectExist = false;
             for (int i = 0; i < tableOfSymbols.size(); i++) {
                 Symbol symbol = tableOfSymbols.get(i);
+
                 if(symbol.getObjectID() == object || symbol.getObjectID() == parent) {
                     if (symbol.getObjectID() == parent) {
                         someObjectExist = true;
                         parent = symbol.getParentID();
                         pomObject = symbol.getObjectID();
                     }
-
 
                     if (symbol.getName().equals(name) && (isVariable == symbol.isVariable())){
                         return symbol;
@@ -306,17 +306,6 @@ public class TableOfSymbols {
         }
 
         return null;
-    }
-
-    public static void removeAllInLevel(int level){
-        int size = tableOfSymbols.size();
-        for (int i = 0; i < size; i++){
-            if (tableOfSymbols.get(i).getLevel() == level) {
-                tableOfSymbols.remove(i);
-                i--;
-            }
-        }
-
     }
 
     public static void setLevel(boolean isDeeper){

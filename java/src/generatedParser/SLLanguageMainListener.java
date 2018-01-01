@@ -1,6 +1,7 @@
 // Generated from D:/projekty/FJP_super_language\SLLanguage.g4 by ANTLR 4.7
 package generatedParser;
 
+import Convertor.Validators;
 import createFilePL0.CreateFile;
 import elements.*;
 import enums.EInstructionSet;
@@ -24,7 +25,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	public static boolean isInCycleHeader = false;
 	private static boolean isInAssignemt = false;
 	private static boolean isInDeclaration = false;
-
+    private static boolean isInTernalIf = false;
 
 	private static boolean compileFunctions = false;
 	private static boolean isInFunction = false;
@@ -250,9 +251,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 		}
 
 		TableOfSymbols.setObject(true);
-		System.out.println("--------zacatek cyklu-------");
 		String type = ctx.getChild(0).getText();
-		System.out.println("Object " + TableOfSymbols.getObjectID() + " level " + TableOfSymbols.getActualLevel() + " parent " + TableOfSymbols.getParentLevel());
 		switch (type) {
 			case "for":{
 				ForTranslate forTranslate = new ForTranslate();
@@ -292,7 +291,6 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 		}
 
         String type = ctx.getChild(0).getText();
-		System.out.println("Ukonceni cyklu: " + type);
 		switch (type) {
 			case "for":{
 				ForTranslate forTranslate = new ForTranslate();
@@ -405,7 +403,9 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpressionStatement(SLLanguageParser.ExpressionStatementContext ctx) { }
+	@Override public void enterExpressionStatement(SLLanguageParser.ExpressionStatementContext ctx) {
+
+    }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -517,13 +517,36 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConditionalExpression(SLLanguageParser.ConditionalExpressionContext ctx) { }
+	@Override public void enterConditionalExpression(SLLanguageParser.ConditionalExpressionContext ctx) {
+        if (hasAccess()) {
+            return;
+        }
+
+
+		if (!isInCycleHeader && !isInDeclaration && !isInAssignemt) {
+            if (Validators.isTernalIfHere(ctx.getText())) {
+                isInTernalIf = true;
+                TernalIfTranslate ternalIfTranslate = new TernalIfTranslate();
+                ternalIfTranslate.doTernalIf(ctx.getParent(), ctx.getStart(), Validators.UNKNOWN_TYPE, false);
+            }
+        }
+    }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConditionalExpression(SLLanguageParser.ConditionalExpressionContext ctx) { }
+	@Override public void exitConditionalExpression(SLLanguageParser.ConditionalExpressionContext ctx) {
+        if (hasAccess()) {
+            return;
+        }
+
+        if (!isInCycleHeader && !isInDeclaration && !isInAssignemt) {
+            if (Validators.isTernalIfHere(ctx.getText())) {
+                isInTernalIf = false;
+            }
+        }
+    }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -603,11 +626,13 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 			return;
 		}
 
-		if (!isInCycleHeader && !isInDeclaration && !isInAssignemt) {
-			isInAssignemt = true;
-			SimpleAssigmentTranslate assigmentTranslate = new SimpleAssigmentTranslate();
-			assigmentTranslate.doAssigmentTranslate(ctx);
+		if (!isInCycleHeader && !isInDeclaration && !isInAssignemt && !isInTernalIf) {
 
+			if (!Validators.isTernalIfHere(ctx.getText())) {
+				isInAssignemt = true;
+				SimpleAssigmentTranslate assigmentTranslate = new SimpleAssigmentTranslate();
+				assigmentTranslate.doAssigmentTranslate(ctx);
+			}
 		}
 	}
 	/**
@@ -620,8 +645,10 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 			return;
 		}
 
-		if (!isInCycleHeader && !isInDeclaration && isInAssignemt) {
-			isInAssignemt = false;
+		if (!isInCycleHeader && !isInDeclaration && isInAssignemt && !isInTernalIf) {
+			if (!Validators.isTernalIfHere(ctx.getText())) {
+				isInAssignemt = false;
+			}
 		}
 	}
 	/**

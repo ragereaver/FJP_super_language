@@ -1,5 +1,7 @@
-boolean q = true;
-q = q && !q;
+boolean ah;
+(5>6) ? ah = true : ah = false;
+
+ah = false;
 
 
 

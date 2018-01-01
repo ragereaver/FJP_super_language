@@ -78,8 +78,11 @@ public class DeclarationTranslate {
 
             if (type.equals(Validators.VARIABLE_TYPE_BOOLEAN)) {
                 if (Validators.isTernalIfHere(value)) {
-                    // obstara se jinde - trida IfTranslate
-                    System.out.println("-------- ternalni --------");
+                    TernalIfTranslate ternalIfTranslate = new TernalIfTranslate();
+                    ternalIfTranslate.doTernalIf(assignmentExpCtx, ctx.getStart(), type, true);
+                    if (isDeclaration) {
+                        TableOfSymbols.addSymbolVariable(ctx.getStart(), identifier, type, 0);
+                    }
                     return;
                 }
             }
@@ -100,7 +103,7 @@ public class DeclarationTranslate {
         }
     }
 
-    private void getValue(String value, String type, ParseTree assignmentExpCtx, Token token ) {
+    public void getValue(String value, String type, ParseTree assignmentExpCtx, Token token ) {
         if (Validators.isDimHere(value)
                 || Validators.isArrayHere(value)
                 || Validators.isSignHere(value)) { // reseni zavorkovych vyrazu

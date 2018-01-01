@@ -16,19 +16,8 @@ import tableClasses.TableOfSymbols;
  * Created by BobrZlosyn on 22.12.2017.
  */
 public class IfTranslate extends DeclarationTranslate {
-    public void doTernalIf (ParseTree condition, ParseTree trueSide, ParseTree falseSide, Token token) {
-        resolveMathProblems(condition, token, Validators.VARIABLE_TYPE_BOOLEAN);
-        EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP, 2); //skok na falseSide
-        SimpleAssigmentTranslate assigment = new SimpleAssigmentTranslate();
-        assigment.doAssigmentTranslate((ParserRuleContext) trueSide);   //prirazeni, nutno dodělat komu přiřadit
-        EInstructionSet.doInstruction(EInstructionSet.JUMP, 3); //skok na další příkaz, preskoceni falseSide
-
-        assigment.doAssigmentTranslate((ParserRuleContext) falseSide); //prirazeni, nutno dodělat komu přiřadit
-    }
 
     public void runIf(SLLanguageParser.CycleContext ctx) {
-        System.out.println("IF ------- " + ctx.getText());
-
         Token token = ctx.getStart();
 
         doCondition(ctx.logicalOrExpression(), token);
@@ -39,9 +28,8 @@ public class IfTranslate extends DeclarationTranslate {
 
     public void doCondition(ParseTree condition, Token token){
         SLLanguageMainListener.isInCycleHeader = true; // musi byt vsude zatim
-        //TODO: zpracovani podminky
+
         if(!resolveMathProblems(condition, token, Validators.VARIABLE_TYPE_BOOLEAN).equals("")) {
-            //proc program neskonci? :O
             ErrorHandle.addError(EErrorCodes.BAD_SYNTAX_CONDITION, token.getLine(), token.getCharPositionInLine());
             return;
         }

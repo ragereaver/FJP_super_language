@@ -129,7 +129,7 @@ expression
     ;
 
 conditionalExpression
-    :   logicalOrExpression ('?' expression ':' (conditionalExpression | expression))?
+    :   logicalOrExpression ('?' expression (':' expression)? )?
     ;
 
 assignmentOperator

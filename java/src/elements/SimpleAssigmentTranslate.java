@@ -15,8 +15,9 @@ import tableClasses.TableOfSymbols;
 public class SimpleAssigmentTranslate extends DeclarationTranslate{
 
     public void doAssigmentTranslate(ParserRuleContext ctx) {
+        boolean isAssign = Validators.isAssignmentHere(ctx.getText());
 
-        if (!Validators.isAssignmentHere(ctx.getText())) {
+        if (!isAssign) {
             return;
         }
 
@@ -30,6 +31,7 @@ public class SimpleAssigmentTranslate extends DeclarationTranslate{
             return;
         }
 
+
         if (ctx.getChild(2).getChildCount() > 1) {
             ParserRuleContext newTree = new ParserRuleContext();
             newTree.addChild((ParserRuleContext)ctx.getChild(2));
@@ -38,9 +40,6 @@ public class SimpleAssigmentTranslate extends DeclarationTranslate{
             super.doDeclarationInner(symbol.getVariableType(), ctx.getParent(), false);
         }
 
-        System.out.println("------------- " + ctx.getChild(2).getChildCount());
-
         EInstructionSet.doInstruction(EInstructionSet.STORE, symbol.getAddress());
-
     }
 }
