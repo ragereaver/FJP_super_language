@@ -1,1 +1,2 @@
-Warning: At line 13:0 - Parsing code wasnt possible! mismatched input 'return' expecting <EOF>
+Warning: At line 14:8 - Variable on right side doesnt exist! 
+Warning: At line 14:8 - Action is not allowed with these types! 

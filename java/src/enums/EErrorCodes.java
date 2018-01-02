@@ -19,6 +19,7 @@ public enum EErrorCodes {
     FUNCTION_EXISTS("This function already exists!"),
     BAD_SYNTAX("This syntax isn't allowed!"),
     MISSING_DECLARATION_STATEMENT("Missing declaration statement in cycle for"),
+    MISSING_RETURN("Missing return statement"),
     BAD_SYNTAX_CONDITION("This condition has bad syntax! I can't decide if it's true or false")
     ;
 

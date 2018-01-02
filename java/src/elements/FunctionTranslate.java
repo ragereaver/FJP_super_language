@@ -1,13 +1,18 @@
 package elements;
 
+import enums.EErrorCodes;
 import enums.EInstructionSet;
 import generatedParser.SLLanguageBaseListener;
 import generatedParser.SLLanguageParser;
 import javafx.scene.control.Tab;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
+import tableClasses.ErrorHandle;
+import tableClasses.TableOfCodes;
 import tableClasses.TableOfSymbols;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * Created by BobrZlosyn on 17.12.2017.
@@ -113,4 +118,73 @@ public class FunctionTranslate extends SLLanguageBaseListener{
 
     }
 
+
+    public void validReturn (ParserRuleContext ctx) {
+        ArrayList returnAddresses = new ArrayList();
+        int size = TableOfCodes.getTableOfMainCode().size();
+        boolean noReturn = true;
+        boolean hasWrongJump = false;
+        EInstructionSet code;
+        int address, lastJumpAddress = Integer.MAX_VALUE;
+
+        for (int i = size - 1; i >= 0; i-- ) {
+            code = TableOfCodes.getTableOfMainCode().get(i).getCode();
+
+            if (code.equals(EInstructionSet.INT)){
+                break;
+            }
+
+            if (code.equals(EInstructionSet.RETURN)){
+                returnAddresses.add(i);
+                noReturn = false;
+                continue;
+            }
+
+            if (code.equals(EInstructionSet.JUMP)) {
+                address = Integer.parseInt(TableOfCodes.getTableOfMainCode().get(i).getValue());
+                hasWrongJump = isBadReturn(returnAddresses, address, Integer.MAX_VALUE);
+                lastJumpAddress = i;
+
+            }
+
+            if (code.equals(EInstructionSet.JUMP_COMP) ){
+                address = Integer.parseInt(TableOfCodes.getTableOfMainCode().get(i).getValue());
+
+                if (hasWrongJump) {
+                    if (isBadReturn(returnAddresses, i, lastJumpAddress) && !isBadReturn(returnAddresses, address, Integer.MAX_VALUE)) {
+                        noReturn = true;
+                        break;
+                    }else {
+                        hasWrongJump = false;
+                    }
+                    continue;
+                }
+
+                if (isBadReturn(returnAddresses, address, Integer.MAX_VALUE)) {
+                    noReturn = true;
+                    break;
+                }
+            }
+
+        }
+
+        if (noReturn) {
+            ErrorHandle.addError(EErrorCodes.MISSING_RETURN,
+                    ctx.getStart().getLine(),
+                    ctx.getStart().getCharPositionInLine());
+        }
+    }
+
+    private boolean isBadReturn(ArrayList returns, int min, int max) {
+
+        for (int i = 0; i < returns.size(); i++) {
+            int value = (int)returns.get(i);
+            System.out.println("porovnani ----------- " + value + "    " + min + "   " + max);
+            if ( value > min && value <= max) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

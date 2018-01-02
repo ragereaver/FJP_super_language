@@ -170,7 +170,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 		TableOfSymbols.setObject(true);
 		EInstructionSet.doInstruction(EInstructionSet.INT, 3);
 		FunctionTranslate functionTranslate = new FunctionTranslate();
-		hasToReturn = functionTranslate.doFunctionDefinition(ctx);
+		functionTranslate.doFunctionDefinition(ctx);
 		System.out.println(ctx.getText());
 	}
 	/**
@@ -184,13 +184,15 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 			return;
 		}
 
-		hasToReturn = false;
-		//TableOfSymbols.setLevel(false);
 		TableOfSymbols.setObject(false);
-		TableOfSymbols.setLevel(false);
-		EInstructionSet.doInstruction(EInstructionSet.RETURN, 0, 0);
-		System.out.println("konec funkce");
-		System.out.println();
+		if (ctx.typeSpecifier().equals("void")) {
+			EInstructionSet.doInstruction(EInstructionSet.RETURN, 0, 0);
+		}else {
+			FunctionTranslate functionTranslate = new FunctionTranslate();
+			functionTranslate.validReturn(ctx);
+		}
+
+        TableOfSymbols.setLevel(false);
 	}
 	/**
 	 * {@inheritDoc}
