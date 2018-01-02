@@ -100,7 +100,7 @@ public class TableOfCodes {
     }
 
     public static  void addCode (EInstructionSet code, String value) {
-        TableOfCodes.addCode(code, TableOfSymbols.getActualLevel(), value);
+        TableOfCodes.addCode(code, 0, value);
     }
 
     public static  void addCode (EInstructionSet code, int level, String value) {

@@ -166,6 +166,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 			return;
 		}
 
+		TableOfSymbols.setLevel(true);
 		TableOfSymbols.setObject(true);
 		EInstructionSet.doInstruction(EInstructionSet.INT, 3);
 		FunctionTranslate functionTranslate = new FunctionTranslate();
@@ -186,6 +187,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 		hasToReturn = false;
 		//TableOfSymbols.setLevel(false);
 		TableOfSymbols.setObject(false);
+		TableOfSymbols.setLevel(false);
 		EInstructionSet.doInstruction(EInstructionSet.RETURN, 0, 0);
 		System.out.println("konec funkce");
 		System.out.println();

@@ -5,10 +5,12 @@ int function name (int l, int o) {
 
 
 int function name (int l, int o, int k) {
-    int a = 5;
+    int a = 5 + c;
+    c = 9 + a;
     return a + 15;
 }
 
+int c = 5;
 name(1, 2);
 
 int d = name (1, 2, 3);

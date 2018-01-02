@@ -34,7 +34,7 @@ public class SimpleAssigmentTranslate extends DeclarationTranslate{
 
         prepareForDeclaration(symbol.getVariableType(), ctx);
 
-        EInstructionSet.doInstruction(EInstructionSet.STORE, symbol.getAddress());
+        EInstructionSet.storeInstruction(identifier);
     }
 
     public void prepareForDeclaration(String type, ParserRuleContext ctx){

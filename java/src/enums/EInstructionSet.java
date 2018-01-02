@@ -54,7 +54,7 @@ public enum EInstructionSet {
                 return false;
             }
 
-            doInstruction(EInstructionSet.STORE, symbol.getAddress());
+            doInstruction(EInstructionSet.STORE, TableOfSymbols.getActualLevel() - symbol.getLevel(), symbol.getAddress());
             return true;
         }
 
@@ -79,7 +79,8 @@ public enum EInstructionSet {
                     return false;
                 }
 
-                doInstruction(EInstructionSet.LOAD, sym.getLevel(), sym.getAddress());
+                System.out.println(token.getLine() + " ----------- " + variable + "          " + TableOfSymbols.getActualLevel() + "            " + sym.getLevel());
+                doInstruction(EInstructionSet.LOAD, TableOfSymbols.getActualLevel() - sym.getLevel(), sym.getAddress());
                 return true;
         }
 
@@ -176,10 +177,10 @@ public enum EInstructionSet {
                     TableOfSymbols.Symbol indexSym = TableOfSymbols.findByNameAllLevels(variable, true);
                     if (indexSym != null) {
                         if (indexSym.getVariableType().equals(Validators.VARIABLE_TYPE_INT)) {
-                            doInstruction(EInstructionSet.LOAD, indexSym.getLevel(), indexSym.getAddress());
-                            doInstruction(EInstructionSet.LOAD, sym.getLevel(), sym.getAddress());
+                            doInstruction(EInstructionSet.LOAD, TableOfSymbols.getActualLevel() - indexSym.getLevel(), indexSym.getAddress());
+                            doInstruction(EInstructionSet.LOAD, TableOfSymbols.getActualLevel() - sym.getLevel(), sym.getAddress());
                             EOperationCodes.doOperation("+");
-                            doInstruction(EInstructionSet.LOAD_ADD, sym.getLevel(), sym.getAddress());
+                            doInstruction(EInstructionSet.LOAD_ADD, TableOfSymbols.getActualLevel() - sym.getLevel(), sym.getAddress());
                             return true;
                         }else {
                             ErrorHandle.addError(EErrorCodes.BAD_INDEX_ARRAY,
@@ -199,7 +200,7 @@ public enum EInstructionSet {
                     return false;
                 }
 
-                doInstruction(EInstructionSet.LOAD, sym.getLevel(), sym.getAddress() + ind);
+                doInstruction(EInstructionSet.LOAD, TableOfSymbols.getActualLevel() - sym.getLevel(), sym.getAddress() + ind);
                 return true;
             }
             return false;
