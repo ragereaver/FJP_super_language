@@ -32,14 +32,18 @@ public class SimpleAssigmentTranslate extends DeclarationTranslate{
         }
 
 
+        prepareForDeclaration(symbol.getVariableType(), ctx);
+
+        EInstructionSet.doInstruction(EInstructionSet.STORE, symbol.getAddress());
+    }
+
+    public void prepareForDeclaration(String type, ParserRuleContext ctx){
         if (ctx.getChild(2).getChildCount() > 1) {
             ParserRuleContext newTree = new ParserRuleContext();
             newTree.addChild((ParserRuleContext)ctx.getChild(2));
-            super.doDeclarationInner(symbol.getVariableType(), newTree, false);
+            super.doDeclarationInner(type, newTree, false);
         }else {
-            super.doDeclarationInner(symbol.getVariableType(), ctx.getParent(), false);
+            super.doDeclarationInner(type, ctx.getParent(), false);
         }
-
-        EInstructionSet.doInstruction(EInstructionSet.STORE, symbol.getAddress());
     }
 }

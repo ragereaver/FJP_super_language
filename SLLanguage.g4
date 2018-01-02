@@ -222,6 +222,7 @@ unaryOperator
 postfixExpression
     :   primaryExpression
     |   postfixExpression '[' expression ']'
+    |   Identifier '(' functionValues? ')'
     ;
 
 primaryExpression

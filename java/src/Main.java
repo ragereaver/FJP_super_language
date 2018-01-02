@@ -23,8 +23,8 @@ public class Main {
         //2) run with gramatic files in generated parser
         if (args.length == 0) {
              //TableOfSymbols.filepath = "tests/testFiles/assigment/testAssignment.sll";
-            //TableOfSymbols.filepath = "tests/testFiles/funkce/testFunction.sll";
-            TableOfSymbols.filepath = "tests/testFiles/testFile.sll";
+            TableOfSymbols.filepath = "tests/testFiles/funkce/testFunction.sll";
+            //TableOfSymbols.filepath = "tests/testFiles/testFile.sll";
             //TableOfSymbols.filepath = "tests/testFiles/cykly/testCycles2.sll";
             TableOfSymbols.destinationFilepath = TableOfSymbols.filepath;
         }else {

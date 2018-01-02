@@ -4,6 +4,7 @@ import Convertor.Validators;
 import enums.EErrorCodes;
 import enums.EInstructionSet;
 import generatedParser.SLLanguageParser;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import tableClasses.ErrorHandle;
 import tableClasses.TableOfCodes;
@@ -24,22 +25,30 @@ public class CallFunctionTranslate {
 
         //TODO prepracovani vyhledavani pro funkce - zavislost na poctu a typu parametru
         SLLanguageParser.FunctionValuesContext values = ctx.functionValues();
+        prepareCalling(name, values, null);
+    }
+
+    public void prepareCalling( String identifier, ParserRuleContext values, String type){
         storeValues(values);
 
-        if (!TableOfSymbols.functionExist(name, types)) {
+        if (!TableOfSymbols.functionExist(identifier, types)) {
             ErrorHandle.addError(EErrorCodes.FUNCTION_NOT_EXIST,
-                    ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
+                    values.getStart().getLine(), values.getStart().getCharPositionInLine());
         }else {
-            TableOfCodes.addCall("-1", types, name);
+            TableOfCodes.addCall("-1", types, identifier);
+            TableOfSymbols.Symbol function = TableOfSymbols.findFunction(identifier, types);
+            if (type != null && !TableOfSymbols.validFunctionType(identifier, types, type)) {
+                ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH,
+                        values.getStart().getLine(), values.getStart().getCharPositionInLine());
+            }
 
-            TableOfSymbols.Symbol function = TableOfSymbols.findFunction(name, types);
             if (function != null) {
-                TableOfCodes.updateCall(types, name, String.valueOf(function.getAddress()));
+                TableOfCodes.updateCall(types, identifier, String.valueOf(function.getAddress()));
             }
         }
     }
 
-    private void storeValues(SLLanguageParser.FunctionValuesContext values){
+    private void storeValues(ParserRuleContext values){
         String value;
         ParseTree child = values;
 
@@ -51,7 +60,7 @@ public class CallFunctionTranslate {
                 value = child.getChild(0).getText();
                 child = null;
             }
-
+            System.out.println("---------" + value + "      " + Validators.getType(value));
             types.add(Validators.getType(value));
             varibles.add(value);
         }

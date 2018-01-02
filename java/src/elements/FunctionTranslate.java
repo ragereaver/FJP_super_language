@@ -27,7 +27,7 @@ public class FunctionTranslate extends SLLanguageBaseListener{
             return "*return_int";
     }
 
-    public void doFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) {
+    public boolean doFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) {
         String type = ctx.typeSpecifier().getText();
         String name = ctx.Identifier().getText();
         SLLanguageParser.InitListContext list = ctx.initList();
@@ -44,6 +44,7 @@ public class FunctionTranslate extends SLLanguageBaseListener{
         }
 
         TableOfSymbols.addSymbolFunction(ctx.getStart(), name, type, types, variables);
+        return hasToReturn;
     }
 
 
@@ -81,7 +82,7 @@ public class FunctionTranslate extends SLLanguageBaseListener{
         if (variables != null) {
             getVariables(variables, name, type);
         }else {
-            TableOfSymbols.registerFunction(variables.getStart(), name, type, null, null);
+            TableOfSymbols.registerFunction(ctx.getStart(), name, type, new ArrayList<>(), new ArrayList<>());
         }
     }
 

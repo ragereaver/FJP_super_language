@@ -123,6 +123,11 @@ public class Validators {
         return value.contains("[");
     }
 
+    public static boolean isMethodHere (String value){
+        String regex = "((\\w+)(\\()((\\w+)((,\\w+)+)?)?(\\)))";
+        return  value.matches(regex);
+    }
+
     public static boolean isSignHere (String value){
         String regex = "((.+)(<|>|==|-|/|%|&&|\\*|\\|\\||<=|>=|!=|!==|===|\\+)(.+))";
         return  value.matches(regex);

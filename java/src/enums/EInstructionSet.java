@@ -65,7 +65,7 @@ public enum EInstructionSet {
      * @param type
      * @return
      */
-        private static boolean loadVariableName(String variable, Token token, String type){
+        public static boolean loadVariableName(String variable, Token token, String type){
                 TableOfSymbols.Symbol sym = TableOfSymbols.findByNameAllLevels(variable, true);
                 if (sym == null) {
                     ErrorHandle.addError(EErrorCodes.VARIABLE_DOESNT_EXIST,

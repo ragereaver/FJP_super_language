@@ -23,6 +23,8 @@ import static generatedParser.SLLanguageParser.*;
 public class DeclarationTranslate {
 
     private String lastType;
+    protected final String RETURN_NAME = "*return";
+
 
     public DeclarationTranslate () {
         lastType = "";
@@ -75,27 +77,7 @@ public class DeclarationTranslate {
         if (assignmentExpCtx != null) {
             value = assignmentExpCtx.getText();
             isEmpty = false;
-
-            if (type.equals(Validators.VARIABLE_TYPE_BOOLEAN)) {
-                if (Validators.isTernalIfHere(value)) {
-                    TernalIfTranslate ternalIfTranslate = new TernalIfTranslate();
-                    ternalIfTranslate.doTernalIf(assignmentExpCtx, ctx.getStart(), type, true);
-                    if (isDeclaration) {
-                        TableOfSymbols.addSymbolVariable(ctx.getStart(), identifier, type, 0);
-                    }
-                    return;
-                }
-            }
-
-            if (Validators.isAssignmentHere(assignmentExpCtx.getText())){
-                multipleValueAssigment(assignmentExpCtx, assignmentExpCtx.getStart(), type, isDeclaration, identifier);
-                if (!isDeclaration) {
-                    EInstructionSet.handleVariables(identifier, assignmentExpCtx.getStart(), type);
-                }
-                return;
-            }
-
-            getValue(value, type, assignmentExpCtx, ctx.getStart());
+            handleAssigment(type, ctx, isDeclaration, value, assignmentExpCtx, identifier);
         }
 
         if (isDeclaration) {
@@ -103,10 +85,53 @@ public class DeclarationTranslate {
         }
     }
 
+    public void handleAssigment(String type, ParserRuleContext ctx, boolean isDeclaration, String value, ParserRuleContext assignmentExpCtx, String identifier){
+
+        if (type.equals(Validators.VARIABLE_TYPE_BOOLEAN)) {
+            if (Validators.isTernalIfHere(value)) {
+                TernalIfTranslate ternalIfTranslate = new TernalIfTranslate();
+                ternalIfTranslate.doTernalIf(assignmentExpCtx, ctx.getStart(), type, true);
+                if (isDeclaration) {
+                    TableOfSymbols.addSymbolVariable(ctx.getStart(), identifier, type, 0);
+                }
+                return;
+            }
+        }
+
+        if (Validators.isAssignmentHere(assignmentExpCtx.getText())){
+            multipleValueAssigment(assignmentExpCtx, assignmentExpCtx.getStart(), type, isDeclaration, identifier);
+            if (!isDeclaration) {
+                EInstructionSet.handleVariables(identifier, assignmentExpCtx.getStart(), type);
+            }
+            return;
+        }
+
+        if (Validators.isMethodHere(assignmentExpCtx.getText())) {
+            TableOfSymbols.addSymbolVariable(ctx.getStart(), RETURN_NAME, type, -1);
+            CallFunctionTranslate callFunction = new CallFunctionTranslate();
+            PostfixExpressionContext function = (PostfixExpressionContext) listToEndChild(assignmentExpCtx);
+            callFunction.prepareCalling(function.Identifier().getText(), function.functionValues(), type);
+            EInstructionSet.loadVariableName(RETURN_NAME, ctx.getStart(), type);
+
+            return;
+        }
+        getValue(value, type, assignmentExpCtx, ctx.getStart());
+    }
+
+    private ParserRuleContext listToEndChild(ParseTree ctx){
+        while (ctx.getChildCount() == 1) {
+            ctx = ctx.getChild(0);
+        }
+
+        return (ParserRuleContext) ctx;
+    }
+
+
     public void getValue(String value, String type, ParseTree assignmentExpCtx, Token token ) {
         if (Validators.isDimHere(value)
                 || Validators.isArrayHere(value)
                 || Validators.isSignHere(value)) { // reseni zavorkovych vyrazu
+            System.out.println("-------------------" + value);
             resolveMathProblems(assignmentExpCtx, token, type);
         }else {
             boolean negate = false;
@@ -114,7 +139,6 @@ public class DeclarationTranslate {
                 value = value.substring(1);
                 negate = true;
             }
-
             EInstructionSet.handleVariables(value, token, type);
 
             if (negate) {
@@ -262,6 +286,7 @@ public class DeclarationTranslate {
             String leftType = Validators.getType(ctx, left);
             String rightType = Validators.getType(ctx, right);
 
+
             if (leftType.isEmpty()) {
                 leftType = lastType;
             }
@@ -270,6 +295,9 @@ public class DeclarationTranslate {
                 rightType = lastType;
             }
 
+            System.out.println("-------------------" + leftType);
+            System.out.println("-------------------" + rightType);
+            System.out.println("-------------------" + sign);
             String resultType = Validators.validateAction(leftType, rightType, sign);
             if (resultType != null) {
                 lastType = resultType;
@@ -279,6 +307,8 @@ public class DeclarationTranslate {
                 EOperationCodes.doOperation(sign);
 
             }else {
+
+                System.out.println("errrrr -------------------" + sign);
                 ErrorHandle.addError(EErrorCodes.INVALID_ACTION, ctx.getLine(), ctx.getCharPositionInLine());
             }
         }

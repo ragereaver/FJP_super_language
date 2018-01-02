@@ -26,7 +26,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	private static boolean isInAssignemt = false;
 	private static boolean isInDeclaration = false;
     private static boolean isInTernalIf = false;
-
+    private static boolean hasToReturn = false;
 	private static boolean compileFunctions = false;
 	private static boolean isInFunction = false;
 
@@ -166,12 +166,10 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 			return;
 		}
 
-		System.out.println("zacatek funkce");
-
 		TableOfSymbols.setObject(true);
 		EInstructionSet.doInstruction(EInstructionSet.INT, 3);
 		FunctionTranslate functionTranslate = new FunctionTranslate();
-		functionTranslate.doFunctionDefinition(ctx);
+		hasToReturn = functionTranslate.doFunctionDefinition(ctx);
 		System.out.println(ctx.getText());
 	}
 	/**
@@ -185,6 +183,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 			return;
 		}
 
+		hasToReturn = false;
 		//TableOfSymbols.setLevel(false);
 		TableOfSymbols.setObject(false);
 		EInstructionSet.doInstruction(EInstructionSet.RETURN, 0, 0);
@@ -493,7 +492,27 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJumpStatement(SLLanguageParser.JumpStatementContext ctx) { }
+	@Override public void enterJumpStatement(SLLanguageParser.JumpStatementContext ctx) {
+
+        BreakersTranslate breakersTranslate = new BreakersTranslate();
+        switch (ctx.getChild(0).getText()) {
+            case "return": {
+                if (!hasAccess()) {
+                    breakersTranslate.doReturn(ctx);
+                }
+            }break;
+            case "continue": {
+                breakersTranslate.doContinue(ctx);
+            }break;
+
+            case "break": {
+                breakersTranslate.doBreak(ctx);
+            }break;
+        }
+
+
+
+    }
 	/**
 	 * {@inheritDoc}
 	 *

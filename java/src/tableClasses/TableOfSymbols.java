@@ -229,6 +229,33 @@ public class TableOfSymbols {
         return false;
     }
 
+    public static boolean validFunctionType(String name, ArrayList <String> types, String expType){
+        boolean exists;
+        int size = registerFunctions.size();
+
+        for (int i = 0; i < size; i++) {
+            Symbol symbol = registerFunctions.get(i);
+            if (symbol.getName().equals(name)
+                    && symbol.getCountParam() == types.size()) {
+
+                exists = true;
+                for (int j = 0; j < symbol.getCountParam(); j++) {
+
+                    if (!symbol.getTypeAtIndex(j).equals(types.get(j))){
+                        exists = false;
+                        break;
+                    }
+                }
+
+                if (exists) {
+                    return symbol.getVariableType().equals(expType);
+                }
+            }
+        }
+
+        return false;
+    }
+
     public static Symbol findByAdress(int address){
         for (Symbol symbol : tableOfSymbols){
             if (symbol.getAddress() == address){
