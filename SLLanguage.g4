@@ -54,8 +54,9 @@ emptySpecifier
 cycle
     :   'for' '(' forCondition ')' compoundStatement
     |   'while' '(' expression ')' compoundStatement
+    |   'until' '(' expression ')' compoundStatement
     |   'do' compoundStatement 'while' '(' expression ')' ';'
-    |   'until' compoundStatement 'until' '(' expression ')' ';'
+    |   'repeat' compoundStatement 'until' '(' expression ')' ';'
     |   'if' '(' logicalOrExpression ')' compoundStatement elseStatement?
     |   'switch' '(' expression ')' '{' (labeledStatement)* '}'
     ;

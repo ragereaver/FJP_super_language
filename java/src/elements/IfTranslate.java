@@ -21,15 +21,15 @@ public class IfTranslate extends DeclarationTranslate {
         Token token = ctx.getStart();
 
         doCondition(ctx.logicalOrExpression(), token);
-        EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP,-1); //přepsat adresu, pro skok za if
+        EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP, -1); //přepsat adresu, pro skok za if
         doBodyIf(ctx.compoundStatement());
 
     }
 
-    public void doCondition(ParseTree condition, Token token){
+    public void doCondition(ParseTree condition, Token token) {
         SLLanguageMainListener.isInCycleHeader = true; // musi byt vsude zatim
 
-        if(!resolveMathProblems(condition, token, Validators.VARIABLE_TYPE_BOOLEAN).equals("")) {
+        if (!resolveMathProblems(condition, token, Validators.VARIABLE_TYPE_BOOLEAN).equals("")) {
             ErrorHandle.addError(EErrorCodes.BAD_SYNTAX_CONDITION, token);
             return;
         }
@@ -38,7 +38,7 @@ public class IfTranslate extends DeclarationTranslate {
     }
 
 
-    public void exitIf(SLLanguageParser.CycleContext ctx){
+    public void exitIf(SLLanguageParser.CycleContext ctx) {
         TableOfCodes.updateJumpCompare(TableOfSymbols.getObjectID(), String.valueOf(TableOfCodes.getTableOfMainCode().size() - 1));
     }
 
@@ -54,4 +54,5 @@ public class IfTranslate extends DeclarationTranslate {
     public void exitElse(SLLanguageParser.ElseStatementContext ctx) {
         TableOfCodes.updateJump(TableOfSymbols.getObjectID(), String.valueOf(TableOfCodes.getTableOfMainCode().size()));
     }
+
 }
