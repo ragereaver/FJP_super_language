@@ -1,6 +1,6 @@
-int ahoj = 5;
 int c = 3;
-boolean d = true;
-while (d){
+boolean d = false;
+
+until (5 < c){
 c = c + 1;
 }
