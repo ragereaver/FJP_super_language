@@ -132,7 +132,7 @@ assignmentOperator
     ;
 
 functionCall
-    :   Identifier '(' functionValues? ')' ';'
+    :   Identifier '(' expression? ')' ';'
     ;
 
 functionValues

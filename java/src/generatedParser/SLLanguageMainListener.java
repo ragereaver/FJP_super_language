@@ -82,6 +82,17 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 
 		EInstructionSet.doInstruction(EInstructionSet.JUMP, 1);
 		EInstructionSet.doInstruction(EInstructionSet.INT, 3);
+
+		if (TableOfSymbols.getReturnSize() != 0) {
+			TableOfSymbols.addHiddenVariable(ctx.getStart(), DeclarationTranslate.RETURN_NAME, Validators.UNKNOWN_TYPE, TableOfSymbols.getReturnSize() - 1);
+		}
+
+		if (TableOfSymbols.getMaxParams() != 0) {
+			TableOfSymbols.addHiddenVariable(ctx.getStart(), DeclarationTranslate.PARAMS_NAME, Validators.UNKNOWN_TYPE, TableOfSymbols.getMaxParams());
+		}
+
+
+
 	}
 	/**
 	 * {@inheritDoc}

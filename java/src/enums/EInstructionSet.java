@@ -89,15 +89,18 @@ public enum EInstructionSet {
      * @return
      */
         public static boolean loadIntegerVariable (String variable, Token token, String type){
-                if (Validators.isVariableName(variable)){
-                    return loadVariableName(variable, token, type);
 
-                } else {
-                    if (Validators.isInteger(variable)) {
-                            TableOfCodes.addCode(EInstructionSet.LITERAL, variable);
-                        return true;
-                    }
+
+            if (Validators.isVariableName(variable)){
+                return loadVariableName(variable, token, type);
+
+            } else {
+                if (Validators.isInteger(variable)) {
+                        TableOfCodes.addCode(EInstructionSet.LITERAL, variable);
+                    return true;
                 }
+            }
+
             ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, token);
             return false;
         }
@@ -118,6 +121,7 @@ public enum EInstructionSet {
                             return true;
                         }
                 }
+
             ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, token);
             return false;
         }
@@ -213,6 +217,7 @@ public enum EInstructionSet {
                 }
 
                 default: {
+
                     return false;
                 }
             }

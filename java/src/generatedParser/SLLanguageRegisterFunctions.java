@@ -38,7 +38,6 @@ public class SLLanguageRegisterFunctions extends SLLanguageBaseListener {
 		TableOfSymbols.setObject(true);
 		FunctionTranslate functionTranslate = new FunctionTranslate();
 		functionTranslate.registerFunction(ctx);
-		System.out.println(ctx.getText());
 	}
 	/**
 	 * {@inheritDoc}

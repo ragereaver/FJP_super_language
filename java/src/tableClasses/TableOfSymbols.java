@@ -26,6 +26,8 @@ public class TableOfSymbols {
     private static int actObjectID = 0;
     public static String filepath = "";
     public static String destinationFilepath = "";
+    private static int maxParams = 0;
+    private static int returnSize = 0;
 
     public static class Symbol {
         private String name, variableType;
@@ -113,6 +115,11 @@ public class TableOfSymbols {
         return addSymbol(ctxToken, name, true, getNextSymbolVariableAddress(), variableType, size, true, false);
     }
 
+    public static boolean addHiddenVariable(Token ctxToken, String name, String variableType, int size){
+
+        return addSymbol(ctxToken, name, true, getNextSymbolVariableAddress(), variableType, size, false, true);
+    }
+
     public static boolean addSymbolVariable(Token ctxToken, String name, String variableType, int size){
 
         return addSymbol(ctxToken, name, true, getNextSymbolVariableAddress(), variableType, size, false, false);
@@ -150,9 +157,11 @@ public class TableOfSymbols {
         }
 
 
-        if (Validators.isArrayHere(variableType)) {//zapsani pole do prikazu
-
+        if (size > 0) {
             TableOfCodes.updateInt(getObjectID(), size);
+        }
+
+        if (Validators.isArrayHere(variableType)) {//zapsani pole do prikazu
             for (int i = 0; i < size; i++) {
                 EInstructionSet.doInstruction(EInstructionSet.LITERAL, 0);
                 EInstructionSet.doInstruction(EInstructionSet.STORE, address + i);
@@ -172,7 +181,6 @@ public class TableOfSymbols {
 
         return true;
     }
-
 
     public static boolean registerFunction(Token ctxToken, String name, String variableType, ArrayList <String> types, ArrayList <String> variables){
         if (functionExist(name, types)){
@@ -206,9 +214,9 @@ public class TableOfSymbols {
 
         for (int i = 0; i < size; i++) {
             Symbol symbol = registerFunctions.get(i);
+
             if (symbol.getName().equals(name)
                     && symbol.getCountParam() == types.size()) {
-
                 exists = true;
                 for (int j = 0; j < symbol.getCountParam(); j++) {
 
@@ -252,6 +260,33 @@ public class TableOfSymbols {
         }
 
         return false;
+    }
+
+    public static String getFunctionType(String name, ArrayList <String> types){
+        boolean exists;
+        int size = registerFunctions.size();
+
+        for (int i = 0; i < size; i++) {
+            Symbol symbol = registerFunctions.get(i);
+            if (symbol.getName().equals(name)
+                    && symbol.getCountParam() == types.size()) {
+
+                exists = true;
+                for (int j = 0; j < symbol.getCountParam(); j++) {
+
+                    if (!symbol.getTypeAtIndex(j).equals(types.get(j))){
+                        exists = false;
+                        break;
+                    }
+                }
+
+                if (exists) {
+                    return symbol.getVariableType();
+                }
+            }
+        }
+
+        return Validators.UNKNOWN_TYPE;
     }
 
     public static Symbol findByAdress(int address){
@@ -380,7 +415,7 @@ public class TableOfSymbols {
     public static int getNextSymbolVariableAddress(){
         Symbol symbol = null;
         for (Symbol sym : tableOfSymbols){
-             if (sym.getLevel() == 0 && (sym.isVariable())) {
+             if (actualLevel == 0 && sym.getLevel() == actualLevel && (sym.isVariable())) {
                  symbol = sym;
             } else {
                 if (sym.getObjectID() == objectID && (sym.isVariable())){
@@ -402,6 +437,23 @@ public class TableOfSymbols {
 
     public static int getObjectID() {
         return objectID;
+    }
+
+
+    public static void setMaxParams(int number) {
+        maxParams = Integer.max(maxParams, number);
+    }
+
+    public static int getMaxParams() {
+       return maxParams;
+    }
+
+    public static void setReturnSize(int number) {
+        returnSize = Integer.max(returnSize, number);
+    }
+
+    public static int getReturnSize() {
+        return returnSize;
     }
 
     public static void clean() {
