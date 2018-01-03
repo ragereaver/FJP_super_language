@@ -1,1 +1,3 @@
-Warning: At line 10:0 - Missing return statement 
+Warning: At line 3:4 - Variable is not convertable! 
+Warning: At line 3:4 - Variable is not convertable! 
+Warning: At line 3:4 - Variable with this name already exist! 

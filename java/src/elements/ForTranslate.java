@@ -20,7 +20,7 @@ public class ForTranslate extends WhileTranslate{
     public void runFor(SLLanguageParser.CycleContext ctx) {
         SLLanguageMainListener.addAddress(TableOfCodes.getTableOfMainCode().size());
         doCondition(ctx.forCondition(), ctx.getStart());
-        doBody(ctx.compoundStatement());
+
     }
 
     @Override

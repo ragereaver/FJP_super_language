@@ -285,6 +285,11 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 				UntilTranslate untilTranslate = new UntilTranslate();
 				untilTranslate.runUntil(ctx);
 			}; break;
+			case "repeat":{
+				RepeatTranslate repeatTranslate = new RepeatTranslate();
+				repeatTranslate.runRepeat(ctx);
+			}; break;
+
 			case "switch":{
                 unblockSegment(isInCycle);
 				SwitchTranslate switchTranslate = new SwitchTranslate();
@@ -328,6 +333,11 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
                 unblockSegment(isInCycle);
 				UntilTranslate untilTranslate = new UntilTranslate();
 				untilTranslate.exitUntil(ctx);
+			}; break;
+			case "repeat":{
+				unblockSegment(isInCycle);
+				RepeatTranslate repeatTranslate = new RepeatTranslate();
+				repeatTranslate.exitRepeat(ctx);
 			}; break;
 			case "switch":{
 				SwitchTranslate switchTranslate = new SwitchTranslate();
