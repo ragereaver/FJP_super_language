@@ -1,6 +1,6 @@
 int ahoj = 5;
 int c = 3;
-
+boolean d = true;
 until (c < 5){
 c = c + 1;
 }

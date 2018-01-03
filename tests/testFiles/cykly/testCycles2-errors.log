@@ -1,1 +1,1 @@
-Warning: At line 4:6 - Parsing code wasnt possible! no viable alternative at input 'until('
+Warning: At line 4:0 - This condition has bad syntax! I can't decide if it's true or false 
