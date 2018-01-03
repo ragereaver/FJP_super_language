@@ -79,7 +79,6 @@ public enum EInstructionSet {
                     return false;
                 }
 
-                System.out.println(token.getLine() + " ----------- " + variable + "          " + TableOfSymbols.getActualLevel() + "            " + sym.getLevel());
                 doInstruction(EInstructionSet.LOAD, TableOfSymbols.getActualLevel() - sym.getLevel(), sym.getAddress());
                 return true;
         }

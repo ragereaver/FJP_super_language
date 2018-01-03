@@ -2,7 +2,6 @@ package elements;
 
 import Convertor.Validators;
 import enums.EErrorCodes;
-import enums.EInstructionSet;
 import generatedParser.SLLanguageParser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -23,7 +22,6 @@ public class CallFunctionTranslate {
     public void doFunctionCalling(SLLanguageParser.FunctionCallContext ctx) {
         String name = ctx.Identifier().getText();
 
-        //TODO prepracovani vyhledavani pro funkce - zavislost na poctu a typu parametru
         SLLanguageParser.FunctionValuesContext values = ctx.functionValues();
         prepareCalling(name, values, null);
     }
@@ -60,7 +58,6 @@ public class CallFunctionTranslate {
                 value = child.getChild(0).getText();
                 child = null;
             }
-            System.out.println("---------" + value + "      " + Validators.getType(value));
             types.add(Validators.getType(value));
             varibles.add(value);
         }

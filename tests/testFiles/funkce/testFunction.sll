@@ -26,8 +26,6 @@ boolean function name (int l) {
 int c = 5;
 if (6 > 11 ) {
     name(1, 2);
-
-
 }
 /* blokovy koment */
 int d = 5 + name (1, 2, 3);

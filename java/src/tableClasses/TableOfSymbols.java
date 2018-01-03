@@ -127,7 +127,6 @@ public class TableOfSymbols {
         function.params = params;
         function.types = types;
         function.countParam = types.size();
-
         TableOfCodes.updateCall(types, name, String.valueOf(function.getAddress()));
         return true;
     }
@@ -160,7 +159,6 @@ public class TableOfSymbols {
             }
 
         }else {//normalni promenna
-            //TODO: doplnit string - pokud bude
 
             if (isEmpty) {
                 EInstructionSet.doInstruction(EInstructionSet.LITERAL, 0);
@@ -362,7 +360,6 @@ public class TableOfSymbols {
             parentID = changesInParentID.pop();
             objectID = changesInObjectID.pop();
         }
-        System.out.println("object" + objectID + " parent " + parentID);
     }
 
     public static int getActualLevel() {
@@ -383,20 +380,19 @@ public class TableOfSymbols {
     public static int getNextSymbolVariableAddress(){
         Symbol symbol = null;
         for (Symbol sym : tableOfSymbols){
-            if (sym.getLevel() == 0 && (sym.isVariable())) {
-                symbol = sym;
+             if (sym.getLevel() == 0 && (sym.isVariable())) {
+                 symbol = sym;
             } else {
                 if (sym.getObjectID() == objectID && (sym.isVariable())){
                     symbol = sym;
                 }
             }
-
         }
 
         if (symbol == null) {
             return 3;
         }else {
-            if (symbol.getSize() == 0) {
+            if (symbol.getSize() <= 0) {
                 return symbol.getAddress() + 1;
             }else {
                 return symbol.getAddress() + symbol.getSize();

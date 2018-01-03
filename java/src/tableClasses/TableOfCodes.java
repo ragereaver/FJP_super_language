@@ -103,8 +103,11 @@ public class TableOfCodes {
     }
 
     public static  void addCode (EInstructionSet code, int level, String value) {
-        if (code.equals(EInstructionSet.INT)
-                || code.equals(EInstructionSet.JUMP)
+        if (code.equals(EInstructionSet.INT)) {
+            tableOfIntsJump.add(new IntWait(TableOfSymbols.getObjectID(), tableOfMainCode.size(), code));
+        }
+
+        if (code.equals(EInstructionSet.JUMP)
                 || code.equals(EInstructionSet.JUMP_COMP)) {
 
             if (Integer.parseInt(value) == -1){
@@ -120,7 +123,7 @@ public class TableOfCodes {
         call.setFunctionName(functionName);
         call.setTypes(types);
         tableOfCalls.add(call);
-
+        System.out.println("---- function  " + functionName + types.size());
         tableOfMainCode.add(new Code(EInstructionSet.CALL, 0, value, tableOfMainCode.size()));
     }
 
