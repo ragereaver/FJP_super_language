@@ -18,7 +18,6 @@ import tableClasses.TableOfSymbols;
 public class ForTranslate extends WhileTranslate{
 
     public void runFor(SLLanguageParser.CycleContext ctx) {
-        SLLanguageMainListener.addAddress(TableOfCodes.getTableOfMainCode().size());
         doCondition(ctx.forCondition(), ctx.getStart());
         doBody(ctx.compoundStatement());
     }
@@ -39,9 +38,10 @@ public class ForTranslate extends WhileTranslate{
             ErrorHandle.addError(EErrorCodes.BAD_SYNTAX, token);
             return;
         }
-        resolveMathProblems(condition.getChild(2), token, Validators.VARIABLE_TYPE_BOOLEAN);
+        SLLanguageMainListener.addAddress(TableOfCodes.getTableOfMainCode().size());
+
+        super.doCondition(condition.getChild(2), token);
         EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP,-1); //přepsat adresu, pro skok za for, další instrukce za JMP
-        //TODO: urcite jine zpracovani podminky
     }
 
     public void exitFor(SLLanguageParser.CycleContext ctx) {

@@ -1,1 +1,2 @@
-Warning: At line 10:0 - Missing return statement 
+Warning: At line 4:0 - Variable on right side doesnt exist! 
+Warning: At line 4:0 - Action is not allowed with these types! 

@@ -1,6 +1,7 @@
 int c = 3;
 boolean d = false;
 
-until (5 < c){
-c = c + 1;
+for(int i = 1; i < c; i = i + 1){
+    d = true;
+    c = c + i;
 }
