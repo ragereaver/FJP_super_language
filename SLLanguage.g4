@@ -23,9 +23,9 @@ constDeclaration
     ;
 
 constValues
-    :DigitSequence
-    |'true'
-    |'false'
+    :   DigitSequence
+    |   'true'
+    |   'false'
     ;
 
 arrayDeclaration

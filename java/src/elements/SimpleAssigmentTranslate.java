@@ -5,7 +5,6 @@ import enums.EErrorCodes;
 import enums.EInstructionSet;
 import generatedParser.SLLanguageParser;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
 import tableClasses.ErrorHandle;
 import tableClasses.TableOfSymbols;
 
@@ -16,15 +15,22 @@ public class SimpleAssigmentTranslate extends DeclarationTranslate{
 
     public void doAssigmentTranslate(ParserRuleContext ctx) {
         boolean isAssign = Validators.isAssignmentHere(ctx.getText());
-
+        boolean isArray = false;
+        SLLanguageParser.PostfixExpressionContext array = null;
+        String index = "";
         if (!isAssign) {
             return;
         }
 
         String identifier = ctx.getChild(0).getText();
+        if (Validators.isArrayHere(identifier)) {
+            array = (SLLanguageParser.PostfixExpressionContext) ctx.getChild(0).getChild(0);
+            identifier = array.postfixExpression().getText();
+            index = array.expression().getText();
+            isArray = true;
+        }
+
         TableOfSymbols.Symbol symbol = TableOfSymbols.findByNameAllLevels(identifier, true);
-
-
         if (symbol == null) {
             ErrorHandle.addError(EErrorCodes.VARIABLE_TO_ASSIGNMENT_NOT_EXIST, ctx);
             return;
@@ -33,7 +39,20 @@ public class SimpleAssigmentTranslate extends DeclarationTranslate{
 
         prepareForDeclaration(symbol.getVariableType(), ctx);
 
-        EInstructionSet.storeInstruction(identifier);
+        if (!isArray) {
+            EInstructionSet.storeInstruction(identifier);
+        }else {
+            int level = TableOfSymbols.getActualLevel() - symbol.getLevel();
+            if (level != 0) {
+                EInstructionSet.doInstruction(EInstructionSet.LITERAL, level);
+            }
+
+
+            String type = symbol.getVariableType().substring(0, symbol.getVariableType().length() - 2);
+            handleAssigment(type, false, index, array.expression(), identifier);
+            EInstructionSet.storeToArrayInstruction(identifier, level);
+        }
+
     }
 
     public void prepareForDeclaration(String type, ParserRuleContext ctx){
@@ -42,6 +61,7 @@ public class SimpleAssigmentTranslate extends DeclarationTranslate{
             newTree.addChild((ParserRuleContext)ctx.getChild(2));
             super.doDeclarationInner(type, newTree, false);
         }else {
+
             super.doDeclarationInner(type, ctx.getParent(), false);
         }
     }

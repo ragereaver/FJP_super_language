@@ -1,11 +1,8 @@
 package Convertor;
 
 import enums.EErrorCodes;
-import enums.EInstructionSet;
-import enums.EOperationCodes;
 import org.antlr.v4.runtime.Token;
 import tableClasses.ErrorHandle;
-import tableClasses.TableOfCodes;
 import tableClasses.TableOfSymbols;
 
 /**
@@ -70,10 +67,6 @@ public class Validators {
 
         if (isInteger(value)){
             return VARIABLE_TYPE_INT;
-        }
-
-        if (isString(value)){
-            return VARIABLE_TYPE_STRING;
         }
 
         if (isBoolean(value)){
@@ -317,7 +310,7 @@ public class Validators {
     }
 
     public static boolean isAssignmentHere(String value) {
-        String pattern = "((\\w+)(=)([^=]*)((\\+|-|!|\\()*)(\\w+)(.*))";
+        String pattern = "((\\w+)((\\[\\w+])?)(=)([^=]*)((\\+|-|!|\\()*)(\\w+)(.*))";
         return (value != null && value.matches(pattern));
     }
 

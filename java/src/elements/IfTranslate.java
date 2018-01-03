@@ -26,7 +26,7 @@ public class IfTranslate extends DeclarationTranslate {
     public void doCondition(ParseTree condition, Token token) {
         SLLanguageMainListener.isInCycleHeader = true; // musi byt vsude zatim
 
-        super.getValue(condition.getText(), Validators.VARIABLE_TYPE_BOOLEAN, condition, token);
+        super.getValue(condition.getText(), Validators.VARIABLE_TYPE_BOOLEAN, condition, token, "");
         /*if (!resolveMathProblems(condition, token, Validators.VARIABLE_TYPE_BOOLEAN).equals("")) {
             ErrorHandle.addError(EErrorCodes.BAD_SYNTAX_CONDITION, token);
             return;

@@ -4,18 +4,14 @@ import Convertor.Validators;
 import enums.EErrorCodes;
 import enums.EInstructionSet;
 import enums.EOperationCodes;
-import generatedParser.SLLanguageParser.InitDeclaratorListContext;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import tableClasses.ErrorHandle;
-import tableClasses.TableOfCodes;
 import tableClasses.TableOfSymbols;
 
-
-import java.util.ArrayList;
-
-import static generatedParser.SLLanguageParser.*;
+import static generatedParser.SLLanguageParser.DeclarationContext;
+import static generatedParser.SLLanguageParser.PostfixExpressionContext;
 
 /**
  * Created by BobrZlosyn on 18.12.2017.
@@ -63,7 +59,7 @@ public class DeclarationTranslate {
              singleAssignment(type, ctx, isDeclaration);
 
         }else {
-             innerMultipleAssigment(ctx, ctx.getStart(), type, isDeclaration);
+             innerMultipleAssigment(ctx, ctx.getStart(), type, isDeclaration, children.getChild(0).getText() );
         }
 
         return "";
@@ -78,7 +74,6 @@ public class DeclarationTranslate {
         boolean isEmpty = true;
         boolean isConst = false;
         boolean isVariable = true;
-
         if (assignmentExpCtx != null) {
             value = assignmentExpCtx.getText();
             isEmpty = false;
@@ -87,6 +82,7 @@ public class DeclarationTranslate {
         }
 
         if (isDeclaration) {
+
             TableOfSymbols.addSymbol(ctx.getStart(), identifier, isVariable, type, 0, isConst, isEmpty);
         }
     }
@@ -96,16 +92,13 @@ public class DeclarationTranslate {
         if (Validators.isTernalIfHere(value)) {
             TernalIfTranslate ternalIfTranslate = new TernalIfTranslate();
             ternalIfTranslate.doTernalIf(assignmentExpCtx, assignmentExpCtx.getStart(), type, true);
-            if (isDeclaration) {
-                TableOfSymbols.addSymbolVariable(assignmentExpCtx.getStart(), identifier, type, 0);
-            }
             return;
         }
 
         if (Validators.isAssignmentHere(assignmentExpCtx.getText())){
             multipleValueAssigment(assignmentExpCtx, assignmentExpCtx.getStart(), type, isDeclaration, identifier);
             if (!isDeclaration) {
-                EInstructionSet.handleVariables(identifier, assignmentExpCtx.getStart(), type);
+                EInstructionSet.handleVariables(identifier, assignmentExpCtx.getStart(), type, identifier);
             }
             return;
         }
@@ -114,8 +107,7 @@ public class DeclarationTranslate {
             callFunction(assignmentExpCtx.getStart(), assignmentExpCtx, type);
             return;
         }
-
-        getValue(value, type, assignmentExpCtx, assignmentExpCtx.getStart());
+        getValue(value, type, assignmentExpCtx, assignmentExpCtx.getStart(), identifier);
     }
 
     private void callFunction(Token token, ParserRuleContext assignmentExpCtx, String type){
@@ -134,11 +126,11 @@ public class DeclarationTranslate {
     }
 
 
-    public void getValue(String value, String type, ParseTree assignmentExpCtx, Token token ) {
+    public void getValue(String value, String type, ParseTree assignmentExpCtx, Token token, String identifier ) {
         if (Validators.isDimHere(value)
                 || Validators.isArrayHere(value)
                 || Validators.isSignHere(value)) { // reseni zavorkovych vyrazu
-            resolveMathProblems(assignmentExpCtx, token, type);
+            resolveMathProblems(assignmentExpCtx, token, type, identifier);
         }else {
             boolean negate = false;
             if (Validators.isNegateSignHere(value)){
@@ -146,7 +138,8 @@ public class DeclarationTranslate {
                 negate = true;
             }
             lastType = type;
-            EInstructionSet.handleVariables(value, token, type);
+            EInstructionSet.handleVariables(value, token, type, identifier);
+            System.out.println(assignmentExpCtx.getText() + "------------ " + value + "    " + type);
 
             if (negate) {
                 negate(type, token);
@@ -176,7 +169,7 @@ public class DeclarationTranslate {
 
                 //nacteni hodnoty ktera ma byt prirazena
                 if (Validators.validateType(type, left)) {
-                    EInstructionSet.handleVariables(left, token, type);
+                    EInstructionSet.handleVariables(left, token, type, identifier);
                 }
 
                 //prirazeni do dalsi promenne
@@ -190,7 +183,7 @@ public class DeclarationTranslate {
                 }
             }
         }else {
-            getValue(child.getText(), type, child, token);
+            getValue(child.getText(), type, child, token, identifier);
 
             if (Validators.validateType(type, identifier)) {
                 EInstructionSet.storeInstruction(identifier);
@@ -203,16 +196,16 @@ public class DeclarationTranslate {
      * @param token
      * @param type
      */
-    private void innerMultipleAssigment(ParseTree child, Token token, String type, boolean isDeclaration) {
+    private void innerMultipleAssigment(ParseTree child, Token token, String type, boolean isDeclaration, String identifier) {
         if (child.getChildCount() != 1) {
             if (child.getChild(1).getText().equals("=")) {
                 String left = child.getChild(0).getText();
                 String right = child.getChild(2).getText();
 
                 if (child.getChildCount() > 1) {
-                    resolveMathProblems(child.getChild(2), token, type);
+                    resolveMathProblems(child.getChild(2), token, type, identifier);
                 }else {
-                    EInstructionSet.handleVariables(right, token, type);
+                    EInstructionSet.handleVariables(right, token, type, right);
                 }
 
                 if (isDeclaration) {
@@ -221,12 +214,12 @@ public class DeclarationTranslate {
 
 
             }else {
-                innerMultipleAssigment(child.getChild(0), token, type, isDeclaration);
-                innerMultipleAssigment(child.getChild(2), token, type, isDeclaration);
+                innerMultipleAssigment(child.getChild(0), token, type, isDeclaration, identifier);
+                innerMultipleAssigment(child.getChild(2), token, type, isDeclaration, identifier);
             }
         }else {
             if (isDeclaration) {
-                String identifier = child.getText();
+                identifier = child.getText();
                 TableOfSymbols.addSymbol(token, identifier, true, type, 0, false, true);
             }
         }
@@ -238,7 +231,7 @@ public class DeclarationTranslate {
      * @param ctx
      * @return
      */
-    public String resolveMathProblems(ParseTree nextChild, Token ctx, String defType ){
+    public String resolveMathProblems(ParseTree nextChild, Token ctx, String defType, String identifier ){
         String res = "";
         for(int i = 0; i < 100; i++) {
             if (nextChild.getChildCount() == 1) {
@@ -248,7 +241,6 @@ public class DeclarationTranslate {
                 }
 
             }else {
-                System.out.println(nextChild.getText());
                 if (nextChild.getChild(0).getText().equals("(")){
                     nextChild = nextChild.getChild(1);
                 }else {
@@ -259,24 +251,24 @@ public class DeclarationTranslate {
                         return res;
                     }
 
-                    String left = resolveMathProblems(nextChild.getChild(0), ctx, defType);
+                    String left = resolveMathProblems(nextChild.getChild(0), ctx, defType, identifier);
 
                     if (left.equals("!")) {
                         String mid = nextChild.getChild(1).getText();
                         if (Validators.isDimHere(mid)
                                 || Validators.isArrayHere(mid)
                                 || Validators.isSignHere(mid)) {
-                            resolveMathProblems(nextChild.getChild(1), ctx, defType);
+                            resolveMathProblems(nextChild.getChild(1), ctx, defType, identifier);
                         }else {
                             String type = Validators.getType(mid);
-                            EInstructionSet.handleVariables(mid, ctx, type);
+                            EInstructionSet.handleVariables(mid, ctx, type, identifier );
                             lastType = type;
                         }
 
                         negate(lastType, ctx);
 
                     } else {
-                        innerResolveMath(left, nextChild, ctx, defType);
+                        innerResolveMath(left, nextChild, ctx, defType, identifier);
                     }
 
                     return res;
@@ -287,9 +279,9 @@ public class DeclarationTranslate {
         return res;
     }
 
-    private void innerResolveMath(String left, ParseTree nextChild, Token ctx, String defType) {
+    private void innerResolveMath(String left, ParseTree nextChild, Token ctx, String defType, String identifier) {
         String sign = nextChild.getChild(1).getText();
-        String right = resolveMathProblems(nextChild.getChild(2), ctx, defType);
+        String right = resolveMathProblems(nextChild.getChild(2), ctx, defType, identifier);
 
         if (Validators.isArrayHere(sign)){
             loadValueFromArray(left, ctx, right, defType + "[]");
@@ -312,8 +304,8 @@ public class DeclarationTranslate {
             if (resultType != null) {
                 lastType = resultType;
 
-                loadValue(left, ctx, leftType);
-                loadValue(right, ctx, leftType);
+                loadValue(left, ctx, leftType, identifier);
+                loadValue(right, ctx, leftType, identifier);
                 EOperationCodes.doOperation(sign);
 
             }else {
@@ -322,9 +314,9 @@ public class DeclarationTranslate {
         }
     }
 
-    private void loadValue(String value, Token token, String type){
+    private void loadValue(String value, Token token, String type, String identifer){
         if (!value.equals("")) {
-            EInstructionSet.handleVariables(value, token, type);
+            EInstructionSet.handleVariables(value, token, type, identifer);
         }
     }
 

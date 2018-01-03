@@ -287,13 +287,18 @@ public class TableOfSymbols {
         return Validators.UNKNOWN_TYPE;
     }
 
-    public static Symbol findByAdress(int address){
-        for (Symbol symbol : tableOfSymbols){
-            if (symbol.getAddress() == address){
-                return symbol;
-            }
+    public static Symbol getValidateSymbol(String variable, String type, Token token) {
+        TableOfSymbols.Symbol sym = TableOfSymbols.findByNameAllLevels(variable, true);
+        if (sym == null) {
+            ErrorHandle.addError(EErrorCodes.VARIABLE_DOESNT_EXIST, token);
+            return null;
         }
-        return null;
+
+        if (!sym.getVariableType().equals(type)){
+            ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, token);
+            return null;
+        }
+        return sym;
     }
 
     public static Symbol findByNameActLevel(String name, boolean isVariable){
@@ -336,12 +341,13 @@ public class TableOfSymbols {
         int iteration = changesInObjectID.size();
         boolean dontStop = true;
         while (dontStop) {
-            if (iteration < 0) {
+            if (object == 0 ) {
                 dontStop = false;
             }
 
             for (int i = 0; i < tableOfSymbols.size(); i++) {
                 Symbol symbol = tableOfSymbols.get(i);
+                System.out.println(symbol.getName() + "    " + name);
                  if(symbol.getObjectID() == object) {
 
                     if (symbol.getName().equals(name) && (isVariable == symbol.isVariable())){
