@@ -152,7 +152,7 @@ public class DeclarationTranslate {
 
     public void negate(String type, Token token) {
         if (!type.equals(Validators.VARIABLE_TYPE_BOOLEAN)) {
-            ErrorHandle.addError(EErrorCodes.INVALID_ACTION, token.getLine(), token.getCharPositionInLine());
+            ErrorHandle.addError(EErrorCodes.INVALID_ACTION, token);
             return;
         }
 
@@ -318,7 +318,7 @@ public class DeclarationTranslate {
                 EOperationCodes.doOperation(sign);
 
             }else {
-                ErrorHandle.addError(EErrorCodes.INVALID_ACTION, ctx.getLine(), ctx.getCharPositionInLine());
+                ErrorHandle.addError(EErrorCodes.INVALID_ACTION, ctx);
             }
         }
     }

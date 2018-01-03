@@ -123,7 +123,6 @@ public class TableOfCodes {
         call.setFunctionName(functionName);
         call.setTypes(types);
         tableOfCalls.add(call);
-        System.out.println("---- function  " + functionName + types.size());
         tableOfMainCode.add(new Code(EInstructionSet.CALL, 0, value, tableOfMainCode.size()));
     }
 

@@ -26,8 +26,7 @@ public class SimpleAssigmentTranslate extends DeclarationTranslate{
 
 
         if (symbol == null) {
-            ErrorHandle.addError(EErrorCodes.VARIABLE_TO_ASSIGNMENT_NOT_EXIST,
-                    ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
+            ErrorHandle.addError(EErrorCodes.VARIABLE_TO_ASSIGNMENT_NOT_EXIST, ctx);
             return;
         }
 

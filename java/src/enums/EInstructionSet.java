@@ -68,14 +68,12 @@ public enum EInstructionSet {
         public static boolean loadVariableName(String variable, Token token, String type){
                 TableOfSymbols.Symbol sym = TableOfSymbols.findByNameAllLevels(variable, true);
                 if (sym == null) {
-                    ErrorHandle.addError(EErrorCodes.VARIABLE_DOESNT_EXIST,
-                            token.getLine(), token.getCharPositionInLine());
+                    ErrorHandle.addError(EErrorCodes.VARIABLE_DOESNT_EXIST, token);
                     return false;
                 }
 
                 if (!sym.getVariableType().equals(type)){
-                    ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH,
-                            token.getLine(), token.getCharPositionInLine());
+                    ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, token);
                     return false;
                 }
 
@@ -100,7 +98,7 @@ public enum EInstructionSet {
                         return true;
                     }
                 }
-            ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, token.getLine(), token.getCharPositionInLine());
+            ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, token);
             return false;
         }
 
@@ -120,7 +118,7 @@ public enum EInstructionSet {
                             return true;
                         }
                 }
-            ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, token.getLine(), token.getCharPositionInLine());
+            ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, token);
             return false;
         }
 
@@ -140,7 +138,7 @@ public enum EInstructionSet {
                     return true;
                 }
             }
-            ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, token.getLine(), token.getCharPositionInLine());
+            ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, token);
             return false;
         }
 
@@ -182,20 +180,17 @@ public enum EInstructionSet {
                             doInstruction(EInstructionSet.LOAD_ADD, TableOfSymbols.getActualLevel() - sym.getLevel(), sym.getAddress());
                             return true;
                         }else {
-                            ErrorHandle.addError(EErrorCodes.BAD_INDEX_ARRAY,
-                                    token.getLine(), token.getCharPositionInLine());
+                            ErrorHandle.addError(EErrorCodes.BAD_INDEX_ARRAY, token);
                             return false;
                         }
                     }else {
-                        ErrorHandle.addError(EErrorCodes.VARIABLE_DOESNT_EXIST,
-                                token.getLine(), token.getCharPositionInLine());
+                        ErrorHandle.addError(EErrorCodes.VARIABLE_DOESNT_EXIST, token);
                         return false;
                     }
                 }
 
                 if (ind < 0 || ind + sym.getAddress() > sym.getSize()) {
-                    ErrorHandle.addError(EErrorCodes.OUT_OF_ARRAY,
-                            token.getLine(), token.getCharPositionInLine());
+                    ErrorHandle.addError(EErrorCodes.OUT_OF_ARRAY, token);
                     return false;
                 }
 

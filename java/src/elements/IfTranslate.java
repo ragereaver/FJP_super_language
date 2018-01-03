@@ -30,7 +30,7 @@ public class IfTranslate extends DeclarationTranslate {
         SLLanguageMainListener.isInCycleHeader = true; // musi byt vsude zatim
 
         if(!resolveMathProblems(condition, token, Validators.VARIABLE_TYPE_BOOLEAN).equals("")) {
-            ErrorHandle.addError(EErrorCodes.BAD_SYNTAX_CONDITION, token.getLine(), token.getCharPositionInLine());
+            ErrorHandle.addError(EErrorCodes.BAD_SYNTAX_CONDITION, token);
             return;
         }
 

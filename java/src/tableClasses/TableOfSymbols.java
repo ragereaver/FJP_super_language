@@ -405,6 +405,15 @@ public class TableOfSymbols {
     }
 
     public static void clean() {
+        registerFunctions.clear();
+        changesInParentID.clear();
+        changesInObjectID.clear();
+        actualLevel = 0;
+        parentID = -1;
+        objectID = 0;
+        actObjectID = 0;
+        filepath = "";
+        destinationFilepath = "";
         tableOfSymbols.clear();
     }
 

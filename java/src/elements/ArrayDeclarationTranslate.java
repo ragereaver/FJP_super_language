@@ -26,9 +26,7 @@ public class ArrayDeclarationTranslate {
 
         type = ctx.typeSpecifier(firstTypeIndex).getText();
         if (!type.equals(ctx.typeSpecifier(secondTypeIndex).getText())){
-            ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH_ARRAY,
-                    ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
-
+            ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH_ARRAY, ctx);
             return false;
         }
 

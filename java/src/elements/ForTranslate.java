@@ -28,7 +28,7 @@ public class ForTranslate extends WhileTranslate{
         DeclarationTranslate declaration = new DeclarationTranslate();
         //deklarace proměnné na začátku cyklu
         if(condition.getChild(0).getChildCount() < 2){
-            ErrorHandle.addError(EErrorCodes.MISSING_DECLARATION_STATEMENT, token.getLine(), token.getCharPositionInLine());
+            ErrorHandle.addError(EErrorCodes.MISSING_DECLARATION_STATEMENT, token);
             return;
         }
         else{
@@ -36,7 +36,7 @@ public class ForTranslate extends WhileTranslate{
         }
 
         if(condition.getChildCount() < 3){
-            ErrorHandle.addError(EErrorCodes.BAD_SYNTAX, token.getLine(), token.getCharPositionInLine());
+            ErrorHandle.addError(EErrorCodes.BAD_SYNTAX, token);
             return;
         }
         resolveMathProblems(condition.getChild(2), token, Validators.VARIABLE_TYPE_BOOLEAN);
@@ -48,7 +48,7 @@ public class ForTranslate extends WhileTranslate{
         //udělat inkrementaci
         SimpleAssigmentTranslate assigment = new SimpleAssigmentTranslate();
         if(ctx.getChildCount() < 3 || ctx.getChild(2).getChildCount() < 5){
-            ErrorHandle.addError(EErrorCodes.BAD_SYNTAX, ctx.start.getLine(), ctx.start.getCharPositionInLine());
+            ErrorHandle.addError(EErrorCodes.BAD_SYNTAX, ctx);
             return;
         }
         assigment.doAssigmentTranslate((ParserRuleContext)ctx.getChild(2).getChild(4).getChild(0));

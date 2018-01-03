@@ -30,8 +30,7 @@ public class CallFunctionTranslate {
         storeValues(values);
 
         if (!TableOfSymbols.functionExist(identifier, types)) {
-            ErrorHandle.addError(EErrorCodes.FUNCTION_NOT_EXIST,
-                    values.getStart().getLine(), values.getStart().getCharPositionInLine());
+            ErrorHandle.addError(EErrorCodes.FUNCTION_NOT_EXIST, values);
         }else {
             TableOfCodes.addCall("-1", types, identifier);
             TableOfSymbols.Symbol function = TableOfSymbols.findFunction(identifier, types);

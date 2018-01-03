@@ -1,6 +1,8 @@
 package tableClasses;
 
 import enums.EErrorCodes;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 
 import java.util.ArrayList;
 
@@ -28,6 +30,13 @@ public class ErrorHandle {
         }
     }
 
+    public static void addError(EErrorCodes code, ParserRuleContext ctx){
+        addError(code, ctx.getStart());
+    }
+
+    public static void addError(EErrorCodes code, Token token){
+        addError(code, token.getLine(), token.getCharPositionInLine(), "");
+    }
 
     public static void addError(EErrorCodes code, int line, int character){
         addError(code, line, character, "");

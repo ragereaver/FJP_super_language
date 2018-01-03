@@ -35,6 +35,10 @@ public class TernalIfTranslate extends DeclarationTranslate {
         EInstructionSet.doInstruction(EInstructionSet.JUMP, -1); //skok na další příkaz, preskoceni falseSide
         TableOfCodes.updateJumpCompare(TableOfSymbols.getObjectID(), String.valueOf(TableOfCodes.getTableOfMainCode().size()));
 
+        if (isAssignment && falseSide == null) {
+            ErrorHandle.addError(EErrorCodes.MISING_RETURN_TERNAL, token);
+        }
+
         if (falseSide != null) {
             if (!isAssignment) {
                 prepareSideInfo(falseSide);
@@ -49,7 +53,7 @@ public class TernalIfTranslate extends DeclarationTranslate {
 
     private void prepareSideInfo(ParserRuleContext side) {
         if (!Validators.isAssignmentHere(side.getText())){
-            ErrorHandle.addError(EErrorCodes.BAD_SYNTAX, side.getStart().getLine(), side.getStart().getCharPositionInLine());
+            ErrorHandle.addError(EErrorCodes.BAD_SYNTAX, side);
             return;
         }
 

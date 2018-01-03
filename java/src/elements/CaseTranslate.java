@@ -23,7 +23,7 @@ public class CaseTranslate {
                 EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP, -1); //skok na začátek další case
             }
             else{
-                ErrorHandle.addError(EErrorCodes.BAD_SYNTAX, ctx.start.getLine(), ctx.start.getCharPositionInLine());
+                ErrorHandle.addError(EErrorCodes.BAD_SYNTAX, ctx);
             }
         }
     }
