@@ -39,8 +39,7 @@ public class IfTranslate extends DeclarationTranslate {
 
 
     public void exitIf(SLLanguageParser.CycleContext ctx){
-        TableOfCodes.updateJumpCompare(TableOfSymbols.getObjectID(), String.valueOf(TableOfCodes.getTableOfMainCode().size()));
-       // EInstructionSet.doInstruction(EInstructionSet.JUMP, 10); // skok za else větev
+        TableOfCodes.updateJumpCompare(TableOfSymbols.getObjectID(), String.valueOf(TableOfCodes.getTableOfMainCode().size() - 1));
     }
 
     public void doBodyIf(ParseTree body) {

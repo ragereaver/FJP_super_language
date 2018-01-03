@@ -1,12 +1,15 @@
 package generatedParser;
 
+import Convertor.Validators;
 import createFilePL0.CreateFile;
 import elements.*;
+import enums.EErrorCodes;
 import enums.EInstructionSet;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import tableClasses.ErrorHandle;
 import tableClasses.TableOfCodes;
 import tableClasses.TableOfSymbols;
 
@@ -17,14 +20,20 @@ import tableClasses.TableOfSymbols;
  */
 public class SLLanguageRegisterFunctions extends SLLanguageBaseListener {
 
+	@Override
+	public void enterExpressionStatement(SLLanguageParser.ExpressionStatementContext ctx) {
+		if (!Validators.isAssignmentHere(ctx.getText())
+			|| Validators.isTernalIfHere(ctx.getText())){
+			ErrorHandle.addError(EErrorCodes.BAD_SYNTAX, ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
+		}
+	}
+
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void enterFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) {
-
-		System.out.println("zacatek funkce");
 
 		TableOfSymbols.setObject(true);
 		FunctionTranslate functionTranslate = new FunctionTranslate();
@@ -39,7 +48,6 @@ public class SLLanguageRegisterFunctions extends SLLanguageBaseListener {
 	@Override public void exitFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) {
 		TableOfSymbols.setLevel(false);
 		TableOfSymbols.setObject(false);
-		System.out.println("konec funkce");
 	}
 
 }

@@ -170,8 +170,8 @@ public class FunctionTranslate extends SLLanguageBaseListener{
 
         if (noReturn) {
             ErrorHandle.addError(EErrorCodes.MISSING_RETURN,
-                    ctx.getStart().getLine(),
-                    ctx.getStart().getCharPositionInLine());
+                    ctx.getStop().getLine(),
+                    ctx.getStop().getCharPositionInLine());
         }
     }
 
@@ -179,7 +179,6 @@ public class FunctionTranslate extends SLLanguageBaseListener{
 
         for (int i = 0; i < returns.size(); i++) {
             int value = (int)returns.get(i);
-            System.out.println("porovnani ----------- " + value + "    " + min + "   " + max);
             if ( value > min && value <= max) {
                 return false;
             }

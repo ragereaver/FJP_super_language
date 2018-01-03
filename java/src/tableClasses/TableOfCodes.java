@@ -12,7 +12,6 @@ public class TableOfCodes {
     private static ArrayList<Code> tableOfMainCode = new ArrayList<>();
     private static ArrayList<IntWait> tableOfCalls = new ArrayList<>();
     private static ArrayList<IntWait> tableOfIntsJump = new ArrayList<>();
-    private static boolean isInFunction = false;
 
     public static class IntWait {
         private int objectID;
@@ -108,7 +107,9 @@ public class TableOfCodes {
                 || code.equals(EInstructionSet.JUMP)
                 || code.equals(EInstructionSet.JUMP_COMP)) {
 
-            tableOfIntsJump.add(new IntWait(TableOfSymbols.getObjectID(), tableOfMainCode.size(), code));
+            if (Integer.parseInt(value) == -1){
+                tableOfIntsJump.add(new IntWait(TableOfSymbols.getObjectID(), tableOfMainCode.size(), code));
+            }
         }
 
         tableOfMainCode.add(new Code(code, level, value, tableOfMainCode.size()));
@@ -227,7 +228,4 @@ public class TableOfCodes {
         tableOfIntsJump.clear();
     }
 
-    public static void setIsInFunction(boolean isInFunction) {
-        TableOfCodes.isInFunction = isInFunction;
-    }
 }

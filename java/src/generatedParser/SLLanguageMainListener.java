@@ -4,9 +4,11 @@ package generatedParser;
 import Convertor.Validators;
 import createFilePL0.CreateFile;
 import elements.*;
+import enums.EErrorCodes;
 import enums.EInstructionSet;
 import javafx.scene.control.Tab;
 import org.antlr.v4.runtime.Token;
+import tableClasses.ErrorHandle;
 import tableClasses.TableOfCodes;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -26,13 +28,25 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	private static boolean isInAssignemt = false;
 	private static boolean isInDeclaration = false;
     private static boolean isInTernalIf = false;
-    private static boolean hasToReturn = false;
 	private static boolean compileFunctions = false;
 	private static boolean isInFunction = false;
-
+    private static String functionType;
+    private static ArrayList isInCycle = new ArrayList();
 	public static Token variable;
 
     private static ArrayList firstAddress = new ArrayList<>();
+
+    public static void blockSegment(ArrayList segmentToBlock) {
+        segmentToBlock.add(true);
+    }
+
+    public static void unblockSegment(ArrayList segmentToUnblock) {
+        segmentToUnblock.remove(segmentToUnblock.size() - 1);
+    }
+
+    public static boolean isSegmentBlocked(ArrayList segment){
+        return !segment.isEmpty();
+    }
 
 	public static void setCompileFunctions(boolean compileFunctions) {
 		SLLanguageMainListener.compileFunctions = compileFunctions;
@@ -45,6 +59,10 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 
     public static int getAddress () {
         return (int) firstAddress.remove(firstAddress.size() - 1);
+    }
+
+    public static int getAddressWithoutRemove() {
+        return (int) firstAddress.get(firstAddress.size() - 1);
     }
 
     public static boolean hasAccess() {
@@ -166,12 +184,12 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 			return;
 		}
 
+        functionType = ctx.typeSpecifier().getText();
 		TableOfSymbols.setLevel(true);
 		TableOfSymbols.setObject(true);
 		EInstructionSet.doInstruction(EInstructionSet.INT, 3);
 		FunctionTranslate functionTranslate = new FunctionTranslate();
 		functionTranslate.doFunctionDefinition(ctx);
-		System.out.println(ctx.getText());
 	}
 	/**
 	 * {@inheritDoc}
@@ -185,7 +203,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 		}
 
 		TableOfSymbols.setObject(false);
-		if (ctx.typeSpecifier().equals("void")) {
+		if (functionType.equals("void")) {
 			EInstructionSet.doInstruction(EInstructionSet.RETURN, 0, 0);
 		}else {
 			FunctionTranslate functionTranslate = new FunctionTranslate();
@@ -218,18 +236,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitTypeSpecifier(SLLanguageParser.TypeSpecifierContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterStringSpecifier(SLLanguageParser.StringSpecifierContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStringSpecifier(SLLanguageParser.StringSpecifierContext ctx) { }
+
 	/**
 	 * {@inheritDoc}
 	 *
@@ -253,7 +260,8 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 			return;
 		}
 
-		TableOfSymbols.setObject(true);
+        blockSegment(isInCycle);
+        TableOfSymbols.setObject(true);
 		String type = ctx.getChild(0).getText();
 		switch (type) {
 			case "for":{
@@ -261,6 +269,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 				forTranslate.runFor(ctx);
 			}; break;
 			case "if":{
+                unblockSegment(isInCycle);
 				IfTranslate ifTranslate = new IfTranslate();
 				ifTranslate.runIf(ctx);
 			}; break;
@@ -277,6 +286,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 				untilTranslate.runUntil(ctx);
 			}; break;
 			case "switch":{
+                unblockSegment(isInCycle);
 				SwitchTranslate switchTranslate = new SwitchTranslate();
 				switchTranslate.runSwitch(ctx);
 			}; break;
@@ -296,6 +306,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
         String type = ctx.getChild(0).getText();
 		switch (type) {
 			case "for":{
+                unblockSegment(isInCycle);
 				ForTranslate forTranslate = new ForTranslate();
 				forTranslate.exitFor(ctx);
 			}; break;
@@ -304,14 +315,17 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 				ifTranslate.exitIf(ctx);
 			}; break;
 			case "while":{
+                unblockSegment(isInCycle);
 				WhileTranslate whileTranslate = new WhileTranslate();
 				whileTranslate.exitWhile(ctx);
 			}; break;
 			case "do":{
+                unblockSegment(isInCycle);
 				DoTranslate doTranslate = new DoTranslate();
 				doTranslate.exitDo(ctx);
 			}; break;
 			case "until":{
+                unblockSegment(isInCycle);
 				UntilTranslate untilTranslate = new UntilTranslate();
 				untilTranslate.exitUntil(ctx);
 			}; break;
@@ -321,7 +335,6 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 			}; break;
 		}
         TableOfSymbols.setObject(false);
-		System.out.println();
 	}
 	/**
 	 * {@inheritDoc}
@@ -450,7 +463,6 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 		}
 
 		isInDeclaration = true;
-		System.out.println(ctx.getText());
 		DeclarationTranslate declarationTranslate = new DeclarationTranslate();
 		declarationTranslate.doStandardDeclaration(ctx);
 
@@ -502,20 +514,35 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
         switch (ctx.getChild(0).getText()) {
             case "return": {
                 if (!hasAccess()) {
-                    breakersTranslate.doReturn(ctx);
+                    breakersTranslate.doReturn(ctx, functionType);
                 }
             }break;
             case "continue": {
-                breakersTranslate.doContinue(ctx);
+                if (hasAccess()) {
+                    return;
+                }
+
+                if (isSegmentBlocked(isInCycle)) {
+                    breakersTranslate.doContinue(ctx);
+                }else {
+                    ErrorHandle.addError(EErrorCodes.BAD_SYNTAX,
+                            ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
+                }
             }break;
 
             case "break": {
-                breakersTranslate.doBreak(ctx);
+                if (hasAccess()) {
+                    return;
+                }
+
+                if (isSegmentBlocked(isInCycle)) {
+                    breakersTranslate.doBreak(ctx);
+                }else {
+                    ErrorHandle.addError(EErrorCodes.BAD_SYNTAX,
+                            ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
+                }
             }break;
         }
-
-
-
     }
 	/**
 	 * {@inheritDoc}
@@ -544,9 +571,8 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
         if (hasAccess()) {
             return;
         }
-
-
 		if (!isInCycleHeader && !isInDeclaration && !isInAssignemt) {
+
             if (Validators.isTernalIfHere(ctx.getText())) {
                 isInTernalIf = true;
                 TernalIfTranslate ternalIfTranslate = new TernalIfTranslate();
@@ -650,12 +676,11 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 		}
 
 		if (!isInCycleHeader && !isInDeclaration && !isInAssignemt && !isInTernalIf) {
-
-			if (!Validators.isTernalIfHere(ctx.getText())) {
-				isInAssignemt = true;
-				SimpleAssigmentTranslate assigmentTranslate = new SimpleAssigmentTranslate();
-				assigmentTranslate.doAssigmentTranslate(ctx);
-			}
+            if (Validators.isAssignmentHere(ctx.getText())){
+                isInAssignemt = true;
+                SimpleAssigmentTranslate assigmentTranslate = new SimpleAssigmentTranslate();
+                assigmentTranslate.doAssigmentTranslate(ctx);
+            }
 		}
 	}
 	/**
@@ -669,9 +694,9 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 		}
 
 		if (!isInCycleHeader && !isInDeclaration && isInAssignemt && !isInTernalIf) {
-			if (!Validators.isTernalIfHere(ctx.getText())) {
-				isInAssignemt = false;
-			}
+            if (Validators.isAssignmentHere(ctx.getText())){
+                isInAssignemt = false;
+            }
 		}
 	}
 	/**

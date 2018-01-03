@@ -25,7 +25,6 @@ public class TernalIfTranslate extends DeclarationTranslate {
 
         resolveMathProblems(condition, token, Validators.VARIABLE_TYPE_BOOLEAN);
         EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP, -1); //skok na falseSide
-
         if (!isAssignment) {
             prepareSideInfo(trueSide);
         }else {

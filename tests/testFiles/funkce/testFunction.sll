@@ -7,11 +7,26 @@ int function name (int l, int o) {
 
 int function name (int l, int o, int k) {
     int a = 5 + c;
-    c = 9 + a;
+
     return 5;
 }
 
-int c = 5;
-name(1, 2);
+boolean function name (int l) {
+    int a = 5 + c;
+    while (5 > 6) {
+         if (6 > 11 ) {
+            break;
+         }else {
+            continue;
+         }
+    }
+    return true;
+}
 
-int d = name (1, 2, 3);
+int c = 5;
+if (6 > 11 ) {
+    name(1, 2);
+
+
+}
+int d = 5 + name (1, 2, 3);

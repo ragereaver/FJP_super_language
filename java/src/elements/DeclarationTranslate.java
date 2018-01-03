@@ -55,6 +55,7 @@ public class DeclarationTranslate {
 
         ParserRuleContext ctx = (ParserRuleContext) children;
          if (ctx.getChildCount() == 1) {
+
              singleAssignment(type, ctx, isDeclaration);
 
         }else {
@@ -77,6 +78,7 @@ public class DeclarationTranslate {
         if (assignmentExpCtx != null) {
             value = assignmentExpCtx.getText();
             isEmpty = false;
+
             handleAssigment(type, ctx, isDeclaration, value, assignmentExpCtx, identifier);
         }
 
@@ -87,15 +89,13 @@ public class DeclarationTranslate {
 
     public void handleAssigment(String type, ParserRuleContext ctx, boolean isDeclaration, String value, ParserRuleContext assignmentExpCtx, String identifier){
 
-        if (type.equals(Validators.VARIABLE_TYPE_BOOLEAN)) {
-            if (Validators.isTernalIfHere(value)) {
-                TernalIfTranslate ternalIfTranslate = new TernalIfTranslate();
-                ternalIfTranslate.doTernalIf(assignmentExpCtx, ctx.getStart(), type, true);
-                if (isDeclaration) {
-                    TableOfSymbols.addSymbolVariable(ctx.getStart(), identifier, type, 0);
-                }
-                return;
+        if (Validators.isTernalIfHere(value)) {
+            TernalIfTranslate ternalIfTranslate = new TernalIfTranslate();
+            ternalIfTranslate.doTernalIf(assignmentExpCtx, ctx.getStart(), type, true);
+            if (isDeclaration) {
+                TableOfSymbols.addSymbolVariable(ctx.getStart(), identifier, type, 0);
             }
+            return;
         }
 
         if (Validators.isAssignmentHere(assignmentExpCtx.getText())){
@@ -107,15 +107,19 @@ public class DeclarationTranslate {
         }
 
         if (Validators.isMethodHere(assignmentExpCtx.getText())) {
-            TableOfSymbols.addSymbolVariable(ctx.getStart(), RETURN_NAME, type, -1);
-            CallFunctionTranslate callFunction = new CallFunctionTranslate();
-            PostfixExpressionContext function = (PostfixExpressionContext) listToEndChild(assignmentExpCtx);
-            callFunction.prepareCalling(function.Identifier().getText(), function.functionValues(), type);
-            EInstructionSet.loadVariableName(RETURN_NAME, ctx.getStart(), type);
-
+            callFunction(ctx.getStart(), assignmentExpCtx, type);
             return;
         }
+
         getValue(value, type, assignmentExpCtx, ctx.getStart());
+    }
+
+    private void callFunction(Token token, ParserRuleContext assignmentExpCtx, String type){
+        TableOfSymbols.addSymbolVariable(token, RETURN_NAME, type, -1);
+        CallFunctionTranslate callFunction = new CallFunctionTranslate();
+        PostfixExpressionContext function = (PostfixExpressionContext) listToEndChild(assignmentExpCtx);
+        callFunction.prepareCalling(function.Identifier().getText(), function.functionValues(), type);
+        EInstructionSet.loadVariableName(RETURN_NAME, token, type);
     }
 
     private ParserRuleContext listToEndChild(ParseTree ctx){
@@ -131,7 +135,6 @@ public class DeclarationTranslate {
         if (Validators.isDimHere(value)
                 || Validators.isArrayHere(value)
                 || Validators.isSignHere(value)) { // reseni zavorkovych vyrazu
-            System.out.println("-------------------" + value);
             resolveMathProblems(assignmentExpCtx, token, type);
         }else {
             boolean negate = false;
@@ -236,7 +239,6 @@ public class DeclarationTranslate {
         for(int i = 0; i < 100; i++) {
             if (nextChild.getChildCount() == 1) {
                 nextChild = nextChild.getChild(0);
-
                 if (nextChild.getChild(0) == null) {
                     return nextChild.getText();
                 }
@@ -246,7 +248,14 @@ public class DeclarationTranslate {
                     nextChild = nextChild.getChild(1);
                 }else {
 
+                    if (Validators.isMethodHere(nextChild.getText())) {
+                        callFunction(ctx, (ParserRuleContext) nextChild, defType);
+                        lastType = defType;
+                        return res;
+                    }
+
                     String left = resolveMathProblems(nextChild.getChild(0), ctx, defType);
+
                     if (left.equals("!")) {
                         String mid = nextChild.getChild(1).getText();
                         if (Validators.isDimHere(mid)
@@ -263,7 +272,12 @@ public class DeclarationTranslate {
 
                     } else {
 
-                        innerResolveMath(left, nextChild, ctx, defType);
+                        if (Validators.isMethodHere(left)){
+
+
+                        }else {
+                            innerResolveMath(left, nextChild, ctx, defType);
+                        }
                     }
 
                     return res;
@@ -295,9 +309,6 @@ public class DeclarationTranslate {
                 rightType = lastType;
             }
 
-            System.out.println("-------------------" + leftType);
-            System.out.println("-------------------" + rightType);
-            System.out.println("-------------------" + sign);
             String resultType = Validators.validateAction(leftType, rightType, sign);
             if (resultType != null) {
                 lastType = resultType;
@@ -307,8 +318,6 @@ public class DeclarationTranslate {
                 EOperationCodes.doOperation(sign);
 
             }else {
-
-                System.out.println("errrrr -------------------" + sign);
                 ErrorHandle.addError(EErrorCodes.INVALID_ACTION, ctx.getLine(), ctx.getCharPositionInLine());
             }
         }
