@@ -6,13 +6,12 @@ import createFilePL0.CreateFile;
 import elements.*;
 import enums.EErrorCodes;
 import enums.EInstructionSet;
-import javafx.scene.control.Tab;
-import org.antlr.v4.runtime.Token;
-import tableClasses.ErrorHandle;
-import tableClasses.TableOfCodes;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import tableClasses.ErrorHandle;
+import tableClasses.TableOfCodes;
 import tableClasses.TableOfSymbols;
 
 import java.util.ArrayList;
@@ -397,6 +396,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
             return;
         }
 
+        TableOfSymbols.setObject(true);
         IfTranslate iftranslate = new IfTranslate();
         iftranslate.doElse(ctx);
 	}
@@ -409,9 +409,9 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
         if (hasAccess()) {
             return;
         }
-
         IfTranslate iftranslate = new IfTranslate();
         iftranslate.exitElse(ctx);
+        TableOfSymbols.setObject(false);
 	}
 	/**
 	 * {@inheritDoc}

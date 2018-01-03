@@ -1,14 +1,11 @@
 package elements;
 
-import enums.EErrorCodes;
+import Convertor.Validators;
 import enums.EInstructionSet;
 import generatedParser.SLLanguageMainListener;
 import generatedParser.SLLanguageParser;
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.Token;
-import Convertor.Validators;
-import tableClasses.ErrorHandle;
+import org.antlr.v4.runtime.tree.ParseTree;
 import tableClasses.TableOfCodes;
 import tableClasses.TableOfSymbols;
 
@@ -40,16 +37,16 @@ public class IfTranslate extends DeclarationTranslate {
 
 
     public void exitIf(SLLanguageParser.CycleContext ctx) {
-        TableOfCodes.updateJumpCompare(TableOfSymbols.getObjectID(), String.valueOf(TableOfCodes.getTableOfMainCode().size() - 1));
+
     }
 
     public void doBodyIf(ParseTree body) {
 
-        //TODO: pravdive vetve
     }
 
     public void doElse(SLLanguageParser.ElseStatementContext ctx) {
         EInstructionSet.doInstruction(EInstructionSet.JUMP, -1); //skok za else větev
+        TableOfCodes.updateJumpCompare(TableOfSymbols.getParentID(), String.valueOf(TableOfCodes.getTableOfMainCode().size()));
     }
 
     public void exitElse(SLLanguageParser.ElseStatementContext ctx) {

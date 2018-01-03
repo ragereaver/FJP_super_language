@@ -1,10 +1,8 @@
 package tableClasses;
 
-import Convertor.TypeConvertor;
 import Convertor.Validators;
 import enums.EErrorCodes;
 import enums.EInstructionSet;
-import jdk.nashorn.internal.ir.Symbol;
 import org.antlr.v4.runtime.Token;
 
 import java.util.ArrayList;
@@ -334,27 +332,17 @@ public class TableOfSymbols {
     }
 
     public static Symbol findByNameAllLevels(String name, boolean isVariable){
-        int parent = parentID;
         int object = objectID;
-        int pomObject = -1;
-        boolean lastRound = true;
-        boolean someObjectExist = true;
-
-        while (lastRound) {
-            if (parent == -1 || !someObjectExist) {
-                lastRound = false;
+        int iteration = changesInObjectID.size();
+        boolean dontStop = true;
+        while (dontStop) {
+            if (iteration < 0) {
+                dontStop = false;
             }
 
-            someObjectExist = false;
             for (int i = 0; i < tableOfSymbols.size(); i++) {
                 Symbol symbol = tableOfSymbols.get(i);
-
-                if(symbol.getObjectID() == object || symbol.getObjectID() == parent) {
-                    if (symbol.getObjectID() == parent) {
-                        someObjectExist = true;
-                        parent = symbol.getParentID();
-                        pomObject = symbol.getObjectID();
-                    }
+                 if(symbol.getObjectID() == object) {
 
                     if (symbol.getName().equals(name) && (isVariable == symbol.isVariable())){
                         return symbol;
@@ -362,7 +350,13 @@ public class TableOfSymbols {
                 }
             }
 
-            object = pomObject;
+            if (iteration == 0) {
+                object = 0;
+                iteration--;
+            }else {
+                object = object - changesInObjectID.get(changesInObjectID.size() - iteration);
+                iteration--;
+            }
         }
 
         return null;
@@ -401,9 +395,8 @@ public class TableOfSymbols {
         return actualLevel;
     }
 
-    public static int getParentLevel() {
-        int parentLevel = getActualLevel() - 1;
-        return (parentLevel > 0) ? parentLevel : 0;
+    public static int getParentID() {
+        return parentID;
     }
 
     public static Symbol getLastSymbol(){
