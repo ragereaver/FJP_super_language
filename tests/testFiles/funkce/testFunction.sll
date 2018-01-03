@@ -29,4 +29,5 @@ if (6 > 11 ) {
 
 
 }
+/* blokovy koment */
 int d = 5 + name (1, 2, 3);

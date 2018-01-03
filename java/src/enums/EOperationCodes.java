@@ -90,16 +90,6 @@ EOperationCodes {
                 EInstructionSet.doInstruction(EInstructionSet.LITERAL, 0);
                 TableOfCodes.addCode(EInstructionSet.OPERATION, EOperationCodes.MORE.getOperationName());
             }break;
-
-            //String equal - musi se osetrit
-            case "===": {
-                TableOfCodes.addCode(EInstructionSet.OPERATION, EOperationCodes.EQUAL.getOperationName());
-            }break;
-
-            //String equal - musi se osetrit
-            case "!==": {
-                TableOfCodes.addCode(EInstructionSet.OPERATION, EOperationCodes.NOT_EQUAL.getOperationName());
-            }break;
         }
     }
 }

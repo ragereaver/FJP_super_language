@@ -65,12 +65,6 @@ public interface SLLanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTypeSpecifier(SLLanguageParser.TypeSpecifierContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SLLanguageParser#stringSpecifier}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStringSpecifier(SLLanguageParser.StringSpecifierContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link SLLanguageParser#emptySpecifier}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -202,12 +196,6 @@ public interface SLLanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitEqualityExpression(SLLanguageParser.EqualityExpressionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SLLanguageParser#stringEqualityExpression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStringEqualityExpression(SLLanguageParser.StringEqualityExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SLLanguageParser#relationalExpression}.
 	 * @param ctx the parse tree

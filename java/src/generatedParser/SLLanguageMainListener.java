@@ -716,18 +716,6 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStringEqualityExpression(SLLanguageParser.StringEqualityExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStringEqualityExpression(SLLanguageParser.StringEqualityExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterRelationalExpression(SLLanguageParser.RelationalExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
