@@ -157,7 +157,7 @@ public class DeclarationTranslate {
         }
 
         EInstructionSet.doInstruction(EInstructionSet.LITERAL, 1);
-        EOperationCodes.doOperation("%");
+        EOperationCodes.doOperation("!=");
 
     }
 
