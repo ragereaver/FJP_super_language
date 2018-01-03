@@ -317,7 +317,7 @@ public class Validators {
     }
 
     public static boolean isAssignmentHere(String value) {
-        String pattern = "((\\w+)(=)[^=](.*)(\\w+)(.*))";
+        String pattern = "((\\w+)(=)([^=]*)((\\+|-|!|\\()*)(\\w+)(.*))";
         return (value != null && value.matches(pattern));
     }
 

@@ -4,18 +4,14 @@ import Convertor.Validators;
 import enums.EErrorCodes;
 import enums.EInstructionSet;
 import enums.EOperationCodes;
-import generatedParser.SLLanguageParser.InitDeclaratorListContext;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import tableClasses.ErrorHandle;
-import tableClasses.TableOfCodes;
 import tableClasses.TableOfSymbols;
 
-
-import java.util.ArrayList;
-
-import static generatedParser.SLLanguageParser.*;
+import static generatedParser.SLLanguageParser.DeclarationContext;
+import static generatedParser.SLLanguageParser.PostfixExpressionContext;
 
 /**
  * Created by BobrZlosyn on 18.12.2017.
@@ -23,11 +19,15 @@ import static generatedParser.SLLanguageParser.*;
 public class DeclarationTranslate {
 
     private String lastType;
-    protected final String RETURN_NAME = "*return";
-
+    public static  final String RETURN_NAME = "*return";
+    public static final String PARAMS_NAME = "*params";
 
     public DeclarationTranslate () {
         lastType = "";
+    }
+
+    public String getLastType() {
+        return lastType;
     }
 
     /**
@@ -74,27 +74,24 @@ public class DeclarationTranslate {
         boolean isEmpty = true;
         boolean isConst = false;
         boolean isVariable = true;
-
         if (assignmentExpCtx != null) {
             value = assignmentExpCtx.getText();
             isEmpty = false;
 
-            handleAssigment(type, ctx, isDeclaration, value, assignmentExpCtx, identifier);
+            handleAssigment(type, isDeclaration, value, assignmentExpCtx, identifier);
         }
 
         if (isDeclaration) {
+
             TableOfSymbols.addSymbol(ctx.getStart(), identifier, isVariable, type, 0, isConst, isEmpty);
         }
     }
 
-    public void handleAssigment(String type, ParserRuleContext ctx, boolean isDeclaration, String value, ParserRuleContext assignmentExpCtx, String identifier){
-
+    public void handleAssigment(String type, boolean isDeclaration, String value, ParserRuleContext assignmentExpCtx, String identifier){
+        lastType = Validators.UNKNOWN_TYPE;
         if (Validators.isTernalIfHere(value)) {
             TernalIfTranslate ternalIfTranslate = new TernalIfTranslate();
-            ternalIfTranslate.doTernalIf(assignmentExpCtx, ctx.getStart(), type, true);
-            if (isDeclaration) {
-                TableOfSymbols.addSymbolVariable(ctx.getStart(), identifier, type, 0);
-            }
+            ternalIfTranslate.doTernalIf(assignmentExpCtx, assignmentExpCtx.getStart(), type, true);
             return;
         }
 
@@ -107,18 +104,17 @@ public class DeclarationTranslate {
         }
 
         if (Validators.isMethodHere(assignmentExpCtx.getText())) {
-            callFunction(ctx.getStart(), assignmentExpCtx, type);
+            callFunction(assignmentExpCtx.getStart(), assignmentExpCtx, type);
             return;
         }
 
-        getValue(value, type, assignmentExpCtx, ctx.getStart());
+        getValue(value, type, assignmentExpCtx, assignmentExpCtx.getStart());
     }
 
     private void callFunction(Token token, ParserRuleContext assignmentExpCtx, String type){
-        TableOfSymbols.addSymbolVariable(token, RETURN_NAME, type, -1);
         CallFunctionTranslate callFunction = new CallFunctionTranslate();
         PostfixExpressionContext function = (PostfixExpressionContext) listToEndChild(assignmentExpCtx);
-        callFunction.prepareCalling(function.Identifier().getText(), function.functionValues(), type);
+        lastType = callFunction.prepareCalling(function.Identifier().getText(), function.functionValues(), type);
         EInstructionSet.loadVariableName(RETURN_NAME, token, type);
     }
 
@@ -142,6 +138,7 @@ public class DeclarationTranslate {
                 value = value.substring(1);
                 negate = true;
             }
+            lastType = type;
             EInstructionSet.handleVariables(value, token, type);
 
             if (negate) {
@@ -244,6 +241,7 @@ public class DeclarationTranslate {
                 }
 
             }else {
+                System.out.println(nextChild.getText());
                 if (nextChild.getChild(0).getText().equals("(")){
                     nextChild = nextChild.getChild(1);
                 }else {

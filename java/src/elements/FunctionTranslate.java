@@ -17,19 +17,16 @@ import java.util.Comparator;
 /**
  * Created by BobrZlosyn on 17.12.2017.
  */
-public class FunctionTranslate extends SLLanguageBaseListener{
+public class FunctionTranslate {
     private boolean hasToReturn;
     private ArrayList <String> types;
     private ArrayList <String> variables;
+
 
     public FunctionTranslate () {
         hasToReturn = false;
         types = new ArrayList<>();
         variables = new ArrayList<>();
-    }
-
-    private String createReturnableName(String name){
-            return "*return_int";
     }
 
     public boolean doFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) {
@@ -57,7 +54,8 @@ public class FunctionTranslate extends SLLanguageBaseListener{
         String type;
         String name;
         ParseTree child = list;
-
+        TableOfSymbols.Symbol params = TableOfSymbols.findByNameAllLevels(DeclarationTranslate.PARAMS_NAME, true);
+        int address = params.getAddress();
         while (child != null) {
             if (child.getChildCount() > 2) {
                 type = child.getChild(0).getText();
@@ -72,6 +70,8 @@ public class FunctionTranslate extends SLLanguageBaseListener{
             types.add(type);
             variables.add(name);
 
+
+            EInstructionSet.doInstruction(EInstructionSet.LOAD, 1, address++);
             TableOfSymbols.addSymbolVariable(list.getStart(), name, type, 0);
         }
 
@@ -89,6 +89,8 @@ public class FunctionTranslate extends SLLanguageBaseListener{
         }else {
             TableOfSymbols.registerFunction(ctx.getStart(), name, type, new ArrayList<>(), new ArrayList<>());
         }
+
+        TableOfSymbols.setReturnSize(1);
     }
 
 
@@ -114,6 +116,7 @@ public class FunctionTranslate extends SLLanguageBaseListener{
             params.add(name);
         }
 
+        TableOfSymbols.setMaxParams(types.size());
         TableOfSymbols.registerFunction(variables.getStart(), nameFunction, typeFunction, types, params);
 
     }

@@ -27,5 +27,5 @@ if (c == ahoj) {
 } else {
     for(int i = 1; i < ahoj; i = i + 1){
 
-    }
+        }
 }

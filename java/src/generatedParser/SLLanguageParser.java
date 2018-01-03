@@ -2058,8 +2058,8 @@ public class SLLanguageParser extends Parser {
 
 	public static class FunctionCallContext extends ParserRuleContext {
 		public TerminalNode Identifier() { return getToken(SLLanguageParser.Identifier, 0); }
-		public FunctionValuesContext functionValues() {
-			return getRuleContext(FunctionValuesContext.class,0);
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public FunctionCallContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2094,10 +2094,10 @@ public class SLLanguageParser extends Parser {
 			setState(326);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__1) | (1L << T__2) | (1L << Identifier) | (1L << DigitSequence) | (1L << Constant))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__1) | (1L << T__2) | (1L << LeftParen) | (1L << Plus) | (1L << Minus) | (1L << Star) | (1L << Not) | (1L << Identifier) | (1L << DigitSequence) | (1L << Constant))) != 0)) {
 				{
 				setState(325);
-				functionValues();
+				expression(0);
 				}
 			}
 
@@ -3858,8 +3858,8 @@ public class SLLanguageParser extends Parser {
 		"\7+\2\2\u013c\u013f\5.\30\2\u013d\u013e\7,\2\2\u013e\u0140\5.\30\2\u013f"+
 		"\u013d\3\2\2\2\u013f\u0140\3\2\2\2\u0140\u0142\3\2\2\2\u0141\u013b\3\2"+
 		"\2\2\u0141\u0142\3\2\2\2\u0142\61\3\2\2\2\u0143\u0144\7/\2\2\u0144\63"+
-		"\3\2\2\2\u0145\u0146\7\62\2\2\u0146\u0148\7\31\2\2\u0147\u0149\5\66\34"+
-		"\2\u0148\u0147\3\2\2\2\u0148\u0149\3\2\2\2\u0149\u014a\3\2\2\2\u014a\u014b"+
+		"\3\2\2\2\u0145\u0146\7\62\2\2\u0146\u0148\7\31\2\2\u0147\u0149\5.\30\2"+
+		"\u0148\u0147\3\2\2\2\u0148\u0149\3\2\2\2\u0149\u014a\3\2\2\2\u014a\u014b"+
 		"\7\32\2\2\u014b\u014c\7-\2\2\u014c\65\3\2\2\2\u014d\u0162\7\62\2\2\u014e"+
 		"\u014f\7\62\2\2\u014f\u0150\7.\2\2\u0150\u0162\5\66\34\2\u0151\u0162\7"+
 		"\64\2\2\u0152\u0153\7\64\2\2\u0153\u0154\7.\2\2\u0154\u0162\5\66\34\2"+
