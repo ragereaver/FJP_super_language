@@ -271,13 +271,7 @@ public class DeclarationTranslate {
                         negate(lastType, ctx);
 
                     } else {
-
-                        if (Validators.isMethodHere(left)){
-
-
-                        }else {
-                            innerResolveMath(left, nextChild, ctx, defType);
-                        }
+                        innerResolveMath(left, nextChild, ctx, defType);
                     }
 
                     return res;
