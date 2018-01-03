@@ -3,7 +3,6 @@ package elements;
 import Convertor.Validators;
 import enums.EErrorCodes;
 import enums.EInstructionSet;
-import generatedParser.SLLanguageMainListener;
 import generatedParser.SLLanguageParser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
@@ -23,7 +22,7 @@ public class TernalIfTranslate extends DeclarationTranslate {
         ParserRuleContext trueSide = ctx.expression(0);
         ParserRuleContext falseSide = ctx.expression(1);
 
-        resolveMathProblems(condition, token, Validators.VARIABLE_TYPE_BOOLEAN);
+        handleAssigment(Validators.VARIABLE_TYPE_BOOLEAN, false, condition.getText(), ctx.logicalOrExpression(), condition.getText());
         EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP, -1); //skok na falseSide
         if (!isAssignment) {
             prepareSideInfo(trueSide);

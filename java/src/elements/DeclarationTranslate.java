@@ -4,18 +4,14 @@ import Convertor.Validators;
 import enums.EErrorCodes;
 import enums.EInstructionSet;
 import enums.EOperationCodes;
-import generatedParser.SLLanguageParser.InitDeclaratorListContext;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import tableClasses.ErrorHandle;
-import tableClasses.TableOfCodes;
 import tableClasses.TableOfSymbols;
 
-
-import java.util.ArrayList;
-
-import static generatedParser.SLLanguageParser.*;
+import static generatedParser.SLLanguageParser.DeclarationContext;
+import static generatedParser.SLLanguageParser.PostfixExpressionContext;
 
 /**
  * Created by BobrZlosyn on 18.12.2017.
@@ -78,7 +74,6 @@ public class DeclarationTranslate {
         boolean isEmpty = true;
         boolean isConst = false;
         boolean isVariable = true;
-
         if (assignmentExpCtx != null) {
             value = assignmentExpCtx.getText();
             isEmpty = false;
@@ -87,6 +82,7 @@ public class DeclarationTranslate {
         }
 
         if (isDeclaration) {
+
             TableOfSymbols.addSymbol(ctx.getStart(), identifier, isVariable, type, 0, isConst, isEmpty);
         }
     }
@@ -96,9 +92,6 @@ public class DeclarationTranslate {
         if (Validators.isTernalIfHere(value)) {
             TernalIfTranslate ternalIfTranslate = new TernalIfTranslate();
             ternalIfTranslate.doTernalIf(assignmentExpCtx, assignmentExpCtx.getStart(), type, true);
-            if (isDeclaration) {
-                TableOfSymbols.addSymbolVariable(assignmentExpCtx.getStart(), identifier, type, 0);
-            }
             return;
         }
 

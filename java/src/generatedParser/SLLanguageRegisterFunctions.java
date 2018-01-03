@@ -1,16 +1,9 @@
 package generatedParser;
 
 import Convertor.Validators;
-import createFilePL0.CreateFile;
-import elements.*;
+import elements.FunctionTranslate;
 import enums.EErrorCodes;
-import enums.EInstructionSet;
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.tree.ErrorNode;
-import org.antlr.v4.runtime.tree.TerminalNode;
 import tableClasses.ErrorHandle;
-import tableClasses.TableOfCodes;
 import tableClasses.TableOfSymbols;
 
 /**
@@ -23,7 +16,8 @@ public class SLLanguageRegisterFunctions extends SLLanguageBaseListener {
 	@Override
 	public void enterExpressionStatement(SLLanguageParser.ExpressionStatementContext ctx) {
 		if (!Validators.isAssignmentHere(ctx.getText())
-			|| Validators.isTernalIfHere(ctx.getText())){
+			&& !Validators.isTernalIfHere(ctx.getText())){
+			System.out.println("------");
 			ErrorHandle.addError(EErrorCodes.BAD_SYNTAX, ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
 		}
 	}
