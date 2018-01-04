@@ -152,7 +152,12 @@ public class TableOfCodes {
     }
 
     public static void updateInt(int objectID) {
-        TableOfCodes.updateInt(objectID, 1);
+        if (TableOfSymbols.getActualLevel() == 0) {
+            TableOfCodes.updateInt(0, 1);
+        }else {
+            TableOfCodes.updateInt(objectID, 1);
+        }
+
     }
 
     public static void updateInt(int objectID, int size) {

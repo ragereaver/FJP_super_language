@@ -1,13 +1,12 @@
 package elements;
 
-import Convertor.Validators;
 import enums.EErrorCodes;
 import enums.EInstructionSet;
 import generatedParser.SLLanguageMainListener;
 import generatedParser.SLLanguageParser;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
 import tableClasses.ErrorHandle;
 import tableClasses.TableOfCodes;
 import tableClasses.TableOfSymbols;
@@ -30,9 +29,9 @@ public class ForTranslate extends WhileTranslate{
             ErrorHandle.addError(EErrorCodes.MISSING_DECLARATION_STATEMENT, token);
             return;
         }
-        else{
-            declaration.doDeclarationInner(condition.getChild(0).getChild(0).getText(), condition.getChild(0).getChild(1), true);
-        }
+
+        declaration.doDeclarationInner(condition.getChild(0).getChild(0).getText(), condition.getChild(0).getChild(1), true);
+
 
         if(condition.getChildCount() < 3){
             ErrorHandle.addError(EErrorCodes.BAD_SYNTAX, token);

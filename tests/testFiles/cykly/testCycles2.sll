@@ -1,4 +1,4 @@
-int c = 3;
-boolean d = false;
-int b = 1;
-(c < 5) ? b = 3 : b = 4;
+ int ahoj = 5;
+ for(int i = 1; i < ahoj; i = i + 1){
+
+ }

@@ -155,6 +155,7 @@ public class TableOfSymbols {
         }
 
 
+
         if (size > 0) {
             TableOfCodes.updateInt(getObjectID(), size);
         }
@@ -172,6 +173,7 @@ public class TableOfSymbols {
             }
 
             if (isVariable) {
+
                 TableOfCodes.updateInt(getObjectID());
                 EInstructionSet.doInstruction(EInstructionSet.STORE, address);
             }
