@@ -1,24 +1,24 @@
 package elements;
 
+import Convertor.Validators;
 import enums.EInstructionSet;
 import generatedParser.SLLanguageMainListener;
 import generatedParser.SLLanguageParser;
 import tableClasses.TableOfCodes;
 import tableClasses.TableOfSymbols;
 
-/**
- * Created by BobrZlosyn on 22.12.2017.
- */
-public class DoTranslate extends WhileTranslate {
+public class RepeatTranslate extends UntilTranslate {
 
-    public void runDo(SLLanguageParser.CycleContext ctx) {
+    public void runRepeat(SLLanguageParser.CycleContext ctx) {
         SLLanguageMainListener.addAddress(TableOfCodes.getTableOfMainCode().size());
     }
 
-    public void exitDo(SLLanguageParser.CycleContext ctx) {
+    public void exitRepeat(SLLanguageParser.CycleContext ctx) {
         doCondition(ctx.expression(), ctx.getStart());
+        negate(Validators.VARIABLE_TYPE_BOOLEAN, ctx.getStart());
         EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP, -1); //přepsat adresu na konec
         EInstructionSet.doInstruction(EInstructionSet.JUMP, SLLanguageMainListener.getAddress()); //přepsat adresu na začátek do
         TableOfCodes.updateJumpCompare(TableOfSymbols.getObjectID(), String.valueOf(TableOfCodes.getTableOfMainCode().size()));
     }
+
 }

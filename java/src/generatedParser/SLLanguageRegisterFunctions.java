@@ -17,7 +17,6 @@ public class SLLanguageRegisterFunctions extends SLLanguageBaseListener {
 	public void enterExpressionStatement(SLLanguageParser.ExpressionStatementContext ctx) {
 		if (!Validators.isAssignmentHere(ctx.getText())
 			&& !Validators.isTernalIfHere(ctx.getText())){
-			System.out.println("--------------" + ctx.getText() + Validators.isAssignmentHere(ctx.getText()));
 			ErrorHandle.addError(EErrorCodes.BAD_SYNTAX, ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
 		}
 	}
