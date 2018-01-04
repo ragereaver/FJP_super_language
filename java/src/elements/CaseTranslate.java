@@ -9,7 +9,6 @@ import org.antlr.v4.runtime.Token;
 import tableClasses.ErrorHandle;
 import tableClasses.TableOfCodes;
 import tableClasses.TableOfSymbols;
-import tableClasses.TableOfSymbols.Symbol;
 
 public class CaseTranslate {
 

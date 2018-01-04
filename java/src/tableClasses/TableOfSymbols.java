@@ -24,88 +24,6 @@ public class TableOfSymbols {
     private static int actObjectID = 0;
     public static String filepath = "";
     public static String destinationFilepath = "";
-    private static int maxParams = 0;
-    private static int returnSize = 0;
-
-    public static class Symbol {
-        private String name, variableType;
-        private boolean isVariable, isConst;
-        private int level, address, size, parentID, objectID;
-        private int countParam;
-        private ArrayList <String> params;
-        private ArrayList <String> types;
-
-        public Symbol(int parentID, int objectID, String name, boolean isVariable, int level, int address,
-                                                    String variableType, int size, boolean isConst){
-
-            this.name = name;
-            this.isVariable = isVariable;
-            this.level = level;
-            this.address = address;
-            this.variableType = variableType;
-            this.size = size;
-            this.isConst = isConst;
-            this.parentID = parentID;
-            this.objectID = objectID;
-            params = new ArrayList();
-            types = new ArrayList();
-            countParam = 0;
-        }
-
-        public int getLevel() {
-            return level;
-        }
-
-        public int getAddress() {
-            return address;
-        }
-
-        public int getSize() {
-            return size;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getVariableType() {
-            return variableType;
-        }
-
-        public boolean isVariable() {
-            return isVariable;
-        }
-
-        public boolean isConst() {
-            return isConst;
-        }
-
-        public int getObjectID() {
-            return objectID;
-        }
-
-        public int getParentID() {
-            return parentID;
-        }
-
-        public int getCountParam() {
-            return countParam;
-        }
-
-        public String getParamAtIndex(int index) {
-            if (params.size() <= index) {
-                return null;
-            }
-            return params.get(index);
-        }
-
-        public String getTypeAtIndex(int index) {
-            if (types.size() <= index) {
-                return null;
-            }
-            return types.get(index);
-        }
-    }
 
 
     public static boolean addSymbolConst(Token ctxToken, String name, String variableType, int size){
@@ -129,9 +47,9 @@ public class TableOfSymbols {
        }
 
         Symbol function = tableOfSymbols.get(tableOfSymbols.size() - 1);
-        function.params = params;
-        function.types = types;
-        function.countParam = types.size();
+        function.setParams(params);
+        function.setTypes(types);
+        function.setCountParam(types.size());
         TableOfCodes.updateCall(types, name, String.valueOf(function.getAddress()));
         return true;
     }
@@ -182,115 +100,8 @@ public class TableOfSymbols {
         return true;
     }
 
-    public static boolean registerFunction(Token ctxToken, String name, String variableType, ArrayList <String> types, ArrayList <String> variables){
-        if (functionExist(name, types)){
-            ErrorHandle.addError(EErrorCodes.FUNCTION_EXISTS,
-                    ctxToken.getLine(), ctxToken.getCharPositionInLine());
-            return false;
-        }
-
-        boolean isVariable = false;
-        boolean isConst = false;
-        int address = -1;
-        int size = -1;
-
-        Symbol newFunction = new Symbol(parentID, objectID, name, isVariable, actualLevel, address, variableType, size, isConst);
-        newFunction.params = variables;
-        newFunction.types = types;
-        newFunction.countParam = types.size();
-
-        if (!registerFunctions.add(newFunction)) {
-            ErrorHandle.addError(EErrorCodes.UNKNOW_ERROR,
-                    ctxToken.getLine(), ctxToken.getCharPositionInLine());
-            return false;
-        }
-        return true;
-
-    }
-
-    public static boolean functionExist(String name, ArrayList <String> types){
-        boolean exists;
-        int size = registerFunctions.size();
-
-        for (int i = 0; i < size; i++) {
-            Symbol symbol = registerFunctions.get(i);
-
-            if (symbol.getName().equals(name)
-                    && symbol.getCountParam() == types.size()) {
-                exists = true;
-                for (int j = 0; j < symbol.getCountParam(); j++) {
-
-                    if (!symbol.getTypeAtIndex(j).equals(types.get(j))){
-                        exists = false;
-                        break;
-                    }
-                }
-
-                if (exists) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public static boolean validFunctionType(String name, ArrayList <String> types, String expType){
-        boolean exists;
-        int size = registerFunctions.size();
-
-        for (int i = 0; i < size; i++) {
-            Symbol symbol = registerFunctions.get(i);
-            if (symbol.getName().equals(name)
-                    && symbol.getCountParam() == types.size()) {
-
-                exists = true;
-                for (int j = 0; j < symbol.getCountParam(); j++) {
-
-                    if (!symbol.getTypeAtIndex(j).equals(types.get(j))){
-                        exists = false;
-                        break;
-                    }
-                }
-
-                if (exists) {
-                    return symbol.getVariableType().equals(expType);
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public static String getFunctionType(String name, ArrayList <String> types){
-        boolean exists;
-        int size = registerFunctions.size();
-
-        for (int i = 0; i < size; i++) {
-            Symbol symbol = registerFunctions.get(i);
-            if (symbol.getName().equals(name)
-                    && symbol.getCountParam() == types.size()) {
-
-                exists = true;
-                for (int j = 0; j < symbol.getCountParam(); j++) {
-
-                    if (!symbol.getTypeAtIndex(j).equals(types.get(j))){
-                        exists = false;
-                        break;
-                    }
-                }
-
-                if (exists) {
-                    return symbol.getVariableType();
-                }
-            }
-        }
-
-        return Validators.UNKNOWN_TYPE;
-    }
-
     public static Symbol getValidateSymbol(String variable, String type, Token token) {
-        TableOfSymbols.Symbol sym = TableOfSymbols.findByNameAllLevels(variable, true);
+        Symbol sym = TableOfSymbols.findByNameAllLevels(variable, true);
         if (sym == null) {
             ErrorHandle.addError(EErrorCodes.VARIABLE_DOESNT_EXIST, token);
             return null;
@@ -311,6 +122,18 @@ public class TableOfSymbols {
         }
 
         return null;
+    }
+
+    public static void updateReturnType( String type){
+        int size = tableOfSymbols.size();
+        for (int i = 0; i < size; i++) {
+            Symbol variable = tableOfSymbols.get(i);
+            if (variable.getName().equals(RegisteredFunction.RETURN_NAME)){
+                variable.setVariableType(type);
+                tableOfSymbols.set(i, variable);
+                return;
+            }
+        }
     }
 
     public static Symbol findFunction(String name, ArrayList <String> types){
@@ -349,7 +172,6 @@ public class TableOfSymbols {
 
             for (int i = 0; i < tableOfSymbols.size(); i++) {
                 Symbol symbol = tableOfSymbols.get(i);
-                System.out.println(symbol.getName() + "    " + name);
                  if(symbol.getObjectID() == object) {
 
                     if (symbol.getName().equals(name) && (isVariable == symbol.isVariable())){
@@ -362,7 +184,7 @@ public class TableOfSymbols {
                 object = 0;
                 iteration--;
             }else {
-                object = object - changesInObjectID.get(changesInObjectID.size() - iteration);
+                object = changesInObjectID.get(changesInObjectID.size() - iteration);
                 iteration--;
             }
         }
@@ -438,23 +260,6 @@ public class TableOfSymbols {
 
     public static int getObjectID() {
         return objectID;
-    }
-
-
-    public static void setMaxParams(int number) {
-        maxParams = Integer.max(maxParams, number);
-    }
-
-    public static int getMaxParams() {
-       return maxParams;
-    }
-
-    public static void setReturnSize(int number) {
-        returnSize = Integer.max(returnSize, number);
-    }
-
-    public static int getReturnSize() {
-        return returnSize;
     }
 
     public static void clean() {

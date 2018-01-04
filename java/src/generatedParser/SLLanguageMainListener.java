@@ -11,6 +11,7 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import tableClasses.ErrorHandle;
+import tableClasses.RegisteredFunction;
 import tableClasses.TableOfCodes;
 import tableClasses.TableOfSymbols;
 
@@ -82,12 +83,12 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 		EInstructionSet.doInstruction(EInstructionSet.JUMP, 1);
 		EInstructionSet.doInstruction(EInstructionSet.INT, 3);
 
-		if (TableOfSymbols.getReturnSize() != 0) {
-			TableOfSymbols.addHiddenVariable(ctx.getStart(), DeclarationTranslate.RETURN_NAME, Validators.UNKNOWN_TYPE, TableOfSymbols.getReturnSize() - 1);
+		if (RegisteredFunction.getReturnSize() != 0) {
+			TableOfSymbols.addHiddenVariable(ctx.getStart(), RegisteredFunction.RETURN_NAME, Validators.UNKNOWN_TYPE, RegisteredFunction.getReturnSize() - 1);
 		}
 
-		if (TableOfSymbols.getMaxParams() != 0) {
-			TableOfSymbols.addHiddenVariable(ctx.getStart(), DeclarationTranslate.PARAMS_NAME, Validators.UNKNOWN_TYPE, TableOfSymbols.getMaxParams());
+		if (RegisteredFunction.getMaxParams() != 0) {
+			TableOfSymbols.addHiddenVariable(ctx.getStart(), RegisteredFunction.PARAMS_NAME, Validators.UNKNOWN_TYPE, RegisteredFunction.getMaxParams());
 		}
 
 

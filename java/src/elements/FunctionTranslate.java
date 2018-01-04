@@ -2,17 +2,12 @@ package elements;
 
 import enums.EErrorCodes;
 import enums.EInstructionSet;
-import generatedParser.SLLanguageBaseListener;
 import generatedParser.SLLanguageParser;
-import javafx.scene.control.Tab;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
-import tableClasses.ErrorHandle;
-import tableClasses.TableOfCodes;
-import tableClasses.TableOfSymbols;
+import tableClasses.*;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 
 /**
  * Created by BobrZlosyn on 17.12.2017.
@@ -41,7 +36,7 @@ public class FunctionTranslate {
             hasToReturn = true;
         }
 
-        if (variables != null) {
+        if (list != null) {
             createVariables(list);
         }
 
@@ -51,10 +46,11 @@ public class FunctionTranslate {
 
 
     private void createVariables(SLLanguageParser.InitListContext list) {
+
         String type;
         String name;
         ParseTree child = list;
-        TableOfSymbols.Symbol params = TableOfSymbols.findByNameAllLevels(DeclarationTranslate.PARAMS_NAME, true);
+        Symbol params = TableOfSymbols.findByNameAllLevels(RegisteredFunction.PARAMS_NAME, true);
         int address = params.getAddress();
         while (child != null) {
             if (child.getChildCount() > 2) {
@@ -87,10 +83,11 @@ public class FunctionTranslate {
         if (variables != null) {
             getVariables(variables, name, type);
         }else {
-            TableOfSymbols.registerFunction(ctx.getStart(), name, type, new ArrayList<>(), new ArrayList<>());
+
+            RegisteredFunction.registerFunction(ctx.getStart(), name, type, new ArrayList<>(), new ArrayList<>());
         }
 
-        TableOfSymbols.setReturnSize(1);
+        RegisteredFunction.setReturnSize(1);
     }
 
 
@@ -116,8 +113,8 @@ public class FunctionTranslate {
             params.add(name);
         }
 
-        TableOfSymbols.setMaxParams(types.size());
-        TableOfSymbols.registerFunction(variables.getStart(), nameFunction, typeFunction, types, params);
+        RegisteredFunction.setMaxParams(types.size());
+        RegisteredFunction.registerFunction(variables.getStart(), nameFunction, typeFunction, types, params);
 
     }
 

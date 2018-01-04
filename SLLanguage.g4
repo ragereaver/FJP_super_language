@@ -13,7 +13,7 @@ allCode
     :   functionDefinition
     |   declaration
     |   cycle
-    |   functionCall
+    |   functionCall ';'
     |   constDeclaration
     |   expressionStatement
     ;
@@ -68,15 +68,15 @@ elseStatement
 statement
     :   labeledStatement
     |   compoundStatement
-    |   functionCall
+    |   functionCall ';'
     |   expressionStatement
     |   cycle
     |   jumpStatement
     ;
 
 labeledStatement
-    :   'case' DigitSequence ':' (compoundStatement | expressionStatement | jumpStatement | functionCall)*
-    |   'default' ':' (compoundStatement | expressionStatement | jumpStatement | functionCall)
+    :   'case' DigitSequence ':' (compoundStatement | expressionStatement | jumpStatement | (functionCall ';'))*
+    |   'default' ':' (compoundStatement | expressionStatement | jumpStatement | (functionCall ';'))
     ;
 
 compoundStatement
@@ -132,7 +132,7 @@ assignmentOperator
     ;
 
 functionCall
-    :   Identifier '(' expression? ')' ';'
+    :   Identifier '(' expression? ')'
     ;
 
 functionValues
@@ -146,6 +146,8 @@ functionValues
     |   'false' ',' functionValues
     |   'true'
     |   'true' ',' functionValues
+    |   functionCall
+    |   functionCall ',' functionValues
     ;
 
 /**

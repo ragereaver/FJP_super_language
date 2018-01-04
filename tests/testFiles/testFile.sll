@@ -1,9 +1,14 @@
 boolean ah;
 (5>6) ? ah = true : ah = false;
-
+int b;
 ah = false;
 
 
+int c = 5;
+c  = fce(fce(5, 6), 6);
 
 
-
+int function fce (int b, int c) {
+    int a = 9;
+    return 10;
+}

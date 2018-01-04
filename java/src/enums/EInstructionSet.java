@@ -4,6 +4,7 @@ import Convertor.TypeConvertor;
 import Convertor.Validators;
 import org.antlr.v4.runtime.Token;
 import tableClasses.ErrorHandle;
+import tableClasses.Symbol;
 import tableClasses.TableOfCodes;
 import tableClasses.TableOfSymbols;
 
@@ -49,7 +50,7 @@ public enum EInstructionSet {
         }
 
         public static boolean storeInstruction(String identifier){
-            TableOfSymbols.Symbol symbol = TableOfSymbols.findByNameAllLevels(identifier, true);
+            Symbol symbol = TableOfSymbols.findByNameAllLevels(identifier, true);
             if (symbol == null){
                 return false;
             }
@@ -59,7 +60,7 @@ public enum EInstructionSet {
         }
 
         public static boolean storeToArrayInstruction(String identifier, int level){
-            TableOfSymbols.Symbol symbol = TableOfSymbols.findByNameAllLevels(identifier, true);
+            Symbol symbol = TableOfSymbols.findByNameAllLevels(identifier, true);
             if (symbol == null){
                 return false;
             }
@@ -85,7 +86,7 @@ public enum EInstructionSet {
      * @return
      */
         public static boolean loadVariableName(String variable, Token token, String type){
-            TableOfSymbols.Symbol sym = TableOfSymbols.getValidateSymbol(variable, type, token);
+            Symbol sym = TableOfSymbols.getValidateSymbol(variable, type, token);
             if (sym != null) {
                 doInstruction(EInstructionSet.LOAD, TableOfSymbols.getActualLevel() - sym.getLevel(), sym.getAddress());
                 return true;
@@ -118,26 +119,7 @@ public enum EInstructionSet {
             return false;
         }
 
-    /**
-     * porovna zda se jedna o prommenou nebo konstantni vyraz a da hodnotu na vrchol zasobniku
-     * @param variable
-     * @param token
-     * @param type
-     * @return
-     */
-        public static boolean loadStringVariable (String variable, Token token, String type){
-                if (Validators.isVariableName(variable)){
-                    return loadVariableName(variable, token, type);
-                } else {
-                        if (Validators.isString(variable)) {
-                                TableOfCodes.addCode(EInstructionSet.LITERAL, variable);
-                            return true;
-                        }
-                }
 
-            ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, token);
-            return false;
-        }
 
     /**
      * porovna zda se jedna o prommenou nebo konstantni vyraz a da hodnotu na vrchol zasobniku
@@ -172,7 +154,7 @@ public enum EInstructionSet {
                 return false;
             }
 
-            TableOfSymbols.Symbol sym = TableOfSymbols.getValidateSymbol(variable, type, token);
+            Symbol sym = TableOfSymbols.getValidateSymbol(variable, type, token);
             if (sym == null) {
                 return false;
             }
@@ -183,8 +165,8 @@ public enum EInstructionSet {
             }
 
             if (Validators.isVariableName(index)) {
-                TableOfSymbols.Symbol indexSym = TableOfSymbols.getValidateSymbol(index,type.substring(0, type.length() - 2), token);
-                System.out.println("--------" + variable);
+                Symbol indexSym = TableOfSymbols.getValidateSymbol(index,type.substring(0, type.length() - 2), token);
+
                 if (indexSym == null) {
                     ErrorHandle.addError(EErrorCodes.BAD_INDEX_ARRAY, token);
                     return false;
@@ -231,8 +213,8 @@ public enum EInstructionSet {
             }
 
 
-            TableOfSymbols.Symbol where = TableOfSymbols.getValidateSymbol(identifier, type, token);
-            TableOfSymbols.Symbol what = TableOfSymbols.getValidateSymbol(variable, type, token);
+            Symbol where = TableOfSymbols.getValidateSymbol(identifier, type, token);
+            Symbol what = TableOfSymbols.getValidateSymbol(variable, type, token);
             if (what == null || where == null) {
                 return false;
             }
@@ -251,10 +233,9 @@ public enum EInstructionSet {
         }
 
         public static boolean handleVariables(String variable, Token token, String type, String identifier) {
+
+
             switch (type){
-                case Validators.VARIABLE_TYPE_STRING: {
-                    return loadStringVariable(variable, token, type);
-                }
                 case Validators.VARIABLE_TYPE_INT: {
                     return loadIntegerVariable(variable, token, type);
                 }

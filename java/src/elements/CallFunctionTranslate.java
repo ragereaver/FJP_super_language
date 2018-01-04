@@ -5,12 +5,8 @@ import enums.EErrorCodes;
 import enums.EInstructionSet;
 import generatedParser.SLLanguageParser;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNodeImpl;
-import tableClasses.ErrorHandle;
-import tableClasses.TableOfCodes;
-import tableClasses.TableOfSymbols;
+import tableClasses.*;
 
 import java.util.ArrayList;
 
@@ -32,20 +28,23 @@ public class CallFunctionTranslate {
     }
 
     public String prepareCalling( String identifier, ParserRuleContext values, String type){
-        storeValues(values);
+        if (values != null) {
+            storeValues(values);
+        }
 
-        if (!TableOfSymbols.functionExist(identifier, types)) {
+
+        if (!RegisteredFunction.functionExist(identifier, types)) {
             ErrorHandle.addError(EErrorCodes.FUNCTION_NOT_EXIST, values);
             return Validators.UNKNOWN_TYPE;
         }
 
         if (Validators.UNKNOWN_TYPE.equals(type)) {
-            type = TableOfSymbols.getFunctionType(identifier, types);
+            type = RegisteredFunction.getFunctionType(identifier, types);
         }
 
         TableOfCodes.addCall("-1", types, identifier);
-        TableOfSymbols.Symbol function = TableOfSymbols.findFunction(identifier, types);
-        if (type != null && !TableOfSymbols.validFunctionType(identifier, types, type)) {
+        Symbol function = TableOfSymbols.findFunction(identifier, types);
+        if (type != null && !RegisteredFunction.validFunctionType(identifier, types, type)) {
             ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, values);
         }
 
@@ -53,18 +52,21 @@ public class CallFunctionTranslate {
             TableOfCodes.updateCall(types, identifier, String.valueOf(function.getAddress()));
         }
 
+        TableOfSymbols.updateReturnType(type);
         return type;
     }
 
     private void storeValues(ParserRuleContext values){
         DeclarationTranslate declaration = new DeclarationTranslate();
-
-
-
         resolveAllParams(values, declaration, false);
 
         if (size > address) {
-            TableOfSymbols.Symbol params = TableOfSymbols.findByNameAllLevels(declaration.PARAMS_NAME, true);
+            Symbol params = TableOfSymbols.findByNameAllLevels(RegisteredFunction.PARAMS_NAME, true);
+            if (params == null) {
+                ErrorHandle.addError(EErrorCodes.FUNCTION_NOT_EXIST, values);
+                return;
+            }
+
             address = params.getAddress();
             resolveAllParams(values, declaration, true);
         }else {
@@ -94,6 +96,9 @@ public class CallFunctionTranslate {
                 resolveParameter(right, child.getChild(2), isSolving, declaration);
                 savetoAddress();
             }
+        }else {
+            resolveParameter(child.getText(), child.getChild(0), isSolving, declaration);
+            savetoAddress();
         }
     }
 

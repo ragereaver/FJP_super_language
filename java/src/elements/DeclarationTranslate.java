@@ -8,10 +8,10 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import tableClasses.ErrorHandle;
+import tableClasses.RegisteredFunction;
 import tableClasses.TableOfSymbols;
 
 import static generatedParser.SLLanguageParser.DeclarationContext;
-import static generatedParser.SLLanguageParser.PostfixExpressionContext;
 
 /**
  * Created by BobrZlosyn on 18.12.2017.
@@ -19,8 +19,6 @@ import static generatedParser.SLLanguageParser.PostfixExpressionContext;
 public class DeclarationTranslate {
 
     private String lastType;
-    public static  final String RETURN_NAME = "*return";
-    public static final String PARAMS_NAME = "*params";
 
     public DeclarationTranslate () {
         lastType = "";
@@ -52,10 +50,8 @@ public class DeclarationTranslate {
      * @return
      */
     public String doDeclarationInner(String type, ParseTree children, boolean isDeclaration){
-
         ParserRuleContext ctx = (ParserRuleContext) children;
          if (ctx.getChildCount() == 1) {
-
              singleAssignment(type, ctx, isDeclaration);
 
         }else {
@@ -82,7 +78,6 @@ public class DeclarationTranslate {
         }
 
         if (isDeclaration) {
-
             TableOfSymbols.addSymbol(ctx.getStart(), identifier, isVariable, type, 0, isConst, isEmpty);
         }
     }
@@ -107,14 +102,23 @@ public class DeclarationTranslate {
             callFunction(assignmentExpCtx.getStart(), assignmentExpCtx, type);
             return;
         }
+
         getValue(value, type, assignmentExpCtx, assignmentExpCtx.getStart(), identifier);
     }
 
     private void callFunction(Token token, ParserRuleContext assignmentExpCtx, String type){
         CallFunctionTranslate callFunction = new CallFunctionTranslate();
-        PostfixExpressionContext function = (PostfixExpressionContext) listToEndChild(assignmentExpCtx);
-        lastType = callFunction.prepareCalling(function.Identifier().getText(), function.functionValues(), type);
-        EInstructionSet.loadVariableName(RETURN_NAME, token, type);
+        ParserRuleContext arguments = listToEndChild(assignmentExpCtx);
+        String identifier = arguments.getChild(0).getText();
+
+        if (arguments.getChildCount() > 3) {
+            arguments = (ParserRuleContext) arguments.getChild(2);
+        }else {
+            arguments = null;
+        }
+
+        lastType = callFunction.prepareCalling(identifier, arguments, type);
+        EInstructionSet.loadVariableName(RegisteredFunction.RETURN_NAME, token, lastType);
     }
 
     private ParserRuleContext listToEndChild(ParseTree ctx){
@@ -139,7 +143,6 @@ public class DeclarationTranslate {
             }
             lastType = type;
             EInstructionSet.handleVariables(value, token, type, identifier);
-            System.out.println(assignmentExpCtx.getText() + "------------ " + value + "    " + type);
 
             if (negate) {
                 negate(type, token);

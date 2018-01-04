@@ -6,6 +6,7 @@ import enums.EInstructionSet;
 import generatedParser.SLLanguageParser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import tableClasses.ErrorHandle;
+import tableClasses.Symbol;
 import tableClasses.TableOfSymbols;
 
 /**
@@ -30,7 +31,7 @@ public class SimpleAssigmentTranslate extends DeclarationTranslate{
             isArray = true;
         }
 
-        TableOfSymbols.Symbol symbol = TableOfSymbols.findByNameAllLevels(identifier, true);
+        Symbol symbol = TableOfSymbols.findByNameAllLevels(identifier, true);
         if (symbol == null) {
             ErrorHandle.addError(EErrorCodes.VARIABLE_TO_ASSIGNMENT_NOT_EXIST, ctx);
             return;

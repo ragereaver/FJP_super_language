@@ -3,6 +3,7 @@ package elements;
 import enums.EInstructionSet;
 import generatedParser.SLLanguageMainListener;
 import generatedParser.SLLanguageParser;
+import tableClasses.RegisteredFunction;
 
 /**
  * Created by BobrZlosyn on 22.12.2017.
@@ -20,8 +21,8 @@ public class BreakersTranslate extends SimpleAssigmentTranslate{
     }
 
     public void doReturn(SLLanguageParser.JumpStatementContext ctx, String functionType) {
-        super.handleAssigment(functionType, false, ctx.expression().getText(), ctx.expression(), RETURN_NAME);
-        EInstructionSet.storeInstruction(RETURN_NAME);
+        super.handleAssigment(functionType, false, ctx.expression().getText(), ctx.expression(), RegisteredFunction.RETURN_NAME);
+        EInstructionSet.storeInstruction(RegisteredFunction.RETURN_NAME);
         EInstructionSet.doInstruction(EInstructionSet.RETURN, 0, 0);
     }
 

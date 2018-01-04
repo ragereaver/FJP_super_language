@@ -10,93 +10,9 @@ import java.util.ArrayList;
 public class TableOfCodes {
 
     private static ArrayList<Code> tableOfMainCode = new ArrayList<>();
-    private static ArrayList<IntWait> tableOfCalls = new ArrayList<>();
-    private static ArrayList<IntWait> tableOfIntsJump = new ArrayList<>();
+    private static ArrayList<ExpectingAddress> tableOfCalls = new ArrayList<>();
+    private static ArrayList<ExpectingAddress> tableOfIntsJump = new ArrayList<>();
 
-    public static class IntWait {
-        private int objectID;
-        private int codeIndex;
-        private EInstructionSet code;
-        private ArrayList <String> types;
-        private String functionName;
-
-        public IntWait(int objectID, int codeIndex, EInstructionSet code) {
-            this.objectID = objectID;
-            this.codeIndex = codeIndex;
-            this.code = code;
-            types = new ArrayList<>();
-            functionName = "";
-        }
-
-        public void setFunctionName(String functionName) {
-            this.functionName = functionName;
-        }
-
-        public void setTypes(ArrayList<String> types) {
-            this.types = types;
-        }
-
-        public int getObjectID() {
-            return objectID;
-        }
-
-        public int getCodeIndex() {
-            return codeIndex;
-        }
-
-        public EInstructionSet getCode() {
-            return code;
-        }
-
-        public String getFunctionName() {
-            return functionName;
-        }
-
-        public int getTypesSize() {
-            return types.size();
-        }
-
-        public String getTypeAtIndex(int index) {
-            if (types.size() <= index) {
-                return null;
-            }
-            return types.get(index);
-        }
-    }
-
-    public static class Code {
-        private EInstructionSet code;
-        private int level;
-        private String value;
-        private int index;
-
-        public Code (EInstructionSet code, int level, String value, int index) {
-            this.code = code;
-            this.level = level;
-            this.value = value;
-            this.index = index;
-        }
-
-        public int getLevel() {
-            return level;
-        }
-
-        public EInstructionSet getCode() {
-            return code;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
-        }
-
-        public String toString() {
-            return index + "\t" + code.getInsturctionName() + "\t" + level + "\t" + value + "\n";
-        }
-    }
 
     public static  void addCode (EInstructionSet code, String value) {
         TableOfCodes.addCode(code, 0, value);
@@ -104,14 +20,14 @@ public class TableOfCodes {
 
     public static  void addCode (EInstructionSet code, int level, String value) {
         if (code.equals(EInstructionSet.INT)) {
-            tableOfIntsJump.add(new IntWait(TableOfSymbols.getObjectID(), tableOfMainCode.size(), code));
+            tableOfIntsJump.add(new ExpectingAddress(TableOfSymbols.getObjectID(), tableOfMainCode.size(), code));
         }
 
         if (code.equals(EInstructionSet.JUMP)
                 || code.equals(EInstructionSet.JUMP_COMP)) {
 
             if (Integer.parseInt(value) == -1){
-                tableOfIntsJump.add(new IntWait(TableOfSymbols.getObjectID(), tableOfMainCode.size(), code));
+                tableOfIntsJump.add(new ExpectingAddress(TableOfSymbols.getObjectID(), tableOfMainCode.size(), code));
             }
         }
 
@@ -119,7 +35,7 @@ public class TableOfCodes {
     }
 
     public static void addCall (String value, ArrayList<String> types, String functionName) {
-        IntWait call = new IntWait(TableOfSymbols.getObjectID(), tableOfMainCode.size(), EInstructionSet.CALL);
+        ExpectingAddress call = new ExpectingAddress(TableOfSymbols.getObjectID(), tableOfMainCode.size(), EInstructionSet.CALL);
         call.setFunctionName(functionName);
         call.setTypes(types);
         tableOfCalls.add(call);
@@ -142,7 +58,7 @@ public class TableOfCodes {
 
     public static int getAddressInt(int objectID) {
         int defaultObject = -1;
-        for (IntWait intWait : tableOfIntsJump) {
+        for (ExpectingAddress intWait : tableOfIntsJump) {
             if (intWait.getCode().equals(EInstructionSet.INT) && intWait.getObjectID() == objectID) {
                 return intWait.getCodeIndex();
             }
@@ -176,7 +92,7 @@ public class TableOfCodes {
         int size = tableOfIntsJump.size();
 
         for (int i = 0; i < size; i++) {
-            IntWait jump = tableOfIntsJump.get(i);
+            ExpectingAddress jump = tableOfIntsJump.get(i);
             if ( jump.getCode().equals(EInstructionSet.JUMP)
                     && jump.getObjectID() == objectID) {
 
@@ -192,7 +108,7 @@ public class TableOfCodes {
         int size = tableOfIntsJump.size();
 
         for (int i = 0; i < size; i++) {
-            IntWait jump = tableOfIntsJump.get(i);
+            ExpectingAddress jump = tableOfIntsJump.get(i);
             if ( jump.getCode().equals(EInstructionSet.JUMP_COMP)
                     && jump.getObjectID() == objectID) {
 
@@ -209,7 +125,7 @@ public class TableOfCodes {
         boolean exists;
 
         for (int i = 0; i < size; i++) {
-            IntWait call = tableOfCalls.get(i);
+            ExpectingAddress call = tableOfCalls.get(i);
             if (call.getFunctionName().equals(name)
                     && types.size() == call.getTypesSize()){
 

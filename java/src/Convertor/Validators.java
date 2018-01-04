@@ -3,6 +3,7 @@ package Convertor;
 import enums.EErrorCodes;
 import org.antlr.v4.runtime.Token;
 import tableClasses.ErrorHandle;
+import tableClasses.Symbol;
 import tableClasses.TableOfSymbols;
 
 /**
@@ -18,7 +19,7 @@ public class Validators {
 
     public static boolean validateType (String variableType, String value){
         boolean isVariable = false;
-        TableOfSymbols.Symbol var = null;
+        Symbol var = null;
         if (isVariableName(value)) {
             var = TableOfSymbols.findByNameAllLevels(value, true);
             isVariable = true;
@@ -50,7 +51,7 @@ public class Validators {
 
     public static String getType (String value){
         boolean isVariable = false;
-        TableOfSymbols.Symbol var = null;
+        Symbol var = null;
         if (isVariableName(value)) {
             var = TableOfSymbols.findByNameAllLevels(value, true);
             isVariable = true;
@@ -117,7 +118,7 @@ public class Validators {
     }
 
     public static boolean isMethodHere (String value){
-        String regex = "((\\w+)(\\()((\\w+)((,\\w+)+)?)?(\\)))";
+        String regex = "((\\w+)(\\()(.+))";
         return  value.matches(regex);
     }
 
@@ -159,7 +160,7 @@ public class Validators {
 
     public static String getType (Token token, String variable) {
         if (isVariableName(variable)) {
-            TableOfSymbols.Symbol sym = TableOfSymbols.findByNameAllLevels(variable, true);
+            Symbol sym = TableOfSymbols.findByNameAllLevels(variable, true);
             if (sym == null) {
                 ErrorHandle.addError(EErrorCodes.VARIABLE_DOESNT_EXIST,
                         token.getLine(), token.getCharPositionInLine());
