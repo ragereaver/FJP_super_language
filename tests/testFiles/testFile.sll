@@ -26,7 +26,7 @@ int function ahoj () {
      int b = 12;
      int d = l + o + k;
      if (d < 10) {
-
+         b = 3;
      }
      return d;
  }
