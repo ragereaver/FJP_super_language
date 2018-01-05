@@ -49,12 +49,16 @@ public enum EInstructionSet {
             TableOfCodes.addCode(instruction, level, String.valueOf(address));
         }
 
-        public static boolean storeInstruction(String identifier){
+        public static boolean storeInstruction(String identifier, Token token){
             Symbol symbol = TableOfSymbols.findByNameAllLevels(identifier, true);
             if (symbol == null){
                 return false;
             }
 
+            if (symbol.isConst()) {
+                ErrorHandle.addError(EErrorCodes.CONSTANT_CHANGE, token );
+                return false;
+            }
             doInstruction(EInstructionSet.STORE, TableOfSymbols.getActualLevel() - symbol.getLevel(), symbol.getAddress());
             return true;
         }
@@ -114,7 +118,7 @@ public enum EInstructionSet {
                     return true;
                 }
             }
-
+            System.out.println(type + " ----------- " + variable);
             ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, token);
             return false;
         }
@@ -249,7 +253,6 @@ public enum EInstructionSet {
         }
 
         public static boolean handleVariables(String variable, Token token, String type, String identifier) {
-
 
             switch (type){
                 case Validators.VARIABLE_TYPE_INT: {

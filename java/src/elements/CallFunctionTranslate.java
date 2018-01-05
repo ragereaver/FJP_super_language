@@ -124,7 +124,7 @@ public class CallFunctionTranslate {
         }
 
         if (isSolving){
-            declaration.handleAssigment(Validators.getType(value),false, value, ctx, value );
+            declaration.handleAssigment(Validators.getType(value),value, ctx, value );
             types.add(declaration.getLastType());
 
         }else {

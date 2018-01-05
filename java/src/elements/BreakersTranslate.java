@@ -21,8 +21,8 @@ public class BreakersTranslate extends SimpleAssigmentTranslate{
     }
 
     public void doReturn(SLLanguageParser.JumpStatementContext ctx, String functionType) {
-        super.handleAssigment(functionType, false, ctx.expression().getText(), ctx.expression(), RegisteredFunction.RETURN_NAME);
-        EInstructionSet.storeInstruction(RegisteredFunction.RETURN_NAME);
+        super.handleAssigment(functionType, ctx.expression().getText(), ctx.expression(), RegisteredFunction.RETURN_NAME);
+        EInstructionSet.storeInstruction(RegisteredFunction.RETURN_NAME, ctx.getStart());
         EInstructionSet.doInstruction(EInstructionSet.RETURN, 0, 0);
     }
 

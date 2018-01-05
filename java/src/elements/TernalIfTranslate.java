@@ -22,7 +22,7 @@ public class TernalIfTranslate extends DeclarationTranslate {
         ParserRuleContext trueSide = ctx.expression(0);
         ParserRuleContext falseSide = ctx.expression(1);
 
-        handleAssigment(Validators.VARIABLE_TYPE_BOOLEAN, false, condition.getText(), ctx.logicalOrExpression(), condition.getText());
+        handleAssigment(Validators.VARIABLE_TYPE_BOOLEAN, condition.getText(), ctx.logicalOrExpression(), condition.getText());
         EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP, -1); //skok na falseSide
         if (!isAssignment) {
             prepareSideInfo(trueSide);

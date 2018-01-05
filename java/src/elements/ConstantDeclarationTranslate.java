@@ -14,9 +14,9 @@ public class ConstantDeclarationTranslate {
         String type = ctx.typeSpecifier().getText();
         String ident = ctx.Identifier().getText();
         String value = ctx.constValues().getText();
-
         if (Validators.validateType(type, value)){
             EInstructionSet.handleVariables(value, ctx.getStart(), type, ident);
+
             TableOfSymbols.addSymbolConst(ctx.getStart(), ident, type, 0);
         }
     }

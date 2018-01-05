@@ -25,18 +25,11 @@ public class Validators {
             isVariable = true;
         }
 
-        if (var == null) {
-            return false;
-        }
-
-        if (isVariable) {
+        if (var != null && isVariable) {
             return (var.getVariableType().equals(variableType));
         }
 
         switch (variableType){
-            case VARIABLE_TYPE_STRING: {
-                return isString(value);
-            }
             case VARIABLE_TYPE_INT: {
                 return isInteger(value);
             }
@@ -159,14 +152,16 @@ public class Validators {
     }
 
     public static String getType (Token token, String variable) {
+
         if (isVariableName(variable)) {
+
             Symbol sym = TableOfSymbols.findByNameAllLevels(variable, true);
             if (sym == null) {
-                ErrorHandle.addError(EErrorCodes.VARIABLE_DOESNT_EXIST,
-                        token.getLine(), token.getCharPositionInLine());
+                ErrorHandle.addError(EErrorCodes.VARIABLE_DOESNT_EXIST, token);
                 return "";
             }
             return sym.getVariableType();
+
         }else {
             if (isInteger(variable)){
                 return VARIABLE_TYPE_INT;
@@ -174,10 +169,6 @@ public class Validators {
 
             if (isBoolean(variable)){
                 return VARIABLE_TYPE_BOOLEAN;
-            }
-
-            if (isString(variable)){
-                return VARIABLE_TYPE_STRING;
             }
         }
         return "";

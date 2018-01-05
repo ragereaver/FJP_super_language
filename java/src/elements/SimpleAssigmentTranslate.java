@@ -41,7 +41,7 @@ public class SimpleAssigmentTranslate extends DeclarationTranslate{
         prepareForDeclaration(symbol.getVariableType(), ctx);
 
         if (!isArray) {
-            EInstructionSet.storeInstruction(identifier);
+            EInstructionSet.storeInstruction(identifier, ctx.getStart());
         }else {
             int level = TableOfSymbols.getActualLevel() - symbol.getLevel();
             if (level != 0) {
@@ -50,7 +50,7 @@ public class SimpleAssigmentTranslate extends DeclarationTranslate{
 
 
             String type = symbol.getVariableType().substring(0, symbol.getVariableType().length() - 2);
-            handleAssigment(type, false, index, array.expression(), identifier);
+            handleAssigment(type, index, array.expression(), identifier);
             EInstructionSet.storeToArrayInstruction(identifier, level);
         }
 
@@ -60,7 +60,8 @@ public class SimpleAssigmentTranslate extends DeclarationTranslate{
         if (ctx.getChild(2).getChildCount() > 1) {
             ParserRuleContext newTree = new ParserRuleContext();
             newTree.addChild((ParserRuleContext)ctx.getChild(2));
-            super.doDeclarationInner(type, newTree, false);
+            System.out.println(ctx.getChild(2).getText());
+            super.handleAssigment(type, ctx.getChild(2).getText(), (ParserRuleContext)ctx.getChild(2), ctx.getChild(0).getText());
         }else {
 
             super.doDeclarationInner(type, ctx.getParent(), false);
