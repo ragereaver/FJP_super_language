@@ -85,6 +85,7 @@ public enum EInstructionSet {
      * @return
      */
         public static boolean loadVariableName(String variable, Token token, String type){
+
             Symbol sym = TableOfSymbols.getValidateSymbol(variable, type, token);
             if (sym != null) {
                 doInstruction(EInstructionSet.LOAD, TableOfSymbols.getActualLevel() - sym.getLevel(), sym.getAddress());
@@ -209,7 +210,7 @@ public enum EInstructionSet {
         private static boolean copyArray (String variable, Token token, String type, String identifier) {
 
             if (Validators.isArrayHere(identifier)) {
-                return handleVariables(variable, token, type.substring(0, type.length() - 2), identifier);
+                return handleVariables(variable, token, type.substring(0, type.length() - 2), identifier, Validators.VARIABLE_TYPE_BOOLEAN);
             }
 
             if (!Validators.getType(variable).equals(type)){
@@ -236,7 +237,7 @@ public enum EInstructionSet {
             return false;
         }
 
-        public static boolean handleVariables(String variable, Token token, String type, String identifier) {
+        public static boolean handleVariables(String variable, Token token, String type, String identifier, String resultType) {
 
             switch (type){
                 case Validators.VARIABLE_TYPE_INT: {
@@ -246,7 +247,11 @@ public enum EInstructionSet {
                     return loadBooleanVariable(variable, token, type);
                 }
                 case Validators.VARIABLE_TYPE_ARRAY_INT: {
-                    return copyArray(variable, token, type, identifier);
+                    if (resultType.equals(Validators.VARIABLE_TYPE_ARRAY_INT)) {
+                        return copyArray(variable, token, type, identifier);
+                    }else {
+                        return loadIntegerVariable(variable, token, type);
+                    }
                 }
                 case Validators.VARIABLE_TYPE_ARRAY_BOOLEAN: {
                     return copyArray(variable, token, type, identifier);

@@ -103,7 +103,7 @@ public class DeclarationTranslate extends SolveProblem {
 
                 //nacteni hodnoty ktera ma byt prirazena
                 if (Validators.validateType(type, left)) {
-                    EInstructionSet.handleVariables(left, token, type, identifier);
+                    EInstructionSet.handleVariables(left, token, type, identifier, type);
                 }
 
 
@@ -141,7 +141,7 @@ public class DeclarationTranslate extends SolveProblem {
                 if (child.getChildCount() > 1) {
                     resolveMathProblems(child.getChild(2), token, type, identifier);
                 }else {
-                    EInstructionSet.handleVariables(right, token, type, right);
+                    EInstructionSet.handleVariables(right, token, type, right, type);
                 }
 
                 if (isDeclaration) {

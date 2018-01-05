@@ -14,6 +14,28 @@ public class TypeConvertor {
             return 0;
         }
     }
+
+    public static String convertArrayTypes(String type, String defType) {
+        if (Validators.VARIABLE_TYPE_ARRAY_INT.equals(type) && Validators.VARIABLE_TYPE_BOOLEAN.equals(defType)){
+            return Validators.VARIABLE_TYPE_INT;
+        }
+
+        if (Validators.VARIABLE_TYPE_ARRAY_BOOLEAN.equals(type) && Validators.VARIABLE_TYPE_BOOLEAN.equals(defType)){
+            return Validators.VARIABLE_TYPE_BOOLEAN;
+        }
+        return type;
+    }
+
+    public static String convertArrayTypesToSimple(String type) {
+        if (Validators.VARIABLE_TYPE_ARRAY_INT.equals(type)){
+            return Validators.VARIABLE_TYPE_INT;
+        }
+
+        if (Validators.VARIABLE_TYPE_ARRAY_BOOLEAN.equals(type)){
+            return Validators.VARIABLE_TYPE_BOOLEAN;
+        }
+        return type;
+    }
 /*
     public static boolean validateValue(Token ctxToken, String variableType, String value) {
         switch (variableType){

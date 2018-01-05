@@ -151,7 +151,7 @@ public class Validators {
         }
     }
 
-    public static String getType (Token token, String variable) {
+    public static String getType (Token token, String variable, String defType) {
 
         if (isVariableName(variable)) {
 

@@ -1,5 +1,6 @@
 package elements;
 
+import Convertor.TypeConvertor;
 import Convertor.Validators;
 import enums.EErrorCodes;
 import enums.EInstructionSet;
@@ -82,15 +83,13 @@ public class CallFunctionTranslate {
 
             String left = child.getChild(0).getText();
             String right = child.getChild(2).getText();
-            System.out.println("///////" +left);
-            System.out.println("*************" +right);
 
             if (Validators.isCommaHere(left) && !Validators.isMethodHere(left)){
                 resolveAllParams(child.getChild(0), declaration, isSolving);
             }else {
 
                 resolveParameter(left, child.getChild(0), isSolving, declaration);
-                savetoAddress();
+                saveToAddress();
             }
 
             if (Validators.isCommaHere(right) && !Validators.isMethodHere(right)){
@@ -98,16 +97,15 @@ public class CallFunctionTranslate {
             }else {
 
                 resolveParameter(right, child.getChild(2), isSolving, declaration);
-                savetoAddress();
+                saveToAddress();
             }
         }else {
-            System.out.println("++++++++" +child.getText());
             resolveParameter(child.getText(), child.getChild(0), isSolving, declaration);
-            savetoAddress();
+            saveToAddress();
         }
     }
 
-    private void savetoAddress(){
+    private void saveToAddress(){
         if (address > 2) {
             EInstructionSet.doInstruction(EInstructionSet.STORE, address++);
         }
@@ -130,7 +128,7 @@ public class CallFunctionTranslate {
 
         if (isSolving){
             declaration.handleAssigment(Validators.getType(value),value, ctx, value );
-            types.add(declaration.getLastType());
+            types.add(TypeConvertor.convertArrayTypesToSimple(declaration.getLastType()));
 
         }else {
             size++;

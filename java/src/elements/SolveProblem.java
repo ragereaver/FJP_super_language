@@ -1,5 +1,6 @@
 package elements;
 
+import Convertor.TypeConvertor;
 import Convertor.Validators;
 import enums.EErrorCodes;
 import enums.EInstructionSet;
@@ -69,7 +70,7 @@ public class SolveProblem {
             }
 
             lastType = type;
-            EInstructionSet.handleVariables(value, token, type, identifier);
+            EInstructionSet.handleVariables(value, token, type, identifier, type);
 
             if (negate) {
                 negate(type, token);
@@ -128,7 +129,7 @@ public class SolveProblem {
                             resolveMathProblems(nextChild.getChild(1), ctx, defType, identifier);
                         }else {
                             String type = Validators.getType(mid);
-                            EInstructionSet.handleVariables(mid, ctx, type, identifier );
+                            EInstructionSet.handleVariables(mid, ctx, type, identifier, defType );
                             lastType = type;
                         }
 
@@ -152,7 +153,7 @@ public class SolveProblem {
 
         //lze jen pro minus
         if (EOperationCodes.MINUS.getOperationSign().equals(sign)) {
-            String typ = Validators.getType(token, number);
+            String typ = Validators.getType(token, number, defType);
 
             // zjisti zda je funkce nebo promenna a nacti hodnotu
             if (Validators.isMethodHere(number)) {
@@ -198,13 +199,14 @@ public class SolveProblem {
 
         if (Validators.isArrayHere(sign)){
             loadValueFromArray(left, (ParserRuleContext) nextChild.getChild(2) , nextChild.getChild(2).getText(), defType);
-            lastType = defType;
+            lastType = Validators.getType(left);
 
         }else {
             String right = resolveMathProblems(nextChild.getChild(2), ctx, defType, identifier);
 
-            String leftType = Validators.getType(ctx, left);
-            String rightType = Validators.getType(ctx, right);
+            String leftType = Validators.getType(ctx, left, defType);
+            String rightType = Validators.getType(ctx, right, defType);
+
 
             if (leftType.isEmpty()) {
                 leftType = lastType;
@@ -214,7 +216,10 @@ public class SolveProblem {
                 rightType = lastType;
             }
 
-            String resultType = Validators.validateAction(leftType, rightType, sign);
+            String resultType = Validators.validateAction( TypeConvertor.convertArrayTypes(leftType, defType),
+                                                            TypeConvertor.convertArrayTypes(rightType, defType),
+                                                             sign);
+
             if (resultType != null) {
                 lastType = resultType;
 
@@ -228,21 +233,16 @@ public class SolveProblem {
         }
     }
 
-    private void loadValue(String value, Token token, String type, String identifer){
+    private void loadValue(String value, Token token, String type, String identifier){
         if (!value.isEmpty()) {
-            EInstructionSet.handleVariables(value, token, type, identifer);
+            EInstructionSet.handleVariables(value, token, type, identifier, lastType);
         }
     }
 
     private void loadValueFromArray(String value, ParserRuleContext ctx, String index, String defType){
         if (!value.isEmpty()) {
             if (!loadIndexForArray(value, index, ctx)){
-                if(defType.contains(Validators.VARIABLE_TYPE_BOOLEAN)) {
-                    EInstructionSet.loadArrayVariable(value, ctx.getStart(), index, Validators.VARIABLE_TYPE_ARRAY_BOOLEAN);
-                }else {
-                    EInstructionSet.loadArrayVariable(value, ctx.getStart(), index, Validators.VARIABLE_TYPE_ARRAY_INT);
-                }
-
+                EInstructionSet.loadArrayVariable(value, ctx.getStart(), index, Validators.getType(value));
             }
         }
     }
@@ -250,7 +250,8 @@ public class SolveProblem {
     private boolean loadIndexForArray(String value, String index, ParserRuleContext ctx){
         if (Validators.isSignHere(index)
                 || Validators.isArrayHere(index)
-                || Validators.isMethodHere(index)) {
+                || Validators.isMethodHere(index)
+                || Validators.isDimHere(index)) {
 
             Symbol array = TableOfSymbols.findByNameAllLevels(value, true);
             if (array == null) {
