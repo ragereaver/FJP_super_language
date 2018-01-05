@@ -6,9 +6,6 @@ int [] pole = new int [5];
 const int test = 5;
 const int TEST2 = 5;
 
-
-test = test + 4;
-
 int de = test;
 int deS = TEST2;
 int c = 33 -- 30;

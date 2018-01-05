@@ -2,8 +2,9 @@ int a = 5;
 int mn, ob = 5 + a, i = 3, or;
 boolean c = true;
 a = 3;
+const int TEST = 4;
 
-int b = a + 5;
+int b = TEST;
 
 int d = b;
 int e = b;

@@ -1,7 +1,7 @@
 int ahoj = 5;
 int c = 3;
 boolean neco;
-if (dfsfa){
+if (ahoj < 6){
     c = ahoj;
 }
 else{
@@ -11,8 +11,8 @@ else{
 switch(c){
 case 1:
     ahoj = ahoj + 1;
-case 2: break;
-case 3: break;
+case 2:
+case 3:
 default: c = c - 1;
 }
 

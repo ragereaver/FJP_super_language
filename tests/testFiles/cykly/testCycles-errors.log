@@ -1,1 +1,1 @@
-Warning: At line 4:0 - This condition has bad syntax! I can't decide if it's true or false 
+Warning: At line 4:0 - Variable on right side doesnt exist! 

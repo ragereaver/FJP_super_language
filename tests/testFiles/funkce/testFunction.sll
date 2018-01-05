@@ -1,8 +1,11 @@
 int function name (int l, int o, int k) {
     int d = l + o + k;
+
     return d;
 }
 
 
+
 int c = 5;
-c = name(name(3 , 4, 5), 1 , 2);
+
+c = (c < 5) ? 5 : name(1, 2, 3);
