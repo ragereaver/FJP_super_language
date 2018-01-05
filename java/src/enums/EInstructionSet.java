@@ -118,7 +118,7 @@ public enum EInstructionSet {
                     return true;
                 }
             }
-            System.out.println(type + " ----------- " + variable);
+
             ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, token);
             return false;
         }

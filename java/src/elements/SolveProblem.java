@@ -213,6 +213,7 @@ public class SolveProblem {
             if (rightType.isEmpty()) {
                 rightType = lastType;
             }
+
             String resultType = Validators.validateAction(leftType, rightType, sign);
             if (resultType != null) {
                 lastType = resultType;

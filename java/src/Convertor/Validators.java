@@ -85,7 +85,7 @@ public class Validators {
             return false;
         }
 
-        String pattern = "[a-z](\\w+)?";
+        String pattern = "[a-zA-Z](\\w+)?";
         return (value != null && value.matches(pattern));
     }
 
