@@ -7,30 +7,41 @@ import tableClasses.TableOfCodes;
  */
 public enum
 EOperationCodes {
-    UNARY_MINUS("1"),
-    PLUS("2"),
-    MINUS("3"),
-    MULLTIPLY("4"),
-    DIVIDE("5"),
-    MODULO("6"),
-    ODD("7"),
-    EQUAL("8"),
-    NOT_EQUAL("9"),
-    LESS("10"),
-    MORE_EQUAL("11"),
-    MORE("12"),
-    LESS_EQUAL("13");
+    UNARY_MINUS("1", "#-"),
+    PLUS("2", "+"),
+    MINUS("3", "-"),
+    MULLTIPLY("4", "*"),
+    DIVIDE("5", "/"),
+    MODULO("6", "%"),
+    ODD("7", "$"),
+    EQUAL("8", "=="),
+    NOT_EQUAL("9", "!="),
+    LESS("10", "<"),
+    MORE_EQUAL("11", ">="),
+    MORE("12", ">"),
+    LESS_EQUAL("13", "<=");
+
+
 
     private final String operationName;
+    private final String operationSign;
 
-    EOperationCodes(String name){
+    EOperationCodes(String name, String sign){
         operationName = name;
+        operationSign = sign;
     }
 
     public String getOperationName() {
         return operationName;
     }
 
+    public String getOperationSign() {
+        return operationSign;
+    }
+
+    public static void doOperation(EOperationCodes code) {
+        doOperation(code.getOperationSign());
+    }
 
     public static void doOperation(String sign){
 
@@ -89,6 +100,10 @@ EOperationCodes {
                 TableOfCodes.addCode(EInstructionSet.OPERATION, EOperationCodes.PLUS.getOperationName());
                 EInstructionSet.doInstruction(EInstructionSet.LITERAL, 0);
                 TableOfCodes.addCode(EInstructionSet.OPERATION, EOperationCodes.MORE.getOperationName());
+            }break;
+
+            case "#-": {
+                TableOfCodes.addCode(EInstructionSet.OPERATION, EOperationCodes.UNARY_MINUS.getOperationName());
             }break;
         }
     }

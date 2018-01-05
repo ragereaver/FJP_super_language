@@ -67,7 +67,7 @@ public enum EInstructionSet {
 
 
             doInstruction(EInstructionSet.LITERAL, symbol.getAddress());
-            EOperationCodes.doOperation("+");
+            EOperationCodes.doOperation(EOperationCodes.PLUS);
             if (level == 0) {
                 doInstruction(EInstructionSet.STORE_ADD, 0, 0);
             }else {
@@ -174,14 +174,13 @@ public enum EInstructionSet {
 
 
                 int level = TableOfSymbols.getActualLevel() - sym.getLevel();
-
                 if (level != 0) {
                     doInstruction(EInstructionSet.LITERAL, 0, level);
                 }
 
                 doInstruction(EInstructionSet.LOAD, TableOfSymbols.getActualLevel() - indexSym.getLevel(), indexSym.getAddress());
                 doInstruction(EInstructionSet.LITERAL, 0, sym.getAddress());
-                EOperationCodes.doOperation("+");
+                EOperationCodes.doOperation(EOperationCodes.PLUS);
 
                 if (level == 0) {
                     doInstruction(EInstructionSet.LOAD_ADD, 0, 0);
@@ -192,16 +191,33 @@ public enum EInstructionSet {
                 return true;
             }
 
-            if (ind < 0 || ind + sym.getAddress() > sym.getSize()) {
+            if (ind < 0 || ind + sym.getAddress() > sym.getAddress() + sym.getSize()) {
                 ErrorHandle.addError(EErrorCodes.OUT_OF_ARRAY, token);
                 return false;
             }
-
 
             doInstruction(EInstructionSet.LOAD, TableOfSymbols.getActualLevel() - sym.getLevel(), sym.getAddress() + ind);
             return true;
         }
 
+        public static boolean justLoadArrayVariable (Symbol array){
+            int level = TableOfSymbols.getActualLevel() - array.getLevel();
+
+            if (level != 0) {
+                doInstruction(EInstructionSet.LITERAL, 0, level);
+            }
+
+            doInstruction(EInstructionSet.LITERAL, 0, array.getAddress());
+            EOperationCodes.doOperation(EOperationCodes.PLUS);
+
+            if (level == 0) {
+                doInstruction(EInstructionSet.LOAD_ADD, 0, 0);
+            }else {
+                doInstruction(EInstructionSet.LOAD_ADD_LEVEL, 0, 0);
+            }
+
+            return true;
+        }
         private static boolean copyArray (String variable, Token token, String type, String identifier) {
 
             if (Validators.isArrayHere(identifier)) {

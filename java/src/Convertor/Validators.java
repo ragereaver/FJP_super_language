@@ -290,19 +290,9 @@ public class Validators {
                     }
                 }break;
 
-                //String equal - musi se osetrit
-                case "===": {
-                    if (leftType.equals(rightType) &&
-                            (leftType.equals(VARIABLE_TYPE_STRING))){
-                        return VARIABLE_TYPE_BOOLEAN;
-                    }
-                }break;
-
-                //String equal - musi se osetrit
-                case "!==": {
-                    if (leftType.equals(rightType) &&
-                            (leftType.equals(VARIABLE_TYPE_STRING))){
-                        return VARIABLE_TYPE_BOOLEAN;
+                case "#-": {
+                    if (leftType.equals(VARIABLE_TYPE_INT)) {
+                        return VARIABLE_TYPE_INT;
                     }
                 }break;
         }

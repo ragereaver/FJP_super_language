@@ -1,14 +1,10 @@
 package elements;
 
 import Convertor.Validators;
-import enums.EErrorCodes;
 import enums.EInstructionSet;
-import enums.EOperationCodes;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
-import tableClasses.ErrorHandle;
-import tableClasses.RegisteredFunction;
 import tableClasses.TableOfSymbols;
 
 import static generatedParser.SLLanguageParser.DeclarationContext;
@@ -16,17 +12,7 @@ import static generatedParser.SLLanguageParser.DeclarationContext;
 /**
  * Created by BobrZlosyn on 18.12.2017.
  */
-public class DeclarationTranslate {
-
-    private String lastType;
-
-    public DeclarationTranslate () {
-        lastType = "";
-    }
-
-    public String getLastType() {
-        return lastType;
-    }
+public class DeclarationTranslate extends SolveProblem {
 
     /**
      * zpracovava normalni deklarace ( vse krome pole)
@@ -106,64 +92,11 @@ public class DeclarationTranslate {
         getValue(value, type, assignmentExpCtx, assignmentExpCtx.getStart(), identifier);
     }
 
-    private void callFunction(Token token, ParserRuleContext assignmentExpCtx, String type){
-        CallFunctionTranslate callFunction = new CallFunctionTranslate();
-        ParserRuleContext arguments = listToEndChild(assignmentExpCtx);
-        String identifier = arguments.getChild(0).getText();
 
-        if (arguments.getChildCount() > 3) {
-            arguments = (ParserRuleContext) arguments.getChild(2);
-        }else {
-            arguments = null;
-        }
-
-        lastType = callFunction.prepareCalling(identifier, arguments, type);
-        EInstructionSet.loadVariableName(RegisteredFunction.RETURN_NAME, token, lastType);
-    }
-
-    private ParserRuleContext listToEndChild(ParseTree ctx){
-        while (ctx.getChildCount() == 1) {
-            ctx = ctx.getChild(0);
-        }
-
-        return (ParserRuleContext) ctx;
-    }
-
-
-    public void getValue(String value, String type, ParseTree assignmentExpCtx, Token token, String identifier ) {
-        if (Validators.isDimHere(value)
-                || Validators.isArrayHere(value)
-                || Validators.isSignHere(value)) { // reseni zavorkovych vyrazu
-            resolveMathProblems(assignmentExpCtx, token, type, identifier);
-        }else {
-            boolean negate = false;
-            if (Validators.isNegateSignHere(value)){
-                value = value.substring(1);
-                negate = true;
-            }
-            lastType = type;
-            EInstructionSet.handleVariables(value, token, type, identifier);
-
-            if (negate) {
-                negate(type, token);
-            }
-        }
-    }
-
-    public void negate(String type, Token token) {
-        if (!type.equals(Validators.VARIABLE_TYPE_BOOLEAN)) {
-            ErrorHandle.addError(EErrorCodes.INVALID_ACTION, token);
-            return;
-        }
-
-        EInstructionSet.doInstruction(EInstructionSet.LITERAL, 1);
-        EOperationCodes.doOperation("!=");
-
-    }
 
     private void multipleValueAssigment (ParseTree child, Token token, String type, boolean isDeclaration, String identifier) {
         if (child.getChildCount() != 1) {
-            if (child.getChild(1).getText().equals("=")) {
+            if (child.getChild(1).getText().equals(ASSIGN)) {
                 String left = child.getChild(0).getText();
 
                 if (child.getChildCount() > 1) {
@@ -201,7 +134,7 @@ public class DeclarationTranslate {
      */
     private void innerMultipleAssigment(ParseTree child, Token token, String type, boolean isDeclaration, String identifier) {
         if (child.getChildCount() != 1) {
-            if (child.getChild(1).getText().equals("=")) {
+            if (child.getChild(1).getText().equals(ASSIGN)) {
                 String left = child.getChild(0).getText();
                 String right = child.getChild(2).getText();
 
@@ -228,104 +161,4 @@ public class DeclarationTranslate {
         }
     }
 
-    /**
-     * resi problem se zavorkami (zatim jen cisla)
-     * @param nextChild
-     * @param ctx
-     * @return
-     */
-    public String resolveMathProblems(ParseTree nextChild, Token ctx, String defType, String identifier ){
-        String res = "";
-        for(int i = 0; i < 100; i++) {
-            if (nextChild.getChildCount() == 1) {
-                nextChild = nextChild.getChild(0);
-                if (nextChild.getChild(0) == null) {
-                    return nextChild.getText();
-                }
-
-            }else {
-                if (nextChild.getChild(0).getText().equals("(")){
-                    nextChild = nextChild.getChild(1);
-                }else {
-
-                    if (Validators.isMethodHere(nextChild.getText())) {
-                        callFunction(ctx, (ParserRuleContext) nextChild, defType);
-                        lastType = defType;
-                        return res;
-                    }
-
-                    String left = resolveMathProblems(nextChild.getChild(0), ctx, defType, identifier);
-
-                    if (left.equals("!")) {
-                        String mid = nextChild.getChild(1).getText();
-                        if (Validators.isDimHere(mid)
-                                || Validators.isArrayHere(mid)
-                                || Validators.isSignHere(mid)) {
-                            resolveMathProblems(nextChild.getChild(1), ctx, defType, identifier);
-                        }else {
-                            String type = Validators.getType(mid);
-                            EInstructionSet.handleVariables(mid, ctx, type, identifier );
-                            lastType = type;
-                        }
-
-                        negate(lastType, ctx);
-
-                    } else {
-                        innerResolveMath(left, nextChild, ctx, defType, identifier);
-                    }
-
-                    return res;
-                }
-            }
-        }
-
-        return res;
-    }
-
-    private void innerResolveMath(String left, ParseTree nextChild, Token ctx, String defType, String identifier) {
-        String sign = nextChild.getChild(1).getText();
-        String right = resolveMathProblems(nextChild.getChild(2), ctx, defType, identifier);
-
-        if (Validators.isArrayHere(sign)){
-            loadValueFromArray(left, ctx, right, defType + "[]");
-            lastType = defType;
-
-        }else {
-            String leftType = Validators.getType(ctx, left);
-            String rightType = Validators.getType(ctx, right);
-
-
-            if (leftType.isEmpty()) {
-                leftType = lastType;
-            }
-
-            if (rightType.isEmpty()) {
-                rightType = lastType;
-            }
-
-            String resultType = Validators.validateAction(leftType, rightType, sign);
-            if (resultType != null) {
-                lastType = resultType;
-
-                loadValue(left, ctx, leftType, identifier);
-                loadValue(right, ctx, leftType, identifier);
-                EOperationCodes.doOperation(sign);
-
-            }else {
-                ErrorHandle.addError(EErrorCodes.INVALID_ACTION, ctx);
-            }
-        }
-    }
-
-    private void loadValue(String value, Token token, String type, String identifer){
-        if (!value.equals("")) {
-            EInstructionSet.handleVariables(value, token, type, identifer);
-        }
-    }
-
-    private void loadValueFromArray(String value, Token token, String index, String defType){
-        if (!value.equals("")) {
-            EInstructionSet.loadArrayVariable(value, token, index, defType);
-        }
-    }
 }
