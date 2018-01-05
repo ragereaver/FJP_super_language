@@ -1,8 +1,8 @@
 int function name (int l, int o, int k) {
-
-    return 58;
+    int d = l + o + k;
+    return d;
 }
 
 
 int c = 5;
-name(name(3 , 4, 5), 1 , 2);
+c = name(name(3 , 4, 5), 1 , 2);
