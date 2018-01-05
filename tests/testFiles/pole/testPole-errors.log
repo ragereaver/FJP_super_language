@@ -1,2 +1,1 @@
-Warning: At line 7:7 - Variable is not convertable! 
-Warning: At line 7:7 - Variable is not convertable! 
+Warning: At line 3:11 - Parsing code wasnt possible! no viable alternative at input 'pole[0]=8'

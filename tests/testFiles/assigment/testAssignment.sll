@@ -1,12 +1,18 @@
-int [] pole = new int [5];
+int a = 5;
+int mn, ob = 5 + a, i = 3, or;
+boolean c = true;
+a = 3;
+const int TEST = 4;
 
-int d = 2;
-pole [d] = 13;
-fce();
-d = pole [d];
-d = d + 5;
+int b = TEST;
 
-int function fce(){
-    pole[d] = 9;
-    return 0;
+int d = b;
+int e = b;
+
+if (a < 5) {
+    b = 3;
+} else {
+    b = 8;
 }
+
+c = a == b;

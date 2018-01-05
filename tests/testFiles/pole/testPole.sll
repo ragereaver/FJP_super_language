@@ -1,7 +1,6 @@
 int [] pole = new int [5];
-int [] pole3 = new int [2];
-boolean [] pole2 = new boolean [5];
-int b = 0;
-b = 31;
-int c = 3 + pole [b] * 3;
-pole = pole3;
+
+pole[1] = 6;
+pole[3] = 4;
+
+int d = pole[1] + pole[3];

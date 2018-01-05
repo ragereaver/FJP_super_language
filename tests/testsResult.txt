@@ -1,192 +1,51 @@
--------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\assigment\testAssignment.sll --------------------
--------------------- Testing pl0 file: D:\projekty\FJP_super_language\tests\testOutput\assigment\testAssignment.pl --------------------
-Error at line 2:9 --- Expected line: "1	INT	0	12", but received: "1	INT	0	8"
-Error at line 3:8 --- Expected line: "2	LIT	0	5", but received: "2	LIT	0	0"
-Error at line 7:8 --- Expected line: "6	LIT	0	5", but received: "6	LIT	0	0"
-Error at line 8:2 --- Expected line: "7	LOD	0	3", but received: "7	STO	0	5"
-Error at line 9:2 --- Expected line: "8	OPR	0	2", but received: "8	LIT	0	0"
-Error at line 10:8 --- Expected line: "9	STO	0	5", but received: "9	STO	0	6"
-Error at line 11:3 --- Expected line: "10	STO	0	6", but received: "10	LIT	0	0"
-Error at line 12:3 --- Expected line: "11	LIT	0	0", but received: "11	STO	0	7"
-Error at line 13:3 --- Expected line: "12	STO	0	7", but received: "12	RET	0	0"
-
-
-
-
--------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\cykly\testCycles.sll --------------------
--------------------- Testing pl0 file: D:\projekty\FJP_super_language\tests\testOutput\cykly\testCycles.pl --------------------
+-------------------- Testing parsing with file: D:\FJP_super_language\tests\testFiles\assigment\testAssignment.sll --------------------
+-------------------- Testing pl0 file: D:\FJP_super_language\tests\testOutput\assigment\testAssignment.pl --------------------
 -------------------- NO ERRORS FOUND --------------------
 
 
 
 
--------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\cykly\testCycles2.sll --------------------
--------------------- Testing pl0 file: D:\projekty\FJP_super_language\tests\testOutput\cykly\testCycles2.pl --------------------
+-------------------- Testing parsing with file: D:\FJP_super_language\tests\testFiles\cykly\testCycles.sll --------------------
+-------------------- Testing pl0 file: D:\FJP_super_language\tests\testOutput\cykly\testCycles.pl --------------------
 -------------------- NO ERRORS FOUND --------------------
 
 
 
 
--------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\funkce\testFunction.sll --------------------
--------------------- Testing pl0 file: D:\projekty\FJP_super_language\tests\testOutput\funkce\testFunction.pl --------------------
+-------------------- Testing parsing with file: D:\FJP_super_language\tests\testFiles\cykly\testCycles2.sll --------------------
+-------------------- Testing pl0 file: D:\FJP_super_language\tests\testOutput\cykly\testCycles2.pl --------------------
 -------------------- NO ERRORS FOUND --------------------
 
 
 
 
--------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\pole\testPole.sll --------------------
--------------------- Testing pl0 file: D:\projekty\FJP_super_language\tests\testOutput\pole\testPole.pl --------------------
-Error at line 2:8 --- Expected line: "1	INT	0	17", but received: "1	INT	0	22"
-Error at line 8:8 --- Expected line: "7	STO	0	5", but received: "7	STO	0	7"
-Error at line 10:8 --- Expected line: "9	STO	0	6", but received: "9	STO	0	8"
-Error at line 12:9 --- Expected line: "11	STO	0	7", but received: "11	STO	0	9"
-Error at line 14:10 --- Expected line: "13	STO	0	8", but received: "13	STO	0	10"
-Error at line 16:10 --- Expected line: "15	STO	0	9", but received: "15	STO	0	11"
-Error at line 18:10 --- Expected line: "17	STO	0	10", but received: "17	STO	0	12"
-Error at line 20:10 --- Expected line: "19	STO	0	11", but received: "19	STO	0	13"
-Error at line 22:10 --- Expected line: "21	STO	0	12", but received: "21	STO	0	14"
-Error at line 24:10 --- Expected line: "23	STO	0	13", but received: "23	STO	0	15"
-Error at line 26:10 --- Expected line: "25	STO	0	14", but received: "25	STO	0	16"
-Error at line 28:10 --- Expected line: "27	STO	0	15", but received: "27	STO	0	17"
-Error at line 29:10 --- Expected line: "28	LIT	0	31", but received: "28	LIT	0	0"
-Error at line 30:10 --- Expected line: "29	STO	0	15", but received: "29	STO	0	18"
-Error at line 31:10 --- Expected line: "30	LOD	0	15", but received: "30	LIT	0	0"
-Error at line 32:10 --- Expected line: "31	LIT	0	3", but received: "31	STO	0	19"
-Error at line 33:10 --- Expected line: "32	OPR	0	2", but received: "32	LIT	0	31"
-Error at line 34:10 --- Expected line: "33	LDA	0	0", but received: "33	STO	0	19"
-Error at line 35:10 --- Expected line: "34	LIT	0	3", but received: "34	LOD	0	19"
-Error at line 36:3 --- Expected line: "35	OPR	0	4", but received: "35	LIT	0	7"
-Error at line 37:3 --- Expected line: "36	LIT	0	3", but received: "36	OPR	0	2"
-Error at line 38:3 --- Expected line: "37	OPR	0	2", but received: "37	LDA	0	0"
-Error at line 39:10 --- Expected line: "38	STO	0	16", but received: "38	LIT	0	3"
-Error at line 40:3 --- Expected line: "39	LOD	0	9", but received: "39	OPR	0	4"
-Error at line 41:3 --- Expected line: "40	STO	0	4", but received: "40	LIT	0	3"
-Error at line 42:3 --- Expected line: "41	LOD	0	8", but received: "41	OPR	0	2"
-Error at line 43:10 --- Expected line: "42	STO	0	3", but received: "42	STO	0	20"
-Error at line 44:10 --- Expected line: "43	RET	0	0", but received: "43	LOD	0	13"
-Error --- Valid test is shorter than the new one, line: 45
+-------------------- Testing parsing with file: D:\FJP_super_language\tests\testFiles\funkce\testFunction.sll --------------------
+-------------------- Testing pl0 file: D:\FJP_super_language\tests\testOutput\funkce\testFunction.pl --------------------
+-------------------- NO ERRORS FOUND --------------------
 
 
 
 
--------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\testFile.sll --------------------
--------------------- Testing pl0 file: D:\projekty\FJP_super_language\tests\testOutput\testFile.pl --------------------
-Error at line 2:8 --- Expected line: "1	INT	0	19", but received: "1	INT	0	21"
-Error at line 34:10 --- Expected line: "33	LOD	0	14", but received: "33	LIT	0	5"
-Error at line 36:4 --- Expected line: "35	LIT	0	30", but received: "35	LOD	0	14"
-Error at line 37:10 --- Expected line: "36	OPR	0	1", but received: "36	STO	0	16"
-Error at line 38:4 --- Expected line: "37	LIT	0	33", but received: "37	LOD	0	15"
-Error at line 39:10 --- Expected line: "38	OPR	0	3", but received: "38	STO	0	17"
-Error at line 40:3 --- Expected line: "39	STO	0	16", but received: "39	LIT	0	30"
-Error at line 41:10 --- Expected line: "40	LOD	0	14", but received: "40	OPR	0	1"
-Error at line 42:3 --- Expected line: "41	STO	0	16", but received: "41	LIT	0	33"
-Error at line 43:10 --- Expected line: "42	LIT	0	501", but received: "42	OPR	0	3"
-Error at line 44:10 --- Expected line: "43	STO	0	16", but received: "43	STO	0	18"
-Error at line 45:10 --- Expected line: "44	LOD	0	16", but received: "44	LOD	0	14"
-Error at line 46:10 --- Expected line: "45	STO	0	16", but received: "45	STO	0	18"
-Error at line 47:11 --- Expected line: "46	LIT	0	801", but received: "46	LOD	0	15"
-Error at line 48:10 --- Expected line: "47	STO	0	8", but received: "47	STO	0	18"
-Error at line 49:10 --- Expected line: "48	LOD	0	8", but received: "48	LIT	0	501"
-Error at line 50:10 --- Expected line: "49	STO	0	16", but received: "49	STO	0	18"
-Error at line 51:10 --- Expected line: "50	LOD	0	16", but received: "50	LOD	0	18"
-Error at line 52:10 --- Expected line: "51	STO	0	17", but received: "51	STO	0	18"
-Error at line 53:10 --- Expected line: "52	LIT	0	1", but received: "52	LIT	0	801"
-Error at line 54:3 --- Expected line: "53	LIT	0	5", but received: "53	STO	0	8"
-Error at line 55:3 --- Expected line: "54	OPR	0	2", but received: "54	LOD	0	8"
-Error at line 56:3 --- Expected line: "55	CAL	0	73", but received: "55	STO	0	18"
-Error at line 57:10 --- Expected line: "56	LOD	0	3", but received: "56	LOD	0	18"
-Error at line 58:10 --- Expected line: "57	OPR	0	2", but received: "57	STO	0	19"
-Error at line 59:9 --- Expected line: "58	LIT	0	9", but received: "58	LIT	0	1"
-Error at line 60:3 --- Expected line: "59	OPR	0	2", but received: "59	LIT	0	5"
-Error at line 61:3 --- Expected line: "60	LDA	0	0", but received: "60	OPR	0	2"
-Error at line 62:10 --- Expected line: "61	OPR	0	1", but received: "61	CAL	0	79"
-Error at line 63:4 --- Expected line: "62	LIT	0	9", but received: "62	LOD	0	3"
-Error at line 65:4 --- Expected line: "64	LDA	0	0", but received: "64	LIT	0	9"
-Error at line 66:9 --- Expected line: "65	OPR	0	1", but received: "65	OPR	0	2"
-Error at line 67:10 --- Expected line: "66	LOD	0	10", but received: "66	LDA	0	0"
-Error at line 68:9 --- Expected line: "67	OPR	0	3", but received: "67	OPR	0	1"
-Error at line 69:10 --- Expected line: "68	CAL	0	73", but received: "68	LIT	0	9"
-Error at line 70:3 --- Expected line: "69	LOD	0	3", but received: "69	OPR	0	2"
-Error at line 71:3 --- Expected line: "70	OPR	0	2", but received: "70	LDA	0	0"
-Error at line 72:10 --- Expected line: "71	STO	0	16", but received: "71	OPR	0	1"
-Error at line 73:10 --- Expected line: "72	RET	0	0", but received: "72	LOD	0	10"
-Error at line 74:3 --- Expected line: "73	INT	0	4", but received: "73	OPR	0	3"
-Error at line 75:10 --- Expected line: "74	LIT	0	5", but received: "74	CAL	0	79"
-Error at line 76:3 --- Expected line: "75	STO	0	3", but received: "75	LOD	0	3"
-Error at line 77:3 --- Expected line: "76	LOD	0	3", but received: "76	OPR	0	2"
-Error at line 78:10 --- Expected line: "77	LIT	0	6", but received: "77	STO	0	18"
-Error at line 79:10 --- Expected line: "78	OPR	0	12", but received: "78	RET	0	0"
-Error at line 80:10 --- Expected line: "79	JMC	0	83", but received: "79	INT	0	4"
-Error at line 81:10 --- Expected line: "80	LIT	0	501", but received: "80	LIT	0	5"
-Error at line 83:10 --- Expected line: "82	JMP	0	85", but received: "82	LOD	0	3"
-Error at line 84:10 --- Expected line: "83	LIT	0	101", but received: "83	LIT	0	6"
-Error at line 85:10 --- Expected line: "84	STO	0	3", but received: "84	OPR	0	12"
-Error at line 86:10 --- Expected line: "85	LIT	0	5", but received: "85	JMC	0	89"
-Error at line 87:10 --- Expected line: "86	STO	1	3", but received: "86	LIT	0	501"
-Error at line 88:3 --- Expected line: "87	RET	0	0", but received: "87	STO	0	3"
-Error at line 89:10 --- Expected line: "88	INT	0	8", but received: "88	JMP	0	91"
-Error at line 90:10 --- Expected line: "89	LOD	1	4", but received: "89	LIT	0	101"
-Error at line 92:4 --- Expected line: "91	LOD	1	5", but received: "91	LIT	0	5"
-Error at line 93:7 --- Expected line: "92	STO	0	4", but received: "92	STO	1	3"
-Error at line 94:3 --- Expected line: "93	LOD	1	6", but received: "93	RET	0	0"
-Error at line 95:3 --- Expected line: "94	STO	0	5", but received: "94	INT	0	8"
-Error at line 96:10 --- Expected line: "95	LIT	0	12", but received: "95	LOD	1	4"
-Error at line 97:9 --- Expected line: "96	STO	0	6", but received: "96	STO	0	3"
-Error at line 98:7 --- Expected line: "97	LOD	0	3", but received: "97	LOD	1	5"
-Error at line 99:3 --- Expected line: "98	LOD	0	4", but received: "98	STO	0	4"
-Error at line 100:3 --- Expected line: "99	OPR	0	2", but received: "99	LOD	1	6"
-Error at line 101:4 --- Expected line: "100	LOD	0	5", but received: "100	STO	0	5"
-Error at line 102:11 --- Expected line: "101	OPR	0	2", but received: "101	LIT	0	12"
-Error at line 103:10 --- Expected line: "102	STO	0	7", but received: "102	STO	0	6"
-Error at line 104:10 --- Expected line: "103	LOD	0	7", but received: "103	LOD	0	3"
-Error at line 105:11 --- Expected line: "104	LIT	0	10", but received: "104	LOD	0	4"
-Error at line 106:11 --- Expected line: "105	OPR	0	10", but received: "105	OPR	0	2"
-Error at line 107:11 --- Expected line: "106	JMC	0	109", but received: "106	LOD	0	5"
-Error at line 108:4 --- Expected line: "107	LIT	0	3", but received: "107	OPR	0	2"
-Error at line 109:10 --- Expected line: "108	STO	0	6", but received: "108	STO	0	7"
-Error at line 111:11 --- Expected line: "110	STO	1	3", but received: "110	LIT	0	10"
-Error at line 112:11 --- Expected line: "111	RET	0	0", but received: "111	OPR	0	10"
-Error --- Valid test is shorter than the new one, line: 113
+-------------------- Testing parsing with file: D:\FJP_super_language\tests\testFiles\pole\testPole.sll --------------------
+-------------------- Testing pl0 file: D:\FJP_super_language\tests\testOutput\pole\testPole.pl --------------------
+-------------------- NO ERRORS FOUND --------------------
 
 
 
 
--------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\zavorky\testZavorek.sll --------------------
--------------------- Testing pl0 file: D:\projekty\FJP_super_language\tests\testOutput\zavorky\testZavorek.pl --------------------
-Error at line 2:9 --- Expected line: "1	INT	0	6", but received: "1	INT	0	11"
-Error at line 3:8 --- Expected line: "2	LIT	0	3", but received: "2	LIT	0	0"
-Error at line 5:8 --- Expected line: "4	LIT	0	5", but received: "4	LIT	0	0"
-Error at line 6:2 --- Expected line: "5	LIT	0	5", but received: "5	STO	0	4"
-Error at line 7:2 --- Expected line: "6	OPR	0	2", but received: "6	LIT	0	3"
-Error at line 8:2 --- Expected line: "7	LOD	0	3", but received: "7	STO	0	7"
-Error at line 9:2 --- Expected line: "8	OPR	0	4", but received: "8	LIT	0	5"
-Error at line 10:8 --- Expected line: "9	LIT	0	6", but received: "9	LIT	0	5"
-Error at line 11:9 --- Expected line: "10	OPR	0	4", but received: "10	OPR	0	2"
-Error at line 12:4 --- Expected line: "11	LIT	0	1", but received: "11	LOD	0	7"
-Error at line 13:3 --- Expected line: "12	LIT	0	3", but received: "12	OPR	0	4"
-Error at line 14:3 --- Expected line: "13	OPR	0	2", but received: "13	LIT	0	6"
-Error at line 15:3 --- Expected line: "14	LIT	0	5", but received: "14	OPR	0	4"
-Error at line 16:3 --- Expected line: "15	OPR	0	4", but received: "15	LIT	0	1"
-Error at line 17:3 --- Expected line: "16	OPR	0	2", but received: "16	LIT	0	3"
-Error at line 18:3 --- Expected line: "17	LIT	0	5", but received: "17	OPR	0	2"
-Error at line 19:3 --- Expected line: "18	OPR	0	2", but received: "18	LIT	0	5"
-Error at line 20:3 --- Expected line: "19	LIT	0	3", but received: "19	OPR	0	4"
-Error at line 21:3 --- Expected line: "20	LIT	0	7", but received: "20	OPR	0	2"
-Error at line 22:3 --- Expected line: "21	OPR	0	4", but received: "21	LIT	0	5"
-Error at line 24:3 --- Expected line: "23	STO	0	4", but received: "23	LIT	0	3"
-Error at line 25:10 --- Expected line: "24	LIT	0	10", but received: "24	LIT	0	7"
-Error at line 26:3 --- Expected line: "25	LOD	0	4", but received: "25	OPR	0	4"
-Error at line 27:10 --- Expected line: "26	OPR	0	12", but received: "26	OPR	0	2"
-Error at line 28:10 --- Expected line: "27	JMC	0	30", but received: "27	STO	0	8"
-Error at line 29:10 --- Expected line: "28	LIT	0	1", but received: "28	LIT	0	10"
-Error at line 30:10 --- Expected line: "29	JMP	0	31", but received: "29	LOD	0	8"
-Error at line 31:10 --- Expected line: "30	LIT	0	0", but received: "30	OPR	0	12"
-Error at line 32:10 --- Expected line: "31	STO	0	5", but received: "31	JMC	0	34"
-Error at line 33:3 --- Expected line: "32	RET	0	0", but received: "32	LIT	0	1"
-Error --- Valid test is shorter than the new one, line: 34
+-------------------- Testing parsing with file: D:\FJP_super_language\tests\testFiles\testFile.sll --------------------
+-------------------- Testing pl0 file: D:\FJP_super_language\tests\testOutput\testFile.pl --------------------
+-------------------- NO ERRORS FOUND --------------------
 
 
 
 
--------------------- Number of tests: 7, successful tests:3, failed tests: 4 --------------------
--------------------- Folder with tests: D:\projekty\FJP_super_language\tests\testOutput --------------------
+-------------------- Testing parsing with file: D:\FJP_super_language\tests\testFiles\zavorky\testZavorek.sll --------------------
+-------------------- Testing pl0 file: D:\FJP_super_language\tests\testOutput\zavorky\testZavorek.pl --------------------
+-------------------- NO ERRORS FOUND --------------------
+
+
+
+
+-------------------- Number of tests: 7, successful tests:7, failed tests: 0 --------------------
+-------------------- Folder with tests: D:\FJP_super_language\tests\testOutput --------------------
