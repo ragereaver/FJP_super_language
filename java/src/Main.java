@@ -23,7 +23,7 @@ public class Main {
         if (args.length == 0) {
              //TableOfSymbols.filepath = "tests/testFiles/assigment/testAssignment.sll";
             //TableOfSymbols.filepath = "tests/testFiles/pole/testPole.sll";
-            TableOfSymbols.filepath = "tests/testFiles/testFile.sll";
+            TableOfSymbols.filepath = "tests/testFiles/assigment/testAssignment.sll";
             //TableOfSymbols.filepath = "tests/testFiles/cykly/testCycles2.sll";
             TableOfSymbols.destinationFilepath = TableOfSymbols.filepath;
         }else {

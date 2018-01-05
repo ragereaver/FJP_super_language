@@ -43,7 +43,7 @@ public class SolveProblem {
             arguments = null;
         }
 
-        lastType = callFunction.prepareCalling(identifier, arguments, type);
+        lastType = callFunction.prepareCalling(identifier, assignmentExpCtx, arguments, type);
         EInstructionSet.loadVariableName(RegisteredFunction.RETURN_NAME, token, lastType);
     }
 
@@ -257,9 +257,7 @@ public class SolveProblem {
                 return true;
             }
             int level = TableOfSymbols.getActualLevel() - array.getLevel();
-            if (level != 0) {
-                EInstructionSet.doInstruction(EInstructionSet.LITERAL, 0, level);
-            }
+            EInstructionSet.doInstruction(EInstructionSet.LITERAL, 0, level);
 
             //pocitam index
             DeclarationTranslate declarationTranslate = new DeclarationTranslate();

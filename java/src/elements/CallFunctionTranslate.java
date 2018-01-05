@@ -24,17 +24,17 @@ public class CallFunctionTranslate {
         String name = ctx.Identifier().getText();
 
         ParserRuleContext values = ctx.expression();
-        prepareCalling(name, values, null);
+        prepareCalling(name, ctx, values, null);
     }
 
-    public String prepareCalling( String identifier, ParserRuleContext values, String type){
+    public String prepareCalling( String identifier, ParserRuleContext ctx, ParserRuleContext values, String type){
         if (values != null) {
             storeValues(values);
         }
 
 
         if (!RegisteredFunction.functionExist(identifier, types)) {
-            ErrorHandle.addError(EErrorCodes.FUNCTION_NOT_EXIST, values);
+            ErrorHandle.addError(EErrorCodes.FUNCTION_NOT_EXIST, ctx);
             return Validators.UNKNOWN_TYPE;
         }
 
@@ -45,7 +45,7 @@ public class CallFunctionTranslate {
         TableOfCodes.addCall("-1", types, identifier);
         Symbol function = TableOfSymbols.findFunction(identifier, types);
         if (type != null && !RegisteredFunction.validFunctionType(identifier, types, type)) {
-            ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, values);
+            ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, ctx);
         }
 
         if (function != null) {
@@ -82,10 +82,13 @@ public class CallFunctionTranslate {
 
             String left = child.getChild(0).getText();
             String right = child.getChild(2).getText();
+            System.out.println("///////" +left);
+            System.out.println("*************" +right);
 
             if (Validators.isCommaHere(left) && !Validators.isMethodHere(left)){
                 resolveAllParams(child.getChild(0), declaration, isSolving);
             }else {
+
                 resolveParameter(left, child.getChild(0), isSolving, declaration);
                 savetoAddress();
             }
@@ -93,10 +96,12 @@ public class CallFunctionTranslate {
             if (Validators.isCommaHere(right) && !Validators.isMethodHere(right)){
                 resolveAllParams(child.getChild(2), declaration, isSolving);
             }else {
+
                 resolveParameter(right, child.getChild(2), isSolving, declaration);
                 savetoAddress();
             }
         }else {
+            System.out.println("++++++++" +child.getText());
             resolveParameter(child.getText(), child.getChild(0), isSolving, declaration);
             savetoAddress();
         }

@@ -111,7 +111,7 @@ public class Validators {
     }
 
     public static boolean isMethodHere (String value){
-        String regex = "((\\w+)(\\()(.+))";
+        String regex = "((\\w+)(\\()(.*)(\\)))";
         return  value.matches(regex);
     }
 
