@@ -73,7 +73,6 @@ public class TableOfSymbols {
         }
 
 
-
         if (size > 0) {
             TableOfCodes.updateInt(getObjectID(), size);
         }
@@ -163,28 +162,26 @@ public class TableOfSymbols {
 
     public static Symbol findByNameAllLevels(String name, boolean isVariable){
         int object = objectID;
-        int iteration = changesInObjectID.size();
+        int iteration = changesInObjectID.size() - 1;
         boolean dontStop = true;
+
         while (dontStop) {
             if (object == 0 ) {
                 dontStop = false;
             }
-
             for (int i = 0; i < tableOfSymbols.size(); i++) {
                 Symbol symbol = tableOfSymbols.get(i);
                  if(symbol.getObjectID() == object) {
-
                     if (symbol.getName().equals(name) && (isVariable == symbol.isVariable())){
                         return symbol;
                     }
                 }
             }
 
-            if (iteration == 0) {
+            if (iteration < 0) {
                 object = 0;
-                iteration--;
             }else {
-                object = changesInObjectID.get(changesInObjectID.size() - iteration);
+                object = changesInObjectID.get(iteration);
                 iteration--;
             }
         }
@@ -211,7 +208,6 @@ public class TableOfSymbols {
                 parentID++;
                 changesInParentID.push(-1);
             }
-
             changesInObjectID.push(objectID);
             objectID = ++actObjectID;
 
@@ -228,12 +224,6 @@ public class TableOfSymbols {
     public static int getParentID() {
         return parentID;
     }
-
-    public static Symbol getLastSymbol(){
-        return tableOfSymbols.get(tableOfSymbols.size() - 1);
-    }
-
-
 
     public static int getNextSymbolVariableAddress(){
         Symbol symbol = null;

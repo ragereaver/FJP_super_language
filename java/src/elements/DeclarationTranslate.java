@@ -25,6 +25,7 @@ public class DeclarationTranslate extends SolveProblem {
         }
 
         String type = ctx.typeSpecifier().getText();
+
         doDeclarationInner(type, ctx.getChild(1), true);
     }
 
@@ -59,8 +60,7 @@ public class DeclarationTranslate extends SolveProblem {
         if (assignmentExpCtx != null) {
             value = assignmentExpCtx.getText();
             isEmpty = false;
-
-            handleAssigment(type, isDeclaration, value, assignmentExpCtx, identifier);
+            handleAssigment(type, value, assignmentExpCtx, identifier);
         }
 
         if (isDeclaration) {
@@ -68,7 +68,8 @@ public class DeclarationTranslate extends SolveProblem {
         }
     }
 
-    public void handleAssigment(String type, boolean isDeclaration, String value, ParserRuleContext assignmentExpCtx, String identifier){
+    public void handleAssigment(String type, String value, ParserRuleContext assignmentExpCtx, String identifier){
+
         lastType = Validators.UNKNOWN_TYPE;
         if (Validators.isTernalIfHere(value)) {
             TernalIfTranslate ternalIfTranslate = new TernalIfTranslate();
@@ -76,11 +77,9 @@ public class DeclarationTranslate extends SolveProblem {
             return;
         }
 
+
         if (Validators.isAssignmentHere(assignmentExpCtx.getText())){
-            multipleValueAssigment(assignmentExpCtx, assignmentExpCtx.getStart(), type, isDeclaration, identifier);
-            if (!isDeclaration) {
-                EInstructionSet.handleVariables(identifier, assignmentExpCtx.getStart(), type, identifier);
-            }
+            multipleValueAssigment(assignmentExpCtx, assignmentExpCtx.getStart(), type, identifier, 0);
             return;
         }
 
@@ -88,19 +87,18 @@ public class DeclarationTranslate extends SolveProblem {
             callFunction(assignmentExpCtx.getStart(), assignmentExpCtx, type);
             return;
         }
-
         getValue(value, type, assignmentExpCtx, assignmentExpCtx.getStart(), identifier);
     }
 
 
 
-    private void multipleValueAssigment (ParseTree child, Token token, String type, boolean isDeclaration, String identifier) {
+    private void multipleValueAssigment (ParseTree child, Token token, String type, String identifier, int depth) {
         if (child.getChildCount() != 1) {
             if (child.getChild(1).getText().equals(ASSIGN)) {
                 String left = child.getChild(0).getText();
 
                 if (child.getChildCount() > 1) {
-                    multipleValueAssigment(child.getChild(2), token, type, false, left);
+                    multipleValueAssigment(child.getChild(2), token, type, left, depth + 1);
                 }
 
                 //nacteni hodnoty ktera ma byt prirazena
@@ -108,21 +106,23 @@ public class DeclarationTranslate extends SolveProblem {
                     EInstructionSet.handleVariables(left, token, type, identifier);
                 }
 
-                //prirazeni do dalsi promenne
-                if (isDeclaration) {
-                    TableOfSymbols.addSymbolVariable(token, identifier, type, 0);
 
-                }else {
-                    if (Validators.validateType(type, identifier)) {
-                        EInstructionSet.storeInstruction(identifier);
-                    }
+                //prirazeni do dalsi promenne
+                if (depth == 0) {
+                    return;
                 }
+
+                if (Validators.validateType(type, identifier)) {
+                    EInstructionSet.storeInstruction(identifier, token);
+                }
+
             }
         }else {
+
             getValue(child.getText(), type, child, token, identifier);
 
             if (Validators.validateType(type, identifier)) {
-                EInstructionSet.storeInstruction(identifier);
+                EInstructionSet.storeInstruction(identifier, token);
             }
         }
     }

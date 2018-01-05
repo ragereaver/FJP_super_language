@@ -10,6 +10,7 @@ public enum EErrorCodes {
     TYPE_MISMATCH("Variable is not convertable!"),
     VARIABLE_DOESNT_EXIST("Variable on right side doesnt exist!"),
     VARIABLE_TO_ASSIGNMENT_NOT_EXIST("Variable on left side doesnt exist!"),
+    CONSTANT_CHANGE("Constant cannot be changed!"),
     PARSER_FAILED("Parsing code wasnt possible!"),
     UNKNOW_ERROR("Some weird error happened while adding to arraylist!"),
     BAD_INDEX_ARRAY("Index must be number!"),

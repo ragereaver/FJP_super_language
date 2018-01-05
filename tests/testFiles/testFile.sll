@@ -3,11 +3,30 @@ boolean ah;
 int b;
 ah = false;
 int [] pole = new int [5];
-
-int c = 33;
+const int a = 5;
+int c = 33 -- 30;
+c = a;
+c = c = 501;
+int z = c = b = 801;
 c =  -pole[-pole[1 + 5 + ahoj()]] - pole[1] + ahoj();
 
 
 int function ahoj () {
-    return 5;
-}
+     int b = 5;
+     if (b > 6) {
+         b=501;
+     }else {
+         b = 101;
+     }
+     return 5;
+ }
+
+
+ int function fce (int l, int o, int k) {
+     int b = 12;
+     int d = l + o + k;
+     if (d < 10) {
+
+     }
+     return d;
+ }

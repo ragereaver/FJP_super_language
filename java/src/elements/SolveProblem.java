@@ -67,6 +67,7 @@ public class SolveProblem {
                 value = value.substring(1);
                 negate = true;
             }
+
             lastType = type;
             EInstructionSet.handleVariables(value, token, type, identifier);
 
@@ -205,7 +206,6 @@ public class SolveProblem {
             String leftType = Validators.getType(ctx, left);
             String rightType = Validators.getType(ctx, right);
 
-
             if (leftType.isEmpty()) {
                 leftType = lastType;
             }
@@ -213,7 +213,6 @@ public class SolveProblem {
             if (rightType.isEmpty()) {
                 rightType = lastType;
             }
-
             String resultType = Validators.validateAction(leftType, rightType, sign);
             if (resultType != null) {
                 lastType = resultType;
@@ -263,7 +262,7 @@ public class SolveProblem {
 
             //pocitam index
             DeclarationTranslate declarationTranslate = new DeclarationTranslate();
-            declarationTranslate.handleAssigment(Validators.VARIABLE_TYPE_INT, false, index, ctx, index);
+            declarationTranslate.handleAssigment(Validators.VARIABLE_TYPE_INT, index, ctx, index);
             EInstructionSet.justLoadArrayVariable(array);
 
             return true;
