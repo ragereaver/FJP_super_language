@@ -1,0 +1,39 @@
+boolean ah;
+(5>6) ? ah = true : ah = false;
+int b;
+ah = false;
+int [] pole = new int [5];
+const int test = 5;
+const int TEST2 = 5;
+
+int de = test;
+int deS = TEST2;
+int c = 33 -- 30;
+c = test;
+test = TEST2;
+c = c = 501;
+int z = c = b = 801;
+c =  -pole[-pole[1 + 5 + ahoj()]] - pole[1] + ahoj();
+
+pole = pole [1];
+fce (pole [1], ahoj(), 5);
+
+int function ahoj () {
+     int b = 5;
+     if (b > 6) {
+         b=501;
+     }else {
+         b = 101;
+     }
+     return 5;
+ }
+
+
+ int function fce (int l, int o, int k) {
+     int b = 12;
+     int d = l + o + k;
+     if (d < 10) {
+         b = 3;
+     }
+     return 5;
+ }

@@ -23,7 +23,7 @@ public class Main {
         if (args.length == 0) {
             //TableOfSymbols.filepath = "tests/testFiles/assigment/testAssignment.sll";
             //TableOfSymbols.filepath = "tests/testFiles/pole/testPole.sll";
-            TableOfSymbols.filepath = "tests/testFiles/testFile.sll";
+           TableOfSymbols.filepath = "tests/testFiles/testFile.sll";
             //TableOfSymbols.filepath = "tests/testFiles/cykly/testCycles2.sll";
            //TableOfSymbols.filepath = "tests/testFiles/zavorky/testZavorek.sll";
             //TableOfSymbols.filepath = "tests/testFiles/funkce/testFunction.sll";
@@ -32,9 +32,10 @@ public class Main {
             TableOfSymbols.filepath = args[0];
             if (args.length > 1) {
                 TableOfSymbols.destinationFilepath = args[1];
+            }else {
+                TableOfSymbols.destinationFilepath = args[0];
             }
         }
-
         //TableOfSymbols.filepath = "testFiles/zavorky/testZavorek.sll";
         //TableOfSymbols.filepath = "testFiles/cykly/testCycles.sll";
 

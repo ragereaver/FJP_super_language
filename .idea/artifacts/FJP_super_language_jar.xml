@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="FJP_super_language:jar">
+    <output-path>$PROJECT_DIR$/java/out/artifacts/FJP_super_language_jar</output-path>
+    <root id="archive" name="FJP_super_language.jar">
+      <element id="module-output" name="FJP_super_language" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/.idea/libraries/antlr-4.7.1-complete.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
