@@ -37,7 +37,6 @@
 % (odvozen z csplainnat, http://repo.or.cz/w/csplainnat.git)
 % lze snadno modifikovat vzhled citací v textu
 \usepackage[numbers,sort&compress]{natbib}
-\usepackage{courier}
 
 \begin{document}
 %
@@ -48,6 +47,7 @@
 \addtocontents{toc}{\protect\thispagestyle{empty}}
 
 \chapter{Zadání}
+\label{sec:zadani}
 \pagestyle{plain}
 \setcounter{page}{1}
 Cílem práce je vytvoření vlastního jazyka a překladače pro tento jazyk.
@@ -94,7 +94,8 @@ Deklarace proměnných:
 
 \texttt{int cislo;}
 
-\texttt{boolean logika;}
+\texttt{
+boolean logika;}
 
 \noindent Deklarace konstant:
 
@@ -145,22 +146,22 @@ Narozdíl od jazyků C a java, se vždy provede pouze jeden \texttt{case}.
 
 \texttt{switch(2)\{}
 
-\texttt{case 1: }
+\texttt{    case 1: }
 
-\texttt{case 2: int a = 2;}
+\texttt{    case 2: int a = 2;}
 
-\texttt{default: int b = 0;\}}
+\texttt{    default: int b = 0;\}}
 
 \subsection{Ternární operátor}
 Jazyk umožňuje i zkrácený zápis podmínky \texttt{if}, případně podmíněného přiřazení.
 
 \noindent{Ukázka ternární podmínky}
 
-\texttt{(cislo < 2) ? cislo = 2 : cislo = 3;}
+\texttt{  (cislo < 2) ? cislo = 2 : cislo = 3;}
 
 \noindent{Ukázka podmíněného přiřazení}
 
-\texttt{cislo = (cislo < 2) ? 2 : 3;}
+\texttt{  cislo = (cislo < 2) ? 2 : 3;}
 
                
 \section{Cykly}
@@ -174,7 +175,7 @@ Platí zde stejná pravidla jako v podmínce \texttt{if}.
 
 \texttt{while(cislo < 3)\{}
 
-\texttt{cislo = cislo + 1;}
+\texttt{    cislo = cislo + 1;}
 
 \texttt{\}}
 
@@ -185,19 +186,19 @@ Podmínka se ověřuje až na konci cyklu, tedy program se vykoná vždy alespo�
 
 \texttt{do\{}
 
-\texttt{cislo = cislo + 1;}
+\texttt{    cislo = cislo + 1;}
 
 \texttt{\}while(cislo < 3);}
 
 \subsection{Until}
-Podobný cyklus jako \texttt{while}, akorát se provádí dokaď podmínka je nesplněná.
+Podobný cyklus jako \texttt{while}, akorát se provádí pokud podmínka je nesplněná.
 Jakmile se podmínka splní, cyklus končí.
 
 \noindent{Ukázka cyklu: }
 
 \texttt{until(cislo > 3)\{}
 
-\texttt{cislo = cislo + 1;}
+\texttt{    cislo = cislo + 1;}
 
 \texttt{\}}
 
@@ -215,7 +216,7 @@ V poslední části je pak operace, která se provede na konci cyklu.
 
 \texttt{for(int i = 0; i < 3; i = i + 1)\{} 
 
-\texttt{...}
+\texttt{    ...}
 
 \texttt{\}}
                
@@ -231,7 +232,7 @@ Funkce musí být definovány na začátku programu, při definici je důležit�
 
 \texttt{int function soucet(int a, int b)\{}
 
-\texttt{return a + b;}
+\texttt{    return a + b;}
 
 \texttt{\}}
 
@@ -239,15 +240,24 @@ Funkce musí být definovány na začátku programu, při definici je důležit�
 
 \texttt{int c = soucet(1, 2);}
 
+\section{Komentáře}
+Komentáře slouží k označení části kódu, která se nebude překládat do instrukcí.
+Realizovány byly blokové komentáře, které jsou označeny sekvencí \texttt{/*} na začátku bloku
+a \texttt{*/} na konci bloku.
+
+\noindent{Ukázka komentářů: }
+
+\texttt{/* tohle je komentar */}
+
                
 \chapter{Testovací příklady}
 Testování funkčnosti řešení bylo realizováno pomocí testovacích souborů, pro které jsme měli správné posloupnosti instrukcí.
 Při změnách v překladači se pak pouštěl překlad těchto testovacích souborů a provnávali se výstupní instrukce se správnými.
 
-\noindent Testovací soubory lze najít ve složce \textit{testFiles}, programy napsané v našem jazyce mají příponu \textit{.sll}.
+\noindent Testovací soubory lze najít ve složce \textit{tests/testFiles}, programy napsané v našem jazyce mají příponu \textit{.sll}.
 Přeložené programy do instrukční sady PL/0 mají příponu \textit{.pl}.
 
-\noindent Některé kratší soubory a výstupní instrukce přiložím zde.
+\noindent Některé kratší ukázky a výstupní instrukce přiložím zde.
 
 \section{Test přiřazení}
 
@@ -281,7 +291,7 @@ Program:
 
 \texttt{c = a == b;}
 
-\texttt{\}}
+
 
 \noindent{Instrukce:}
 
@@ -365,7 +375,175 @@ Program:
 
 
 
-\chapter{Závěr}
+\section{Test cyklu a podmínek}
 
+Zde je otestovaný pouze cyklus \texttt{for} a podmínka \texttt{if}.
+Všechny cykly jsou testovány v souboru \textit{tests/testFiles/cykly/testCycles.sll}.
+
+\noindent Program:
+
+\texttt{int i;}
+
+\texttt{for(int k = 0; k < 3; k = k + 1)\{}
+    
+\texttt{    if(i < 3)\{ }
+
+\texttt{        i = i - 1;}
+
+\texttt{    \}             }
+
+\texttt{    else\{          }
+
+\texttt{        i = i * k;  }
+
+\texttt{    \}            }
+
+\texttt{\}                 }
+
+\noindent Instrukce:
+
+\texttt{0	JMP	0	1}
+
+\texttt{1	INT	0	5}
+
+\texttt{2	LIT	0	0 }
+
+\texttt{3	STO	0	3  }
+
+\texttt{4	LIT	0	0   }
+
+\texttt{5	STO	0	4    }
+
+\texttt{6	LOD	0	4     }
+
+\texttt{7	LIT	0	3      }
+
+\texttt{8	OPR	0	10      }
+
+\texttt{9	JMC	0	28       }
+
+\texttt{10	LOD	0	3       }
+
+\texttt{11	LIT	0	3        }
+
+\texttt{12	OPR	0	10        }
+
+\texttt{13	JMC	0	19         }
+
+\texttt{14	LOD	0	3           }
+
+\texttt{15	LIT	0	1 }
+
+\texttt{16	OPR	0	3  }
+
+\texttt{17	STO	0	3   }
+
+\texttt{18	JMP	0	23   }
+
+\texttt{19	LOD	0	3     }
+
+\texttt{20	LOD	0	4      }
+
+\texttt{21	OPR	0	4       }
+
+\texttt{22	STO	0	3        }
+
+\texttt{23	LOD	0	4         }
+
+\texttt{24	LIT	0	1          }
+
+\texttt{25	OPR	0	2           }
+
+\texttt{26	STO	0	4            }
+
+\texttt{27	JMP	0	6             }
+
+\texttt{28	RET	0	0              }
+
+
+\section{Testování polí}
+
+\section{Testování funkcí}
+Ukázka funkce pro součet dvou čísel.
+
+\noindent Program:
+
+\texttt{int function soucet (int a, int b) \{}
+ 
+\texttt{    return a + b;}
+
+\texttt{\} }
+
+\texttt{int c = soucet(1, 2); }
+
+\noindent Instrukce: 
+
+\texttt{0	JMP	0	1              }
+
+\texttt{1	INT	0	8              }
+
+\texttt{2	LIT	0	0             }
+
+\texttt{3	STO	0	3            }
+
+\texttt{4	LIT	0	0           }
+
+\texttt{5	STO	0	4          }
+
+\texttt{6	LIT	0	1         }
+
+\texttt{7	STO	0	4        }
+
+\texttt{8	LIT	0	2       }
+
+\texttt{9	STO	0	5      }
+
+\texttt{10	CAL	0	14  }
+
+\texttt{11	LOD	0	3  }
+
+\texttt{12	STO	0	6 }
+
+\texttt{13	RET	0	0         }
+
+\texttt{14	INT	0	5        }
+
+\texttt{15	LOD	1	4       }
+
+\texttt{16	STO	0	3      }
+
+\texttt{17	LOD	1	5     }
+
+\texttt{18	STO	0	4    }
+
+\texttt{19	LOD	0	3   }
+
+\texttt{20	LOD	0	4  }
+
+\texttt{21	OPR	0	2 }
+
+\texttt{22	STO	1	3}
+
+\texttt{23	RET	0	0}
+
+
+
+\chapter{Závěr}
+Semestrální práci se podařilo úspěšně dokončit. Nicméně během tvorby jazyka a překladače
+jsme narazili na řadu problémů a obtíží. Nejhorší byl začátek, kdy bylo potřeba sestavit gramatiku jazyka
+a nástroj ANTLR pro parsování programu. Dále se pak naučit jak funguje PL/0, a co znamenají jednotlivé instrukce.
+
+Práce byla poměrně rozsáhlá a bylo potřeba mnoho úsilí, aby byly splněny minimální požadavky na rozsah.
+Na druhou stranu byla práce originální a poskytla nám pohled do fungování překladačů,
+jak se z nám známeho programovacího jazyka stane posloupnost strojových instrukcí použitelných pro procesor.
+
+Vzhledem k tomu, že práce byla dělána ve dvojicích, se bylo vždy možno poradit, když jsme si nevěděli rady.
+Zároveň si myslíme, že i komunikace byla lepší, než kdyby jsme tuto práci dělali v početnějším týmu.
+Ačkoliv si nedovedeme představit kolik času by bylo potřeba nad touto prací strávit, abychom dosáhli maximálního počtu bodů.
+
+Celý projekt byl veden na githubu na adrese \href{https://github.com/tuslm/FJP\_{super}\_{language}}{FJP\_{super}\_{language}}\footnote{Adresa v případě nefunkčnosti odkazu: https://github.com/tuslm/FJP\_{super}\_{language}}.
+Za semestrální práci, tak jak bylo řečeno v kapitole \ref{sec:zadani}, by jsme očekávali 24 bodů. Případně
+bonusový bod za implementaci komentářů.
 
 \end{document}
+
