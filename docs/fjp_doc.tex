@@ -50,10 +50,10 @@
 \label{sec:zadani}
 \pagestyle{plain}
 \setcounter{page}{1}
-Cílem práce je vytvoření vlastního jazyka a překladače pro tento jazyk.
-Překládat jsme se rozhodli do instrukční sady PL/0.
-Při vytváření jazyka jsme se snažili napodobit syntaxi jazyků java a C.
-Od vytvořeného jazyka jsme požadovali aby uměl následující základní elementy:
+Cílem práce je vytvoření vlastního jazyka a překladače pro~tento jazyk.
+Překládat jsme se rozhodli do~instrukční sady PL/0.
+Při~vytváření jazyka jsme se snažili napodobit syntaxi jazyků java a C.
+Od~vytvořeného jazyka jsme požadovali, aby uměl následující základní elementy:
 
 \begin{itemize}
 \item definice celočíselných proměnných
@@ -65,7 +65,7 @@ Od vytvořeného jazyka jsme požadovali aby uměl následující základní ele
 \item definice podprogramu (procedura, funkce, metoda) a jeho volání
 \end{itemize}
 
-\noindent Dále jsme se rozhodli jazyk rožšířit o další složitější konstrukce.
+\noindent Dále jsme se rozhodli jazyk rožšířit o~další složitější konstrukce.
 Mezi složitější konstrukce, které jazyk umí patří:
 
 \begin{itemize}
@@ -80,8 +80,8 @@ Mezi složitější konstrukce, které jazyk umí patří:
 \item komentáře
 \end{itemize}
 
-\noindent Za plně funkční překladač pro jazyk, které umí tyto konstrukce by mělo být uděleno 24 bodů.
-Další bonusový bod by mohl být za realizaci komentářů, které nebyly uvedeny v seznamu možných konstrukcí.
+\noindent Za~plně funkční překladač pro~jazyk, které umí tyto konstrukce by mělo být uděleno 24 bodů.
+Další bonusový bod by mohl být za~realizaci komentářů, které nebyly uvedeny v seznamu možných konstrukcí.
 
 \chapter{Popis řešení}
 
@@ -119,10 +119,10 @@ boolean logika;}
 
 \section{Podmínky}
 \subsection{Podmínka if}
-Část programu ve větvi \texttt{if} se provede, pokud je splněná podmínka.
-V podmínce se může využívat všech logických operátorů, viz příklady.
-Zároveň je možné doplnit na konci větve \texttt{if} větev \texttt{else}, která 
-se provede v případě, že není splněná podmínka.
+Část programu ve~větvi \texttt{if} se provede, pokud je splněná podmínka.
+V~podmínce se může využívat všech logických operátorů, viz příklady.
+Zároveň je možné doplnit na~konci větve \texttt{if} větev \texttt{else}, která 
+se provede v~případě, že není splněná podmínka.
 
 \noindent{Ukázka podmínky:}
 
@@ -132,15 +132,15 @@ se provede v případě, že není splněná podmínka.
 
 \texttt{else\{...\} }
 
-\noindent Podmínka musí být v závorkách následována ihned po příkazu \texttt{if}.
-Za podmínkou ve složených závorkách se pak nachází část kódu, který se má vykonat v případě splněné podmínky.
+\noindent Podmínka musí být v~závorkách následována ihned po~příkazu \texttt{if}.
+Za~podmínkou ve~složených závorkách se pak nachází část kódu, který se má vykonat v~případě splněné podmínky.
 
 \subsection{Switch}
 V podmínce \texttt{switch} se musí nacházet pouze celé číslo nebo proměnná  \texttt{int}.
 Podle dané hodnoty se provede určitý \texttt{case} uvnitř \texttt{switch}.
-Zároveň lze na konci \texttt{switch} udělat větev \texttt{default}, která 
-se provede v případě, že žádný \texttt{case} neodpovídal hodnotě v podmínce.
-Narozdíl od jazyků C a java, se vždy provede pouze jeden \texttt{case}.
+Zároveň lze na~konci \texttt{switch} udělat větev \texttt{default}, která 
+se provede v~případě, že žádný \texttt{case} neodpovídal hodnotě v~podmínce.
+Narozdíl od~jazyků C a java, se vždy provede pouze jeden \texttt{case}.
 
 \noindent{Ukázka podmínky:}
 
@@ -165,11 +165,11 @@ Jazyk umožňuje i zkrácený zápis podmínky \texttt{if}, případně podmín�
 
                
 \section{Cykly}
-Cykly slouží k určitému opakování stejného kódu.
+Cykly slouží k~určitému opakování stejného kódu.
 
 \subsection{While}
 Cyklus, který se provádí dokud je splněná podmínka.
-Platí zde stejná pravidla jako v podmínce \texttt{if}.
+Platí zde stejná pravidla jako v~podmínce \texttt{if}.
 
 \noindent{Ukázka cyklu: }
 
@@ -180,7 +180,7 @@ Platí zde stejná pravidla jako v podmínce \texttt{if}.
 \texttt{\}}
 
 \subsection{Do...while}
-Podmínka se ověřuje až na konci cyklu, tedy program se vykoná vždy alespoň jednou.
+Podmínka se ověřuje až na~konci cyklu, tedy program se vykoná vždy alespoň jednou.
 
 \noindent{Ukázka cyklu: }
 
@@ -203,14 +203,14 @@ Jakmile se podmínka splní, cyklus končí.
 \texttt{\}}
 
 \subsection{Repeat...until}
-Podobný cyklus jako \texttt{until}, akorát podmínka se ověřuje až na konci cyklu.
+Podobný cyklus jako \texttt{until}, akorát podmínka se ověřuje až na~konci cyklu.
 Program se tedy vykoná alespoň jedenkrát.
 
 \subsection{For}
-Cyklus s určitým počtem opakování. Podmínka se skládá ze tří částí.
-V první části musí být deklarace proměnné s přiřazením počáteční hodnoty.
-V druhé části musí být podmínka, při její splnění se bude cyklus provádět.
-V poslední části je pak operace, která se provede na konci cyklu.
+Cyklus s~určitým počtem opakování. Podmínka se skládá ze tří částí.
+V~první části musí být deklarace proměnné s~přiřazením počáteční hodnoty.
+V~druhé části musí být podmínka, při~její splnění se bude cyklus provádět.
+V~poslední části je pak operace, která se provede na~konci cyklu.
 
 \noindent{Ukázka cyklu: }
 
@@ -224,8 +224,8 @@ V poslední části je pak operace, která se provede na konci cyklu.
 
 
 \section{Funkce}
-Program lze členit do podprogramů pomocí funkcí.
-Funkce musí být definovány na začátku programu, při definici je důležité klíčové slovo
+Program lze členit do~podprogramů pomocí funkcí.
+Funkce musí být definovány na~začátku programu, při~definici je důležité klíčové slovo
 \texttt{function}. Funkcím lze předávat parametry a zároveň funkce můžeš vracet jednu hodnotu, viz příklad.
 
 \noindent{Ukázka funkce: }
@@ -241,9 +241,9 @@ Funkce musí být definovány na začátku programu, při definici je důležit�
 \texttt{int c = soucet(1, 2);}
 
 \section{Komentáře}
-Komentáře slouží k označení části kódu, která se nebude překládat do instrukcí.
-Realizovány byly blokové komentáře, které jsou označeny sekvencí \texttt{/*} na začátku bloku
-a \texttt{*/} na konci bloku.
+Komentáře slouží k~označení části kódu, která se nebude překládat do~instrukcí.
+Realizovány byly blokové komentáře, které jsou označeny sekvencí \texttt{/*} na~začátku bloku
+a \texttt{*/} na~konci bloku.
 
 \noindent{Ukázka komentářů: }
 
@@ -251,11 +251,11 @@ a \texttt{*/} na konci bloku.
 
                
 \chapter{Testovací příklady}
-Testování funkčnosti řešení bylo realizováno pomocí testovacích souborů, pro které jsme měli správné posloupnosti instrukcí.
-Při změnách v překladači se pak pouštěl překlad těchto testovacích souborů a provnávali se výstupní instrukce se správnými.
+Testování funkčnosti řešení bylo realizováno pomocí testovacích souborů, pro~které jsme měli správné posloupnosti instrukcí.
+Při~změnách v~překladači se pak pouštěl překlad těchto testovacích souborů a provnávali se výstupní instrukce se~správnými.
 
-\noindent Testovací soubory lze najít ve složce \textit{tests/testFiles}, programy napsané v našem jazyce mají příponu \textit{.sll}.
-Přeložené programy do instrukční sady PL/0 mají příponu \textit{.pl}.
+\noindent Testovací soubory lze najít ve~složce \textit{tests/testFiles}, programy napsané v~našem jazyce mají příponu \textit{.sll}.
+Přeložené programy do~instrukční sady PL/0 mají příponu \textit{.pl}.
 
 \noindent Některé kratší ukázky a výstupní instrukce přiložím zde.
 
@@ -378,7 +378,7 @@ Program:
 \section{Test cyklu a podmínek}
 
 Zde je otestovaný pouze cyklus \texttt{for} a podmínka \texttt{if}.
-Všechny cykly jsou testovány v souboru \textit{tests/testFiles/cykly/testCycles.sll}.
+Všechny cykly jsou testovány v~souboru \textit{tests/testFiles/cykly/testCycles.sll}.
 
 \noindent Program:
 
@@ -464,7 +464,7 @@ Všechny cykly jsou testovány v souboru \textit{tests/testFiles/cykly/testCycle
 \section{Testování polí}
 
 \section{Testování funkcí}
-Ukázka funkce pro součet dvou čísel.
+Ukázka funkce pro~součet dvou čísel.
 
 \noindent Program:
 
@@ -531,19 +531,19 @@ Ukázka funkce pro součet dvou čísel.
 \chapter{Závěr}
 Semestrální práci se podařilo úspěšně dokončit. Nicméně během tvorby jazyka a překladače
 jsme narazili na řadu problémů a obtíží. Nejhorší byl začátek, kdy bylo potřeba sestavit gramatiku jazyka
-a nástroj ANTLR pro parsování programu. Dále se pak naučit jak funguje PL/0, a co znamenají jednotlivé instrukce.
+a zprovoznit nástroj ANTLR pro~parsování programu. Dále se pak naučit jak funguje PL/0, a co znamenají jednotlivé instrukce.
 
-Práce byla poměrně rozsáhlá a bylo potřeba mnoho úsilí, aby byly splněny minimální požadavky na rozsah.
-Na druhou stranu byla práce originální a poskytla nám pohled do fungování překladačů,
-jak se z nám známeho programovacího jazyka stane posloupnost strojových instrukcí použitelných pro procesor.
+Práce byla poměrně rozsáhlá a bylo potřeba mnoho úsilí, aby byly splněny minimální požadavky na~rozsah.
+Na~druhou stranu byla práce originální a poskytla nám pohled do~fungování překladačů,
+jak se z~nám známeho programovacího jazyka stane posloupnost strojových instrukcí použitelných pro~procesor.
 
-Vzhledem k tomu, že práce byla dělána ve dvojicích, se bylo vždy možno poradit, když jsme si nevěděli rady.
-Zároveň si myslíme, že i komunikace byla lepší, než kdyby jsme tuto práci dělali v početnějším týmu.
-Ačkoliv si nedovedeme představit kolik času by bylo potřeba nad touto prací strávit, abychom dosáhli maximálního počtu bodů.
+Vzhledem k~tomu, že práce byla dělána ve~dvojicích, se bylo vždy možno poradit, když jsme si nevěděli rady.
+Zároveň si myslíme, že i komunikace byla lepší, než kdyby jsme tuto práci dělali v~početnějším týmu.
+Ačkoliv si nedovedeme představit, kolik času by bylo potřeba nad~touto~prací strávit, abychom dosáhli maximálního počtu bodů.
 
-Celý projekt byl veden na githubu na adrese \href{https://github.com/tuslm/FJP\_{super}\_{language}}{FJP\_{super}\_{language}}\footnote{Adresa v případě nefunkčnosti odkazu: https://github.com/tuslm/FJP\_{super}\_{language}}.
-Za semestrální práci, tak jak bylo řečeno v kapitole \ref{sec:zadani}, by jsme očekávali 24 bodů. Případně
-bonusový bod za implementaci komentářů.
+Celý projekt byl veden na~githubu na~adrese \href{https://github.com/tuslm/FJP\_{super}\_{language}}{FJP\_{super}\_{language}}\footnote{Adresa v případě nefunkčnosti odkazu: https://github.com/tuslm/FJP\_{super}\_{language}}.
+Za~semestrální práci, tak jak bylo řečeno v~kapitole \ref{sec:zadani}, by jsme očekávali 24 bodů. Případně
+bonusový bod za~implementaci komentářů.
 
 \end{document}
 
