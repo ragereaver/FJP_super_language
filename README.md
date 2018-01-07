@@ -54,4 +54,5 @@ parser for ANTLR.
 - then right click on **SLLanguage.g4** file
 - select **configure ANTLR..**
 - and set up like in image below
-[something](docs/settingsForANTLR.png)
+
+![settings for ANTLR plugin](docs/settingsForANTLR.png)
