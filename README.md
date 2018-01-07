@@ -33,9 +33,9 @@ There is several test files in directory testFiles. To compile these test files 
 run class runTests.java. More info to tests is in documentation.
 
 ## Structure of project
-Main method to our project is in folder - java/src/Main.java
-Executible jar is in - java/out/artifacts/FJP_super_language_jar
-Gramatic for our language is in root directory - SLLanguage.g4
+- Main method to our project is in folder - **java/src/Main.java**
+- Executible jar is in - **java/out/artifacts/FJP_super_language_jar**
+- Gramatic for our language is in root directory - **SLLanguage.g4**
 
 > .idea
 - settings for intelliJ environment
@@ -46,3 +46,12 @@ Gramatic for our language is in root directory - SLLanguage.g4
 > tests
 - files which are used to testing our solution
 
+## Setting up environment
+Everything should be done when you clone this repository like intellJ project except on setting up 
+parser for ANTLR.
+- to parse our gramatic in intelliJ you need to follow these steps
+- you need install intelliJ plugin for ANTLR - info above
+- then right click on **SLLanguage.g4** file
+- select **configure ANTLR..**
+- and set up like in image below
+[something](docs/settingsForANTLR.png)
