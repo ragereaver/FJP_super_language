@@ -1,6 +1,6 @@
 package tableClasses;
 
-import Convertor.Validators;
+import convertor.Validators;
 import enums.EErrorCodes;
 import org.antlr.v4.runtime.Token;
 

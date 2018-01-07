@@ -1,7 +1,7 @@
 package tableClasses;
 
-import Convertor.TypeConvertor;
-import Convertor.Validators;
+import convertor.TypeConvertor;
+import convertor.Validators;
 import enums.EErrorCodes;
 import enums.EInstructionSet;
 import org.antlr.v4.runtime.Token;

@@ -1,3 +1,10 @@
+-------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\assigment\errorAssignment.sll desstination D:\projekty\FJP_super_language\tests\testOutput\assigment\errorAssignment.sll --------------------
+-------------------- Testing error file: D:\projekty\FJP_super_language\tests\testOutput\assigment\errorAssignment-errors.log --------------------
+-------------------- NO ERRORS FOUND --------------------
+
+
+
+
 -------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\assigment\testAssignment.sll desstination D:\projekty\FJP_super_language\tests\testOutput\assigment\testAssignment.sll --------------------
 -------------------- Testing pl0 file: D:\projekty\FJP_super_language\tests\testOutput\assigment\testAssignment.pl --------------------
 -------------------- NO ERRORS FOUND --------------------
@@ -61,5 +68,5 @@
 
 
 
--------------------- Number of tests: 9, successful tests:9, failed tests: 0 --------------------
+-------------------- Number of tests: 10, successful tests:10, failed tests: 0 --------------------
 -------------------- Folder with tests: D:\projekty\FJP_super_language\tests\testOutput --------------------

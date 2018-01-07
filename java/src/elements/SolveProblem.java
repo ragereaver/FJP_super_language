@@ -1,7 +1,7 @@
 package elements;
 
-import Convertor.TypeConvertor;
-import Convertor.Validators;
+import convertor.TypeConvertor;
+import convertor.Validators;
 import enums.EErrorCodes;
 import enums.EInstructionSet;
 import enums.EOperationCodes;

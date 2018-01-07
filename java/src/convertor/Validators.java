@@ -1,4 +1,4 @@
-package Convertor;
+package convertor;
 
 import enums.EErrorCodes;
 import org.antlr.v4.runtime.Token;

@@ -8,6 +8,6 @@ pole[1] = 6;
 pole2[3] = 4;
 
 int b = 33;
-pole = pole2;
+pole = pole;
 
 int d = pole[1] + pole[3];

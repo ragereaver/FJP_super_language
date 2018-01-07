@@ -1,7 +1,7 @@
 // Generated from D:/projekty/FJP_super_language\SLLanguage.g4 by ANTLR 4.7
 package generatedParser;
 
-import Convertor.Validators;
+import convertor.Validators;
 import createFilePL0.CreateFile;
 import elements.*;
 import enums.EErrorCodes;

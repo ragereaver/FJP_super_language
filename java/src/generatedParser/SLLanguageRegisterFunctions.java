@@ -1,6 +1,6 @@
 package generatedParser;
 
-import Convertor.Validators;
+import convertor.Validators;
 import elements.FunctionTranslate;
 import enums.EErrorCodes;
 import tableClasses.ErrorHandle;

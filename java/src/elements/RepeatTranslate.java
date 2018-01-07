@@ -1,6 +1,6 @@
 package elements;
 
-import Convertor.Validators;
+import convertor.Validators;
 import enums.EInstructionSet;
 import generatedParser.SLLanguageMainListener;
 import generatedParser.SLLanguageParser;

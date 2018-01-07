@@ -1,7 +1,7 @@
 package enums;
 
-import Convertor.TypeConvertor;
-import Convertor.Validators;
+import convertor.TypeConvertor;
+import convertor.Validators;
 import org.antlr.v4.runtime.Token;
 import tableClasses.ErrorHandle;
 import tableClasses.Symbol;
