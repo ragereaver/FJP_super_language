@@ -30,10 +30,9 @@ public class Main {
             }
 
         }else {
-            TableOfSymbols.filepath = "tests/testFiles/pole/testPole.sll";
-            TableOfSymbols.destinationFilepath =TableOfSymbols.filepath;
-           /* helpPrint();
-            return;*/
+
+            helpPrint();
+            return;
         }
 
         File file = new File(TableOfSymbols.filepath);
@@ -104,5 +103,6 @@ public class Main {
         System.out.println("Run program with one of this inputs: ");
         System.out.println("1> java -jar <complier>.jar <program>.sll");
         System.out.println("2> java -jar <complier>.jar <program>.sll <output_destination>");
+        System.out.println("");
     }
 }
