@@ -47,7 +47,7 @@ run class runTests.java. More info to tests is in documentation.
 - files which are used to testing our solution
 
 ## Setting up environment
-Everything should be done when you clone this repository like intellJ project except on setting up 
+Everything should be done when you clone or download this repository and then you can open it like intellJ project. Except on setting up 
 parser for ANTLR.
 > to parse our grammar in intelliJ you need to follow these steps
 - you need install intelliJ plugin for ANTLR - info above
