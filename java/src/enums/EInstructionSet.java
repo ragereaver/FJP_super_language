@@ -217,6 +217,7 @@ public enum EInstructionSet {
                 ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, token);
             }
 
+            TableOfSymbols.setConvertArray(false);
             Symbol where = TableOfSymbols.getValidateSymbol(identifier, type, token);
             Symbol what = TableOfSymbols.getValidateSymbol(variable, type, token);
             if (what == null || where == null) {

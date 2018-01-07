@@ -1,10 +1,13 @@
 int [] pole = new int [5];
+int [] pole2 = new int [10];
 boolean [] fd = new boolean [5];
-int b = 3;
 fd[1] = true;
 fd[pole[1]] = true ;
 
 pole[1] = 6;
-pole[3] = 4;
+pole2[3] = 4;
+
+int b = 33;
+pole = pole2;
 
 int d = pole[1] + pole[3];
