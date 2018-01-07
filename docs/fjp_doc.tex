@@ -46,13 +46,504 @@
 \tableofcontents
 \addtocontents{toc}{\protect\thispagestyle{empty}}
 
-\chapter{Úvod}
+\chapter{Zadání}
+\label{sec:zadani}
 \pagestyle{plain}
 \setcounter{page}{1}
+Cílem práce je vytvoření vlastního jazyka a překladače pro~tento jazyk.
+Překládat jsme se rozhodli do~instrukční sady PL/0.
+Při~vytváření jazyka jsme se snažili napodobit syntaxi jazyků java a C.
+Od~vytvořeného jazyka jsme požadovali, aby uměl následující základní elementy:
 
-\chapter{Gramatika}
+\begin{itemize}
+\item definice celočíselných proměnných
+\item definice celočíselných konstant
+\item přiřazení
+\item základní aritmetiku a logiku (+, -, *, /, AND, OR, negace a závorky, operátory pro porovnání čísel)
+\item cyklus (while)
+\item jednoduchou podmínku (if bez else)
+\item definice podprogramu (procedura, funkce, metoda) a jeho volání
+\end{itemize}
+
+\noindent Dále jsme se rozhodli jazyk rožšířit o~další složitější konstrukce.
+Mezi složitější konstrukce, které jazyk umí patří:
+
+\begin{itemize}
+\item další typy cyklů (for, do...while, until, repeat...until)
+\item else větev
+\item datový typ boolean a logické operace s ním
+\item rozvětvená podmínka (switch, case)
+\item podmíněné přiřazení / ternární operátor (min = (a < b) ? a : b;)
+\item pole a práce s jeho prvky
+\item parametry předávané hodnotou
+\item návratová hodnota podprogramu
+\item komentáře
+\end{itemize}
+
+\noindent Za~plně funkční překladač pro~jazyk, které umí tyto konstrukce by mělo být uděleno 24 bodů.
+Další bonusový bod by mohl být za~realizaci komentářů, které nebyly uvedeny v seznamu možných konstrukcí.
+
+\chapter{Popis řešení}
+
+\chapter{Syntaxe}
+V této kapitole bude krátce okomentována a ukázána syntaxe jazyka.
+
+\section{Definice proměnných a přiřazení}
+
+Deklarace proměnných:
+
+\texttt{int cislo;}
+
+\texttt{
+boolean logika;}
+
+\noindent Deklarace konstant:
+
+\texttt{const int CISLO = 5;}
+
+\texttt{const boolean LOGIKA = true;}
+
+\noindent Konstanty musí mít vždy přiřazenou hodnotu již při deklaraci.
+
+\noindent Deklarace s přiřazením: 
+
+\texttt{int cislo = 5;}
+
+\texttt{boolean logika = true;}
+
+\noindent Přiřazení:
+
+\texttt{cislo = 5 + 3;}
+
+\texttt{cislo = cislo + 1;}
+
+\section{Podmínky}
+\subsection{Podmínka if}
+Část programu ve~větvi \texttt{if} se provede, pokud je splněná podmínka.
+V~podmínce se může využívat všech logických operátorů, viz příklady.
+Zároveň je možné doplnit na~konci větve \texttt{if} větev \texttt{else}, která 
+se provede v~případě, že není splněná podmínka.
+
+\noindent{Ukázka podmínky:}
+
+\texttt{if(!(2 < 3 \&\& 1 > 0) || 1 != 0)} 
+
+\texttt{\{...\}}
+
+\texttt{else\{...\} }
+
+\noindent Podmínka musí být v~závorkách následována ihned po~příkazu \texttt{if}.
+Za~podmínkou ve~složených závorkách se pak nachází část kódu, který se má vykonat v~případě splněné podmínky.
+
+\subsection{Switch}
+V podmínce \texttt{switch} se musí nacházet pouze celé číslo nebo proměnná  \texttt{int}.
+Podle dané hodnoty se provede určitý \texttt{case} uvnitř \texttt{switch}.
+Zároveň lze na~konci \texttt{switch} udělat větev \texttt{default}, která 
+se provede v~případě, že žádný \texttt{case} neodpovídal hodnotě v~podmínce.
+Narozdíl od~jazyků C a java, se vždy provede pouze jeden \texttt{case}.
+
+\noindent{Ukázka podmínky:}
+
+\texttt{switch(2)\{}
+
+\texttt{    case 1: }
+
+\texttt{    case 2: int a = 2;}
+
+\texttt{    default: int b = 0;\}}
+
+\subsection{Ternární operátor}
+Jazyk umožňuje i zkrácený zápis podmínky \texttt{if}, případně podmíněného přiřazení.
+
+\noindent{Ukázka ternární podmínky}
+
+\texttt{  (cislo < 2) ? cislo = 2 : cislo = 3;}
+
+\noindent{Ukázka podmíněného přiřazení}
+
+\texttt{  cislo = (cislo < 2) ? 2 : 3;}
+
+               
+\section{Cykly}
+Cykly slouží k~určitému opakování stejného kódu.
+
+\subsection{While}
+Cyklus, který se provádí dokud je splněná podmínka.
+Platí zde stejná pravidla jako v~podmínce \texttt{if}.
+
+\noindent{Ukázka cyklu: }
+
+\texttt{while(cislo < 3)\{}
+
+\texttt{    cislo = cislo + 1;}
+
+\texttt{\}}
+
+\subsection{Do...while}
+Podmínka se ověřuje až na~konci cyklu, tedy program se vykoná vždy alespoň jednou.
+
+\noindent{Ukázka cyklu: }
+
+\texttt{do\{}
+
+\texttt{    cislo = cislo + 1;}
+
+\texttt{\}while(cislo < 3);}
+
+\subsection{Until}
+Podobný cyklus jako \texttt{while}, akorát se provádí pokud podmínka je nesplněná.
+Jakmile se podmínka splní, cyklus končí.
+
+\noindent{Ukázka cyklu: }
+
+\texttt{until(cislo > 3)\{}
+
+\texttt{    cislo = cislo + 1;}
+
+\texttt{\}}
+
+\subsection{Repeat...until}
+Podobný cyklus jako \texttt{until}, akorát podmínka se ověřuje až na~konci cyklu.
+Program se tedy vykoná alespoň jedenkrát.
+
+\subsection{For}
+Cyklus s~určitým počtem opakování. Podmínka se skládá ze tří částí.
+V~první části musí být deklarace proměnné s~přiřazením počáteční hodnoty.
+V~druhé části musí být podmínka, při~její splnění se bude cyklus provádět.
+V~poslední části je pak operace, která se provede na~konci cyklu.
+
+\noindent{Ukázka cyklu: }
+
+\texttt{for(int i = 0; i < 3; i = i + 1)\{} 
+
+\texttt{    ...}
+
+\texttt{\}}
+               
+\section{Pole}
+
+
+\section{Funkce}
+Program lze členit do~podprogramů pomocí funkcí.
+Funkce musí být definovány na~začátku programu, při~definici je důležité klíčové slovo
+\texttt{function}. Funkcím lze předávat parametry a zároveň funkce můžeš vracet jednu hodnotu, viz příklad.
+
+\noindent{Ukázka funkce: }
+
+\texttt{int function soucet(int a, int b)\{}
+
+\texttt{    return a + b;}
+
+\texttt{\}}
+
+\noindent{Volání funkce: }
+
+\texttt{int c = soucet(1, 2);}
+
+\section{Komentáře}
+Komentáře slouží k~označení části kódu, která se nebude překládat do~instrukcí.
+Realizovány byly blokové komentáře, které jsou označeny sekvencí \texttt{/*} na~začátku bloku
+a \texttt{*/} na~konci bloku.
+
+\noindent{Ukázka komentářů: }
+
+\texttt{/* tohle je komentar */}
+
+               
+\chapter{Testovací příklady}
+Testování funkčnosti řešení bylo realizováno pomocí testovacích souborů, pro~které jsme měli správné posloupnosti instrukcí.
+Při~změnách v~překladači se pak pouštěl překlad těchto testovacích souborů a provnávali se výstupní instrukce se~správnými.
+
+\noindent Testovací soubory lze najít ve~složce \textit{tests/testFiles}, programy napsané v~našem jazyce mají příponu \textit{.sll}.
+Přeložené programy do~instrukční sady PL/0 mají příponu \textit{.pl}.
+
+\noindent Některé kratší ukázky a výstupní instrukce přiložím zde.
+
+\section{Test přiřazení}
+
+Program:
+
+\texttt{int a = 5;}
+
+\texttt{int mn, ob = 5 + a, i = 3, or;}
+
+\texttt{boolean c = true; }
+
+\texttt{a = 3;}
+
+\texttt{const int TEST = 4;}
+
+\texttt{int b = TEST;}
+
+\texttt{int d = b;}
+
+\texttt{int e = b;}
+
+\texttt{if (a < 5) \{ }
+
+\texttt{    b = 3; }
+    
+\texttt{\} else \{ }
+
+\texttt{    b = 8; }
+    
+\texttt{\} }
+
+\texttt{c = a == b;}
+
+
+
+\noindent{Instrukce:}
+
+\texttt{0	JMP	0	1}
+
+\texttt{1	INT	0	13}
+
+\texttt{2	LIT	0	5 }
+
+\texttt{3	STO	0	3 }
+
+\texttt{4	LIT	0	0 }
+
+\texttt{5	STO	0	4 }
+
+\texttt{6	LIT	0	5 }
+
+\texttt{7	LOD	0	3 }
+
+\texttt{8	OPR	0	2 }
+                   
+\texttt{9	STO	0	5  }
+
+\texttt{10	STO	0	6 }
+
+\texttt{11	LIT	0	0  }
+
+\texttt{12	STO	0	7   }
+
+\texttt{13	LIT	0	1    }
+
+\texttt{14	STO	0	8     }
+
+\texttt{15	LIT	0	3      }
+
+\texttt{16	STO	0	3       }
+
+\texttt{17	LIT	0	4      }
+
+\texttt{18	STO	0	9 }
+
+\texttt{19	LOD	0	9  }
+
+\texttt{20	STO	0	10  }
+
+\texttt{21	LOD	0	10   }
+
+\texttt{22	STO	0	11    }
+
+\texttt{23	LOD	0	10     }
+
+\texttt{24	STO	0	12      }
+
+\texttt{25	LOD	0	3        }
+
+\texttt{26	LIT	0	5 }
+
+\texttt{27	OPR	0	10 }
+
+\texttt{28	JMC	0	32  }
+
+\texttt{29	LIT	0	3    }
+
+\texttt{30	STO	0	10    }
+
+\texttt{31	JMP	0	34     }
+
+\texttt{32	LIT	0	8       }
+
+\texttt{33	STO	0	10       }
+
+\texttt{34	LOD	0	3         }
+
+\texttt{35	LOD	0	10         }
+
+\texttt{36	OPR	0	8           }
+
+\texttt{37	STO	0	8            }
+
+\texttt{38	RET	0	0             }
+
+
+
+\section{Test cyklu a podmínek}
+
+Zde je otestovaný pouze cyklus \texttt{for} a podmínka \texttt{if}.
+Všechny cykly jsou testovány v~souboru \textit{tests/testFiles/cykly/testCycles.sll}.
+
+\noindent Program:
+
+\texttt{int i;}
+
+\texttt{for(int k = 0; k < 3; k = k + 1)\{}
+    
+\texttt{    if(i < 3)\{ }
+
+\texttt{        i = i - 1;}
+
+\texttt{    \}             }
+
+\texttt{    else\{          }
+
+\texttt{        i = i * k;  }
+
+\texttt{    \}            }
+
+\texttt{\}                 }
+
+\noindent Instrukce:
+
+\texttt{0	JMP	0	1}
+
+\texttt{1	INT	0	5}
+
+\texttt{2	LIT	0	0 }
+
+\texttt{3	STO	0	3  }
+
+\texttt{4	LIT	0	0   }
+
+\texttt{5	STO	0	4    }
+
+\texttt{6	LOD	0	4     }
+
+\texttt{7	LIT	0	3      }
+
+\texttt{8	OPR	0	10      }
+
+\texttt{9	JMC	0	28       }
+
+\texttt{10	LOD	0	3       }
+
+\texttt{11	LIT	0	3        }
+
+\texttt{12	OPR	0	10        }
+
+\texttt{13	JMC	0	19         }
+
+\texttt{14	LOD	0	3           }
+
+\texttt{15	LIT	0	1 }
+
+\texttt{16	OPR	0	3  }
+
+\texttt{17	STO	0	3   }
+
+\texttt{18	JMP	0	23   }
+
+\texttt{19	LOD	0	3     }
+
+\texttt{20	LOD	0	4      }
+
+\texttt{21	OPR	0	4       }
+
+\texttt{22	STO	0	3        }
+
+\texttt{23	LOD	0	4         }
+
+\texttt{24	LIT	0	1          }
+
+\texttt{25	OPR	0	2           }
+
+\texttt{26	STO	0	4            }
+
+\texttt{27	JMP	0	6             }
+
+\texttt{28	RET	0	0              }
+
+
+\section{Testování polí}
+
+\section{Testování funkcí}
+Ukázka funkce pro~součet dvou čísel.
+
+\noindent Program:
+
+\texttt{int function soucet (int a, int b) \{}
+ 
+\texttt{    return a + b;}
+
+\texttt{\} }
+
+\texttt{int c = soucet(1, 2); }
+
+\noindent Instrukce: 
+
+\texttt{0	JMP	0	1              }
+
+\texttt{1	INT	0	8              }
+
+\texttt{2	LIT	0	0             }
+
+\texttt{3	STO	0	3            }
+
+\texttt{4	LIT	0	0           }
+
+\texttt{5	STO	0	4          }
+
+\texttt{6	LIT	0	1         }
+
+\texttt{7	STO	0	4        }
+
+\texttt{8	LIT	0	2       }
+
+\texttt{9	STO	0	5      }
+
+\texttt{10	CAL	0	14  }
+
+\texttt{11	LOD	0	3  }
+
+\texttt{12	STO	0	6 }
+
+\texttt{13	RET	0	0         }
+
+\texttt{14	INT	0	5        }
+
+\texttt{15	LOD	1	4       }
+
+\texttt{16	STO	0	3      }
+
+\texttt{17	LOD	1	5     }
+
+\texttt{18	STO	0	4    }
+
+\texttt{19	LOD	0	3   }
+
+\texttt{20	LOD	0	4  }
+
+\texttt{21	OPR	0	2 }
+
+\texttt{22	STO	1	3}
+
+\texttt{23	RET	0	0}
+
+
 
 \chapter{Závěr}
+Semestrální práci se podařilo úspěšně dokončit. Nicméně během tvorby jazyka a překladače
+jsme narazili na řadu problémů a obtíží. Nejhorší byl začátek, kdy bylo potřeba sestavit gramatiku jazyka
+a zprovoznit nástroj ANTLR pro~parsování programu. Dále se pak naučit jak funguje PL/0, a co znamenají jednotlivé instrukce.
 
+Práce byla poměrně rozsáhlá a bylo potřeba mnoho úsilí, aby byly splněny minimální požadavky na~rozsah.
+Na~druhou stranu byla práce originální a poskytla nám pohled do~fungování překladačů,
+jak se z~nám známeho programovacího jazyka stane posloupnost strojových instrukcí použitelných pro~procesor.
+
+Vzhledem k~tomu, že práce byla dělána ve~dvojicích, se bylo vždy možno poradit, když jsme si nevěděli rady.
+Zároveň si myslíme, že i komunikace byla lepší, než kdyby jsme tuto práci dělali v~početnějším týmu.
+Ačkoliv si nedovedeme představit, kolik času by bylo potřeba nad~touto~prací strávit, abychom dosáhli maximálního počtu bodů.
+
+Celý projekt byl veden na~githubu na~adrese \href{https://github.com/tuslm/FJP\_{super}\_{language}}{FJP\_{super}\_{language}}\footnote{Adresa v případě nefunkčnosti odkazu: https://github.com/tuslm/FJP\_{super}\_{language}}.
+Za~semestrální práci, tak jak bylo řečeno v~kapitole \ref{sec:zadani}, by jsme očekávali 24 bodů. Případně
+bonusový bod za~implementaci komentářů.
 
 \end{document}
+
