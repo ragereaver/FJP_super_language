@@ -73,20 +73,155 @@ Mezi složitější konstrukce, které jazyk umí patří:
 \item else větev
 \item datový typ boolean a logické operace s ním
 \item rozvětvená podmínka (switch, case)
+\item vícenásobné přiřazení (a = b = c = 3;)
 \item podmíněné přiřazení / ternární operátor (min = (a < b) ? a : b;)
 \item pole a práce s jeho prvky
 \item parametry předávané hodnotou
 \item návratová hodnota podprogramu
 \item komentáře
+\item řídící příkazy (break, continue)
 \end{itemize}
 
-\noindent Za~plně funkční překladač pro~jazyk, které umí tyto konstrukce by mělo být uděleno 24 bodů.
-Další bonusový bod by mohl být za~realizaci komentářů, které nebyly uvedeny v seznamu možných konstrukcí.
+\noindent Za~plně funkční překladač pro~jazyk, které umí tyto konstrukce by mělo být uděleno 25 bodů.
+Další bonusový bod by mohl být za~realizaci komentářů, které nebyly uvedeny v~seznamu možných konstrukcí.
+Případně další bod za~příkazy break a continue. 
 
 \chapter{Popis řešení}
 
+\section{Překlad}
+\label{sec:preklad}
+
+Překlad programu se skládá ze~tří fází. V~první fázi se najdou a zaznamenají všechny 
+hlavičky funkcí a zároveň se zjistí potřebná velikost v~paměti na~parametry a návratovou hodnotu. 
+Návratová hodnota může zabírat místo pro~jednu proměnnou nebo žádnou proměnnou, protože funkce mohou vracet jen 
+jednoduché datové typy. Místo pro~parametry má velikost rovnu největšímu počtu parametrů, které mohou do~některé z~funkcí vcházet. 
+Dělání zaznamenávání funkcí jako první krok, je důležité proto, aby se funkce mohli volat z~jakéhokoli místa v~programu. 
+Navíc slouží k~rychlé kontrole ve~správnosti vytvořených funkcích.
+
+
+V~druhé fázi se překládá hlavní kód programu, což znamená překládání kódu mimo funkce. 
+V~této fázi se nejdříve vytvoří místo na~parametry a návratovou hodnotu a posléze se již překládají jednotlivé příkazy. 
+Pokud se narazí na~volání funkce, překladač se ji pokusí najít v~registrovaných funkcích. Pokud je funkce nalezena, 
+vytvoří se kód pro~volání a zároveň se volání přidá do~pole určeného pro~čekání přiřazení počáteční adresy funkce.
+
+
+Ve~třetí fázi se již překládají pouze funkce. Překládání těl funkcí probíhá 
+stejně jako překlad hlavního kódu. Rozdíl je při překládání hlavičky funkce, 
+kdy se funkce přidá do~tabulky symbolů a automaticky se doplňují adresy ke~všem 
+jejím voláním. Pokud se objeví volání v~těle funkce, tak je první krok stejný jako 
+v~předchozí fázi, ale navíc se udělá ještě průzkum, zda již funkce nebyla přiřazena a není 
+tak možné adresu přiřadit k~volání rovnou. Jako poslední krok při překládání funkce se 
+pak validuje, zda opravdu existuje návratová hodnota, pokud ji funkce má.
+
+
+Výhodou tohoto překladu je, že hlavní kód je vždy hned na~začátku a následují ho 
+definice funkcí. Nemusíme tak řešit různé odskoky uprostřed kódu kvůli přeskočení funkce.
+
+
+Pokud během překladu bylo naraženo na~nějakou chybu, kód pro PL0 nebude vytvořen a 
+místo toho se vytvoří soubor s~chybovým hlášením.
+
+\section{Nápomocné tabulky}
+V řešení bylo použito několik tabulek (polí) pro~snadnější překlad. 
+Jsou jimi pole pro~symboly, hotový kód, volání funkcí, registrované funkce, 
+chyby a pole pro~odskoky a zvýšení místa v~zásobníku. 
+
+
+V~tabulce symbolů jsou ukládány všechny proměnné a funkce. Jsou zde informace 
+především o~jejich typech, jménech, adresách a číslech objektu, ve~kterém se nachází.  
+
+
+V~tabulce s~hotovým kódem se nachází již vygenerovaný kód v~PL/0. 
+S~tímto kódem se manipuluje, jen když se potřebují doplnit adresy odskoků či volání funkcí.
+Nachází se zde informace o instrukci, úrovni, adrese a indexu v~poli. 
+
+
+V~tabulce pro~volání funkcí jsou obsaženy všechny volání, které potřebují doplnit adresu. 
+Volání jsou sem přidána, pokud u~přidávání do~tabulky s~hotovým kódem mají hodnotu -1. 
+Jsou uloženy s~indexem kódu v~tabulce s~kódem a zároveň se k~nim přidá hodnota \textit{objectID}, 
+podle které je volání posléze nalezeno a doplněno.
+
+
+Další tabulkou jsou registrované funkce, jejich funkčnost již byla popsána v kapitole \ref{sec:preklad}. 
+
+
+Předposlední tabulkou je pole s~chybami. Tato tabulka slouží, jak již název napovídá, 
+pro~uchovávání chyb zachycených během překladu. Je zde popis chyby, číslo řádku a číslo znaku.
+
+
+Poslední tabulka obsahuje odskoky a instrukci pro~zvýšení místa v~zásobníku. 
+Tato tabulka slouží pro~zachycení příkazů, které potřebují doplnit adresu nebo je její hodnota měněna. 
+Každý záznam má informace o~indexu v~poli kódu a \textit{objectID}, podle kterého jsou nalezeny a doplňovány. 
+V~případě odskoků se po~doplnění adresy odskok z~tabulky smaže. 
+
+\section{Viditelnost proměnných}
+Viditelnost proměnných je zajištěna pomocí \textit{objectID} informace. 
+Objekt je u~nás vše z~následujících případů: cyklus, if, else, switch, funkce a ternární if. 
+Jakmile překladač vstoupí do~nového objektu je číslo \textit{objectID} zvýšeno a následně zase zpátky sníženo, když se daný objekt opustí. 
+Žádný objekt nemůže mít stejné číslo jako už některý objekt před~ním a počáteční hodnota \textit{objektID} je nula. 
+Tato hodnota posléze slouží k~nacházení správné proměnné či pro~identifikaci správného příkazu v~některé tabulce.
+
+
+Tento mechanismus navíc zajišťuje jakýsi strom rodičovství u~jednotlivých objektů, a proto 
+proměnná vytvořená v~rodičovském objektu je následně viděna všemi dětmi. Tato proměnná však může 
+být v~některém dítěti přetížena tím, že se v~něm deklaruje nová proměnná stejného jména. 
+Poté se již v~dalších dětech přistoupí jen k~této nové proměnné.
+
+\section{Defaultní hodnoty proměnných}
+Pokud u~deklarace proměnných není určena počáteční hodnota, jsou všechny hodnoty nastavené na~nulu. 
+V~případě typu boolean to znamená false. Nově vytvořené pole se těmito pravidly řídí také, 
+to znamená, že všechny indexy pole jsou nulové.
+
+\section{Struktura překladače}
+Překladač obsahuje šest balíčků s~třídami.
+
+\subsection{Convertor package}
+Tento balík obsahuje dvě statické třídy. První je TypeConvertor, která slouží pro~změnu 
+typu uvnitř překladače a druhá je Validators, ve~které se nachází validační metody pro~zjištění různých věcí z~textu. 
+Například napomáhá při~zjišťování, zda se má získat jméno proměnné nebo hodnota.
+
+\subsection{CreateFilePL0}
+Zde je jen jedna třída a ta slouží pro zapsání hotového kódu do souboru, či vytvoření chybového souboru.
+
+\subsection{Elements}
+V tomto balíčku se nachází třídy pro ošetření jednotlivých řádků programu. 
+Například třida \textit{DeclarationTranslate} se stará o správně přeloženou deklaraci nebo třida ForTranslate překláda cyklus for. 
+Třída, která stojí za zmínku je SolveProblem, ve které se generuje vyhodnocování výrazů, proto tuto třídu dělí každá třida v balíčku elements.
+
+\subsection{Enums}
+Tento balíček obsahuje enum třídy s chybovými hláškami, instrukcemi a definovanými operacemi.
+
+\subsection{GeneratedParser}
+V tomto balíčku je vygenerovaný parser pomocí ANTLR a dva naše vlastní listenery – \textit{SLLanguageRegisterFunction} a \textit{SLLanguageMainListener}.
+
+\subsection{TableClasses}
+V posledním balíčku jsou třídy s jednotlivými tabulkami a práce s nimi. 
+
+
+\section{Postup překladu}
+Překlad samotný je realizován pomocí listenerů, které dědí od~vygenerovaného listeneru 
+pomocí ANTLR. Pomocí listenerů poté procházíme celý strom programu. Pro~překlad používáme dva listenery. 
+\textit{SLLanguageRegisterFunction} listener slouží jen pro~registraci funkcí a druhý listener \textit{SLLanguageMainListener} dělá zbytek. 
+
+
+Z~těchto listenerů jsou poté volány funkce z~balíčku \textit{elements} pro~přeložení jednotlivých částí. 
+Při~překládání částí kódu se generují instrukce, které jsou ukládány do~ArrayListu \textit{tableOfMainCode} ve~třídě \textit{TableOfCodes}. 
+V~tomto poli jsou uloženy jen instance třídy Code. Případně pokud se musí doplnit ještě adresa, tak jsou přidány ještě
+do~ArrayListu \textit{tableOfCalls} nebo \textit{tableOfIntsJump} do~kterých se ukládá instance třídy \textit{ExpectingAddress}.
+
+
+Zároveň pokud se vytváří v~některé části kódu nová proměnná, uloží se v~ArrayListu \textit{tableOfSymbols} ve~třídě \textit{TableOfSymbols}. 
+Do~tohoto pole lze vložit jen instance třídy \textit{Symbol}. Toto pole zároveň zajišťuje, že se nevloží 
+stejná proměnná znovu, jelikož se při každém vložení nejdřív prohledá, zda proměnná již neexistuje. Zároveň jsou zde uloženy i funkce.
+
+
+Pro~doplnění adresy slouží update metody v~třídě \textit{TableOfCodes}, které stačí jen zavolat s~aktuálním 
+\textit{objectID} a novou adresou a metody tyto hodnoty doplní na~správná místa.
+
+
 \chapter{Syntaxe}
 V této kapitole bude krátce okomentována a ukázána syntaxe jazyka.
+ 
 
 \section{Definice proměnných a přiřazení}
 
@@ -116,6 +251,12 @@ boolean logika;}
 \texttt{cislo = 5 + 3;}
 
 \texttt{cislo = cislo + 1;}
+
+\noindent Vícenásobné přiřazení:
+
+\texttt{int a, b ,c;}
+
+\texttt{a = b = c = 5;}
 
 \section{Podmínky}
 \subsection{Podmínka if}
@@ -165,7 +306,8 @@ Jazyk umožňuje i zkrácený zápis podmínky \texttt{if}, případně podmín�
 
                
 \section{Cykly}
-Cykly slouží k~určitému opakování stejného kódu.
+Cykly slouží k~určitému opakování stejného kódu. Cyklus se dá ukončit příkazem \texttt{break}.
+Případně skočit znovu na začátek cyklu příkazem \texttt{continue}.
 
 \subsection{While}
 Cyklus, který se provádí dokud je splněná podmínka.
@@ -207,8 +349,8 @@ Podobný cyklus jako \texttt{until}, akorát podmínka se ověřuje až na~konci
 Program se tedy vykoná alespoň jedenkrát.
 
 \subsection{For}
-Cyklus s~určitým počtem opakování. Podmínka se skládá ze tří částí.
-V~první části musí být deklarace proměnné s~přiřazením počáteční hodnoty.
+Cyklus s~určitým počtem opakování. Podmínka se skládá ze~tří částí.
+V~první části musí být nastavení počáteční hodnoty proměnné.
 V~druhé části musí být podmínka, při~její splnění se bude cyklus provádět.
 V~poslední části je pak operace, která se provede na~konci cyklu.
 
@@ -221,6 +363,27 @@ V~poslední části je pak operace, která se provede na~konci cyklu.
 \texttt{\}}
                
 \section{Pole}
+
+Pokud se používá v programu pole je potřeba výsledných program spouštět v~interpretu PL0 s~rozšířenou instrukční sadou, 
+jelikož pro~fungování polí jsou potřeba instrukce \texttt{PLD} a \texttt{PST}.
+
+Pole jsou vytvářená kódem:
+
+\texttt{<type> [] <name> = new <type>[<size>]}
+
+\noindent Hodnota size musí být číslo. Následně se již může k~poli přistupovat kódem:
+
+\texttt{int a = pole[<index>]}
+
+\noindent Hodnota index může být libovolný výraz, který má celočíselný datový typ. 
+Pokud se pole nachází na~pravé straně přiřazení, může se na~jeho první hodnotu přistupovat jen pomocí uvedení jména proměnné bez~hranatých závorek. 
+Na~ostatní indexy se již musí použít hranaté závorky. 
+
+
+Přiřazování do~pole může být dvěma způsoby. Při~uvedení indexu u~pole se dá přiřadit 
+hodnota na~danou pozici v~poli. Pokud žádný index dán není, očekává se na~druhé straně pole, 
+které má být překopírováno do~daného pole. Kopírování hodnot vždy přenese maximální možnou 
+velikost přiřazovaného pole omezenou velikosti pole, kam se data přenášejí.
 
 
 \section{Funkce}
@@ -251,13 +414,25 @@ a \texttt{*/} na~konci bloku.
 
                
 \chapter{Testovací příklady}
-Testování funkčnosti řešení bylo realizováno pomocí testovacích souborů, pro~které jsme měli správné posloupnosti instrukcí.
-Při~změnách v~překladači se pak pouštěl překlad těchto testovacích souborů a provnávali se výstupní instrukce se~správnými.
+Pro testování našeho překladače jsme si vytvořili vlastní testovací mechanismus, který testuje překlad souborů a následně i správný výstup. 
+Kontrolujeme tak možné chyby v~gramatice, a zároveň i správné generování.
 
-\noindent Testovací soubory lze najít ve~složce \textit{tests/testFiles}, programy napsané v~našem jazyce mají příponu \textit{.sll}.
-Přeložené programy do~instrukční sady PL/0 mají příponu \textit{.pl}.
 
-\noindent Některé kratší ukázky a výstupní instrukce přiložím zde.
+Testy fungují tak, že si berou všechny soubory s~koncovkou \textit{.sll} nebo \textit{–errors.log} ze~složky \textit{tests/testFiles}, které jsou jsou následně 
+přeloženy do~složky \textit{tests/testOutput}. Odtud jsou posléze porovnávány se~správnými soubory uloženými v~\textit{tests/testValidation}. 
+Výstup testů je následně uložen do~souboru \textit{testsResult.txt} v~adresáři \textit{tests/testValidation}. 
+Odtud lze poté jednoduše zjistit, kde se stala chyba. 
+
+
+Testy se spouští pomocí třídy \textit{RunTests}, která je uložená ve~složce \textit{java/src}.
+
+
+Pomocí těchto testů lze validovat i nekorektní soubory a může se tak snadno udělat otestované prostředí. 
+Tato testovací možnost se nám líbila nejvíc, protože je jednoduchá a otestujeme tím, jak gramatiku, tak výstupní soubory, 
+což u~krátkého vývoje má asi největší využití.
+
+
+Některé kratší ukázky a výstupní instrukce jsou přiloženy zde.
 
 \section{Test přiřazení}
 
@@ -290,7 +465,6 @@ Program:
 \texttt{\} }
 
 \texttt{c = a == b;}
-
 
 
 \noindent{Instrukce:}
@@ -461,8 +635,6 @@ Všechny cykly jsou testovány v~souboru \textit{tests/testFiles/cykly/testCycle
 \texttt{28	RET	0	0              }
 
 
-\section{Testování polí}
-
 \section{Testování funkcí}
 Ukázka funkce pro~součet dvou čísel.
 
@@ -526,7 +698,18 @@ Ukázka funkce pro~součet dvou čísel.
 
 \texttt{23	RET	0	0}
 
+\chapter{Spuštění překladu}
+Spustitelný jar, lze nalézt ve složce \textit{/compiled}.
 
+\noindent Překlad souboru se pak provede příkazem:
+
+   \texttt{java -jar FJP\_{super}\_{language}.jar program.sll}
+   
+\noindent Tímto příkazem se provede překlad a vytvoří se nový soubor se~jménem stejným jako měl překládaný program a příponou \textit{.pl}.  
+
+\noindent Nepovinným parametrem lze specifikovat cíl a jméno výstupního souboru. Stačí jako druhý argument uvést cestu se jménem požadovaného výstupního souboru.
+
+  \texttt{java -jar FJP\_{super}\_{language}.jar program.sll compile/vystup.pl}
 
 \chapter{Závěr}
 Semestrální práci se podařilo úspěšně dokončit. Nicméně během tvorby jazyka a překladače
@@ -542,8 +725,9 @@ Zároveň si myslíme, že i komunikace byla lepší, než kdyby jsme tuto prác
 Ačkoliv si nedovedeme představit, kolik času by bylo potřeba nad~touto~prací strávit, abychom dosáhli maximálního počtu bodů.
 
 Celý projekt byl veden na~githubu na~adrese \href{https://github.com/tuslm/FJP\_{super}\_{language}}{FJP\_{super}\_{language}}\footnote{Adresa v případě nefunkčnosti odkazu: https://github.com/tuslm/FJP\_{super}\_{language}}.
-Za~semestrální práci, tak jak bylo řečeno v~kapitole \ref{sec:zadani}, by jsme očekávali 24 bodů. Případně
-bonusový bod za~implementaci komentářů.
+Zde jsme dělali často commity a zakládali issue, abychom měli přehled o stavu projektu.
+Za~semestrální práci, tak jak bylo řečeno v~kapitole \ref{sec:zadani}, by jsme očekávali 25 bodů. Případně
+bonusové body za~implementaci komentářů, příkazu break a continue.
 
 \end{document}
 
