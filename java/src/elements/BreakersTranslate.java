@@ -1,8 +1,11 @@
 package elements;
 
+import Convertor.Validators;
+import enums.EErrorCodes;
 import enums.EInstructionSet;
 import generatedParser.SLLanguageMainListener;
 import generatedParser.SLLanguageParser;
+import tableClasses.ErrorHandle;
 import tableClasses.RegisteredFunction;
 
 /**
@@ -21,7 +24,14 @@ public class BreakersTranslate extends SimpleAssigmentTranslate{
     }
 
     public void doReturn(SLLanguageParser.JumpStatementContext ctx, String functionType) {
-        super.handleAssigment(functionType, ctx.expression().getText(), ctx.expression(), RegisteredFunction.RETURN_NAME);
+        if (Validators.EMPTY_TYPE.equals(functionType)) {
+            if (ctx.expression() != null) {
+                ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, ctx);
+            }
+        }else {
+            super.handleAssigment(functionType, ctx.expression().getText(), ctx.expression(), RegisteredFunction.RETURN_NAME);
+        }
+
         EInstructionSet.storeInstruction(RegisteredFunction.RETURN_NAME, ctx.getStart());
         EInstructionSet.doInstruction(EInstructionSet.RETURN, 0, 0);
     }

@@ -16,7 +16,7 @@ public class TypeConvertor {
     }
 
     public static String convertArrayTypes(String type, String defType) {
-        if (Validators.VARIABLE_TYPE_ARRAY_INT.equals(type) && Validators.VARIABLE_TYPE_BOOLEAN.equals(defType)){
+        if (Validators.VARIABLE_TYPE_ARRAY_INT.equals(type) && Validators.VARIABLE_TYPE_INT.equals(defType)){
             return Validators.VARIABLE_TYPE_INT;
         }
 
@@ -37,4 +37,14 @@ public class TypeConvertor {
         return type;
     }
 
+    public static String convertSimpleToArray(String type) {
+        if (Validators.VARIABLE_TYPE_INT.equals(type)){
+            return Validators.VARIABLE_TYPE_ARRAY_INT;
+        }
+
+        if (Validators.VARIABLE_TYPE_BOOLEAN.equals(type)){
+            return Validators.VARIABLE_TYPE_ARRAY_BOOLEAN;
+        }
+        return type;
+    }
 }

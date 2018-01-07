@@ -1,51 +1,65 @@
--------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\assigment\testAssignment.sll --------------------
+-------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\assigment\testAssignment.sll desstination D:\projekty\FJP_super_language\tests\testOutput\assigment\testAssignment.sll --------------------
 -------------------- Testing pl0 file: D:\projekty\FJP_super_language\tests\testOutput\assigment\testAssignment.pl --------------------
 -------------------- NO ERRORS FOUND --------------------
 
 
 
 
--------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\cykly\testCycles.sll --------------------
+-------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\cykly\ForCycle.sll desstination D:\projekty\FJP_super_language\tests\testOutput\cykly\ForCycle.sll --------------------
+-------------------- Testing pl0 file: D:\projekty\FJP_super_language\tests\testOutput\cykly\ForCycle.pl --------------------
+-------------------- NO ERRORS FOUND --------------------
+
+
+
+
+-------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\cykly\testCycles.sll desstination D:\projekty\FJP_super_language\tests\testOutput\cykly\testCycles.sll --------------------
 -------------------- Testing pl0 file: D:\projekty\FJP_super_language\tests\testOutput\cykly\testCycles.pl --------------------
 -------------------- NO ERRORS FOUND --------------------
 
 
 
 
--------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\cykly\testCycles2.sll --------------------
+-------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\cykly\testCycles2.sll desstination D:\projekty\FJP_super_language\tests\testOutput\cykly\testCycles2.sll --------------------
 -------------------- Testing pl0 file: D:\projekty\FJP_super_language\tests\testOutput\cykly\testCycles2.pl --------------------
 -------------------- NO ERRORS FOUND --------------------
 
 
 
 
--------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\funkce\testFunction.sll --------------------
+-------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\cykly\WhileCycle.sll desstination D:\projekty\FJP_super_language\tests\testOutput\cykly\WhileCycle.sll --------------------
+-------------------- Testing pl0 file: D:\projekty\FJP_super_language\tests\testOutput\cykly\WhileCycle.pl --------------------
+-------------------- NO ERRORS FOUND --------------------
+
+
+
+
+-------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\funkce\testFunction.sll desstination D:\projekty\FJP_super_language\tests\testOutput\funkce\testFunction.sll --------------------
 -------------------- Testing pl0 file: D:\projekty\FJP_super_language\tests\testOutput\funkce\testFunction.pl --------------------
 -------------------- NO ERRORS FOUND --------------------
 
 
 
 
--------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\pole\testPole.sll --------------------
+-------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\pole\testPole.sll desstination D:\projekty\FJP_super_language\tests\testOutput\pole\testPole.sll --------------------
 -------------------- Testing pl0 file: D:\projekty\FJP_super_language\tests\testOutput\pole\testPole.pl --------------------
 -------------------- NO ERRORS FOUND --------------------
 
 
 
 
--------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\testFile.sll --------------------
+-------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\testFile.sll desstination D:\projekty\FJP_super_language\tests\testOutput\testFile.sll --------------------
 -------------------- Testing pl0 file: D:\projekty\FJP_super_language\tests\testOutput\testFile.pl --------------------
 -------------------- NO ERRORS FOUND --------------------
 
 
 
 
--------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\zavorky\testZavorek.sll --------------------
+-------------------- Testing parsing with file: D:\projekty\FJP_super_language\tests\testFiles\zavorky\testZavorek.sll desstination D:\projekty\FJP_super_language\tests\testOutput\zavorky\testZavorek.sll --------------------
 -------------------- Testing pl0 file: D:\projekty\FJP_super_language\tests\testOutput\zavorky\testZavorek.pl --------------------
 -------------------- NO ERRORS FOUND --------------------
 
 
 
 
--------------------- Number of tests: 7, successful tests:7, failed tests: 0 --------------------
+-------------------- Number of tests: 9, successful tests:9, failed tests: 0 --------------------
 -------------------- Folder with tests: D:\projekty\FJP_super_language\tests\testOutput --------------------

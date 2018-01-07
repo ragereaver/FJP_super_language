@@ -1,18 +1,20 @@
 int a = 5;
-int mn, ob = 5 + a, i = 3, or;
+int mn, ob = 5 + a, i = 3, or = 22;
 boolean c = true;
 a = 3;
 const int TEST = 4;
 
-int b = TEST;
+mn = ob = a = i =3;
+int b = TEST + 3;
 
-int d = b;
-int e = b;
+int test = 0;
+int [] pole = new int [2];
 
-if (a < 5) {
-    b = 3;
-} else {
-    b = 8;
+
+i = 5 * 12 + 3 - pole - pole[fce() + 5 - 3] + pole[test];
+
+int ab = pole, bc = 4, dc = fce() , d = pole[pole[i]], e = 11;
+
+int function fce () {
+    return 5;
 }
-
-c = a == b;

@@ -57,7 +57,7 @@ public class TernalIfTranslate extends DeclarationTranslate {
         }
 
         SimpleAssigmentTranslate assigmentTranslate = new SimpleAssigmentTranslate();
-        assigmentTranslate.doAssigmentTranslate((ParserRuleContext) side.getChild(0));
+        assigmentTranslate.doAssigmentTranslate((ParserRuleContext) side.getChild(0), true);
     }
 
 }

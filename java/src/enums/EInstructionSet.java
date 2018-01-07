@@ -85,7 +85,6 @@ public enum EInstructionSet {
      * @return
      */
         public static boolean loadVariableName(String variable, Token token, String type){
-
             Symbol sym = TableOfSymbols.getValidateSymbol(variable, type, token);
             if (sym != null) {
                 doInstruction(EInstructionSet.LOAD, TableOfSymbols.getActualLevel() - sym.getLevel(), sym.getAddress());
@@ -153,10 +152,13 @@ public enum EInstructionSet {
             if (!Validators.isVariableName(variable)){
                 return false;
             }
-
             Symbol sym = TableOfSymbols.getValidateSymbol(variable, type, token);
-            if (sym == null) {
+            if (sym == null ) {
                 return false;
+            }
+
+            if (!Validators.isArrayType(sym.getVariableType())) {
+                ErrorHandle.addError(EErrorCodes.VARIABLE_DOESNT_EXIST, token);
             }
 
             int ind = -1;
@@ -165,7 +167,8 @@ public enum EInstructionSet {
             }
 
             if (Validators.isVariableName(index)) {
-                Symbol indexSym = TableOfSymbols.getValidateSymbol(index,type.substring(0, type.length() - 2), token);
+                TableOfSymbols.setConvertArray(true);
+                Symbol indexSym = TableOfSymbols.getValidateSymbol(index,type, token);
 
                 if (indexSym == null) {
                     ErrorHandle.addError(EErrorCodes.BAD_INDEX_ARRAY, token);
@@ -196,9 +199,6 @@ public enum EInstructionSet {
         }
 
         public static boolean justLoadArrayVariable (Symbol array){
-            int level = TableOfSymbols.getActualLevel() - array.getLevel();
-            doInstruction(EInstructionSet.LITERAL, 0, level);
-
 
             doInstruction(EInstructionSet.LITERAL, 0, array.getAddress());
             EOperationCodes.doOperation(EOperationCodes.PLUS);
@@ -216,7 +216,6 @@ public enum EInstructionSet {
             if (!Validators.getType(variable).equals(type)){
                 ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, token);
             }
-
 
             Symbol where = TableOfSymbols.getValidateSymbol(identifier, type, token);
             Symbol what = TableOfSymbols.getValidateSymbol(variable, type, token);
@@ -241,20 +240,29 @@ public enum EInstructionSet {
 
             switch (type){
                 case Validators.VARIABLE_TYPE_INT: {
+                    TableOfSymbols.setConvertArray(true);
                     return loadIntegerVariable(variable, token, type);
                 }
                 case Validators.VARIABLE_TYPE_BOOLEAN: {
+                    TableOfSymbols.setConvertArray(true);
                     return loadBooleanVariable(variable, token, type);
                 }
                 case Validators.VARIABLE_TYPE_ARRAY_INT: {
                     if (resultType.equals(Validators.VARIABLE_TYPE_ARRAY_INT)) {
                         return copyArray(variable, token, type, identifier);
                     }else {
+                        TableOfSymbols.setConvertArray(true);
                         return loadIntegerVariable(variable, token, type);
                     }
                 }
+
                 case Validators.VARIABLE_TYPE_ARRAY_BOOLEAN: {
-                    return copyArray(variable, token, type, identifier);
+                    if (resultType.equals(Validators.VARIABLE_TYPE_ARRAY_BOOLEAN)) {
+                        return copyArray(variable, token, type, identifier);
+                    }else {
+                        TableOfSymbols.setConvertArray(true);
+                        return loadBooleanVariable(variable, token, type);
+                    }
                 }
                 default: {
                     ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, token);

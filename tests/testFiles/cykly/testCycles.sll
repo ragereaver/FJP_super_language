@@ -8,6 +8,8 @@ else{
     c = c - 1;
 }
 
+
+
 switch(c){
 case 1:
     ahoj = ahoj + 1;
@@ -16,9 +18,21 @@ case 3:
 default: c = c - 1;
 }
 
+
 do{
     ahoj = ahoj + 1;
 }while(ahoj < 8);
+
+
+repeat{
+    ahoj = ahoj - 1;
+}until(ahoj < 8);
+
+until (true) {
+    break;
+}
+
+
 
 if (c == ahoj) {
     int b = 3;

@@ -6,6 +6,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import tableClasses.ErrorHandle;
+import tableClasses.RegisteredFunction;
 import tableClasses.TableOfCodes;
 import tableClasses.TableOfSymbols;
 
@@ -20,24 +21,20 @@ public class Main {
 
         //1) load file
         //2) run with gramatic files in generated parser
-        if (args.length == 0) {
-            //TableOfSymbols.filepath = "tests/testFiles/assigment/testAssignment.sll";
-            //TableOfSymbols.filepath = "tests/testFiles/pole/testPole.sll";
-           TableOfSymbols.filepath = "tests/testFiles/testFile.sll";
-            //TableOfSymbols.filepath = "tests/testFiles/cykly/testCycles2.sll";
-           //TableOfSymbols.filepath = "tests/testFiles/zavorky/testZavorek.sll";
-            //TableOfSymbols.filepath = "tests/testFiles/funkce/testFunction.sll";
-            TableOfSymbols.destinationFilepath = TableOfSymbols.filepath;
-        }else {
+        if (args.length > 0 && args.length < 3) {
             TableOfSymbols.filepath = args[0];
             if (args.length > 1) {
                 TableOfSymbols.destinationFilepath = args[1];
             }else {
                 TableOfSymbols.destinationFilepath = args[0];
             }
+
+        }else {
+            TableOfSymbols.filepath = "tests/testFiles/pole/testPole.sll";
+            TableOfSymbols.destinationFilepath =TableOfSymbols.filepath;
+           /* helpPrint();
+            return;*/
         }
-        //TableOfSymbols.filepath = "testFiles/zavorky/testZavorek.sll";
-        //TableOfSymbols.filepath = "testFiles/cykly/testCycles.sll";
 
         File file = new File(TableOfSymbols.filepath);
         if (!file.exists() || file.isDirectory()) {
@@ -69,12 +66,16 @@ public class Main {
             errorFile.close();
         }
 
+        clean();
+    }
+
+    public static void clean() {
         //cisteni dat
         TableOfCodes.clean();
         TableOfSymbols.clean();
         ErrorHandle.clean();
+        RegisteredFunction.clean();
     }
-
 
     private static boolean compile(ParserRuleContext tree){
         //register functions
@@ -96,5 +97,12 @@ public class Main {
         walker.walk(listener, tree);
 
         return !ErrorHandle.hasError();
+    }
+
+    private static void helpPrint() {
+        System.out.println("Wrong input arguments!");
+        System.out.println("Run program with one of this inputs: ");
+        System.out.println("1> java -jar <complier>.jar <program>.sll");
+        System.out.println("2> java -jar <complier>.jar <program>.sll <output_destination>");
     }
 }

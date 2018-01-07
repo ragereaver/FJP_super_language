@@ -66,12 +66,13 @@ public class RunTests {
                         destination += testFile.getAbsolutePath().substring(absolutePath.length());
 
                         String [] paths = {testFile.getAbsolutePath(), destination};
-                        addInfo("Testing parsing with file: " + testFile.getAbsolutePath());
+                        addInfo("Testing parsing with file: " + testFile.getAbsolutePath() + " desstination " + destination);
                         //catching all exception possible in test -- > we dont need to destroy all tests because of one mistake
                         try {
                             Main.main(paths);
 
                         }catch (Exception e) {
+                            Main.clean();
                             StringWriter sw = new StringWriter();
                             PrintWriter pw = new PrintWriter(sw);
                             e.printStackTrace(pw);

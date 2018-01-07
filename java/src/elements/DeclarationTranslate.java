@@ -38,7 +38,8 @@ public class DeclarationTranslate extends SolveProblem {
      */
     public String doDeclarationInner(String type, ParseTree children, boolean isDeclaration){
         ParserRuleContext ctx = (ParserRuleContext) children;
-         if (ctx.getChildCount() == 1) {
+         if (ctx.getChildCount() <= 2) {
+
              singleAssignment(type, ctx, isDeclaration);
 
         }else {
@@ -60,6 +61,7 @@ public class DeclarationTranslate extends SolveProblem {
         if (assignmentExpCtx != null) {
             value = assignmentExpCtx.getText();
             isEmpty = false;
+
             handleAssigment(type, value, assignmentExpCtx, identifier);
         }
 
@@ -87,6 +89,7 @@ public class DeclarationTranslate extends SolveProblem {
             callFunction(assignmentExpCtx.getStart(), assignmentExpCtx, type);
             return;
         }
+
         getValue(value, type, assignmentExpCtx, assignmentExpCtx.getStart(), identifier);
     }
 
@@ -133,15 +136,14 @@ public class DeclarationTranslate extends SolveProblem {
      * @param type
      */
     private void innerMultipleAssigment(ParseTree child, Token token, String type, boolean isDeclaration, String identifier) {
-        if (child.getChildCount() != 1) {
+
+        if (child.getChildCount() > 1) {
             if (child.getChild(1).getText().equals(ASSIGN)) {
                 String left = child.getChild(0).getText();
                 String right = child.getChild(2).getText();
 
                 if (child.getChildCount() > 1) {
-                    resolveMathProblems(child.getChild(2), token, type, identifier);
-                }else {
-                    EInstructionSet.handleVariables(right, token, type, right, type);
+                    getValue(right, type, child.getChild(2), token, identifier);
                 }
 
                 if (isDeclaration) {
@@ -154,6 +156,11 @@ public class DeclarationTranslate extends SolveProblem {
                 innerMultipleAssigment(child.getChild(2), token, type, isDeclaration, identifier);
             }
         }else {
+            if (Validators.isAssignmentHere(child.getText())) {
+                innerMultipleAssigment(child.getChild(0), token, type, isDeclaration, identifier);
+                return;
+            }
+
             if (isDeclaration) {
                 identifier = child.getText();
                 TableOfSymbols.addSymbol(token, identifier, true, type, 0, false, true);

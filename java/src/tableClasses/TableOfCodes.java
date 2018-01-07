@@ -94,7 +94,7 @@ public class TableOfCodes {
         for (int i = 0; i < size; i++) {
             ExpectingAddress jump = tableOfIntsJump.get(i);
             if ( jump.getCode().equals(EInstructionSet.JUMP)
-                    && jump.getObjectID() == objectID) {
+                    && jump.getObjectID() >= objectID) {
 
                 int index = jump.getCodeIndex();
                 TableOfCodes.updateCode(index, address);

@@ -15,7 +15,6 @@ c = c = 501;
 int z = c = b = 801;
 c =  -pole[-pole[1 + 5 + ahoj()]] - pole[1] + ahoj();
 
-pole = pole [1];
 fce (pole [1], ahoj(), 5);
 
 int function ahoj () {

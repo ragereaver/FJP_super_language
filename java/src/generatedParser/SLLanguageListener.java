@@ -418,6 +418,16 @@ public interface SLLanguageListener extends ParseTreeListener {
 	 */
 	void exitForDeclaration(SLLanguageParser.ForDeclarationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SLLanguageParser#forInit}.
+	 * @param ctx the parse tree
+	 */
+	void enterForInit(SLLanguageParser.ForInitContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SLLanguageParser#forInit}.
+	 * @param ctx the parse tree
+	 */
+	void exitForInit(SLLanguageParser.ForInitContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SLLanguageParser#forExpression}.
 	 * @param ctx the parse tree
 	 */

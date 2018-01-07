@@ -195,7 +195,12 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 			return;
 		}
 
-        functionType = ctx.typeSpecifier().getText();
+		if (ctx.typeSpecifier() == null) {
+			functionType= ctx.emptySpecifier().getText();
+		}else {
+			functionType= ctx.typeSpecifier().getText();
+		}
+
 		TableOfSymbols.setLevel(true);
 		TableOfSymbols.setObject(true);
 		EInstructionSet.doInstruction(EInstructionSet.INT, 3);
@@ -214,7 +219,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 		}
 
 		TableOfSymbols.setObject(false);
-		if (functionType.equals("void")) {
+		if (functionType.equals(Validators.EMPTY_TYPE)) {
 			EInstructionSet.doInstruction(EInstructionSet.RETURN, 0, 0);
 		}else {
 			FunctionTranslate functionTranslate = new FunctionTranslate();
@@ -278,34 +283,34 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 			case "for":{
 				ForTranslate forTranslate = new ForTranslate();
 				forTranslate.runFor(ctx);
-			}; break;
+			} break;
 			case "if":{
                 unblockSegment(isInCycle);
 				IfTranslate ifTranslate = new IfTranslate();
 				ifTranslate.runIf(ctx);
-			}; break;
+			} break;
 			case "while":{
 				WhileTranslate whileTranslate = new WhileTranslate();
 				whileTranslate.runWhile(ctx);
-			}; break;
+			} break;
 			case "do":{
 				DoTranslate doTranslate = new DoTranslate();
 				doTranslate.runDo(ctx);
-			}; break;
+			} break;
 			case "until":{
 				UntilTranslate untilTranslate = new UntilTranslate();
 				untilTranslate.runUntil(ctx);
-			}; break;
+			} break;
 			case "repeat":{
 				RepeatTranslate repeatTranslate = new RepeatTranslate();
 				repeatTranslate.runRepeat(ctx);
-			}; break;
+			} break;
 
 			case "switch":{
                 unblockSegment(isInCycle);
 				SwitchTranslate switchTranslate = new SwitchTranslate();
 				switchTranslate.runSwitch(ctx);
-			}; break;
+			} break;
 		}
 
 	}
@@ -325,35 +330,35 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
                 unblockSegment(isInCycle);
 				ForTranslate forTranslate = new ForTranslate();
 				forTranslate.exitFor(ctx);
-			}; break;
+			} break;
 			case "if":{
 				IfTranslate ifTranslate = new IfTranslate();
 				ifTranslate.exitIf(ctx);
-			}; break;
+			} break;
 			case "while":{
                 unblockSegment(isInCycle);
 				WhileTranslate whileTranslate = new WhileTranslate();
 				whileTranslate.exitWhile(ctx);
-			}; break;
+			} break;
 			case "do":{
                 unblockSegment(isInCycle);
 				DoTranslate doTranslate = new DoTranslate();
 				doTranslate.exitDo(ctx);
-			}; break;
+			} break;
 			case "until":{
                 unblockSegment(isInCycle);
 				UntilTranslate untilTranslate = new UntilTranslate();
 				untilTranslate.exitUntil(ctx);
-			}; break;
+			} break;
 			case "repeat":{
 				unblockSegment(isInCycle);
 				RepeatTranslate repeatTranslate = new RepeatTranslate();
 				repeatTranslate.exitRepeat(ctx);
-			}; break;
+			} break;
 			case "switch":{
 				SwitchTranslate switchTranslate = new SwitchTranslate();
 				switchTranslate.exitSwitch(ctx);
-			}; break;
+			} break;
 		}
         TableOfSymbols.setObject(false);
 	}
@@ -701,7 +706,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
             if (Validators.isAssignmentHere(ctx.getText())){
                 isInAssignemt = true;
                 SimpleAssigmentTranslate assigmentTranslate = new SimpleAssigmentTranslate();
-                assigmentTranslate.doAssigmentTranslate(ctx);
+                assigmentTranslate.doAssigmentTranslate(ctx, true);
             }
 		}
 	}
@@ -717,7 +722,7 @@ public class SLLanguageMainListener extends SLLanguageBaseListener {
 
 		if (!isInCycleHeader && !isInDeclaration && isInAssignemt && !isInTernalIf) {
             if (Validators.isAssignmentHere(ctx.getText())){
-                isInAssignemt = false;
+				isInAssignemt = false;
             }
 		}
 	}

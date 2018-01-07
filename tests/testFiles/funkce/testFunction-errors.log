@@ -1,1 +1,1 @@
-Warning: At line 3:30 - Parsing code wasnt possible! no viable alternative at input 'intfunctionname(intl,into,intk){intd=l+o+k;for(inti=1;i<5;i++)'
+Warning: At line 18:8 - Action is not allowed with these types! 

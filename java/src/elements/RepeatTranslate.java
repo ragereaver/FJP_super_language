@@ -14,11 +14,14 @@ public class RepeatTranslate extends UntilTranslate {
     }
 
     public void exitRepeat(SLLanguageParser.CycleContext ctx) {
-        doCondition(ctx.expression(), ctx.getStart());
+        doCondition(ctx.logicalOrExpression(), ctx.getStart());
         negate(Validators.VARIABLE_TYPE_BOOLEAN, ctx.getStart());
         EInstructionSet.doInstruction(EInstructionSet.JUMP_COMP, -1); //přepsat adresu na konec
         EInstructionSet.doInstruction(EInstructionSet.JUMP, SLLanguageMainListener.getAddress()); //přepsat adresu na začátek do
-        TableOfCodes.updateJumpCompare(TableOfSymbols.getObjectID(), String.valueOf(TableOfCodes.getTableOfMainCode().size()));
+
+        String endAdress = String.valueOf(TableOfCodes.getTableOfMainCode().size());
+        TableOfCodes.updateJumpCompare(TableOfSymbols.getObjectID(), endAdress);
+        TableOfCodes.updateJump(TableOfSymbols.getObjectID(), endAdress);
     }
 
 }

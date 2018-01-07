@@ -15,7 +15,7 @@ allCode
     |   cycle
     |   functionCall ';'
     |   constDeclaration
-    |   expressionStatement
+    |   assignmentExpression ';'
     ;
 
 constDeclaration
@@ -53,10 +53,10 @@ emptySpecifier
 
 cycle
     :   'for' '(' forCondition ')' compoundStatement
-    |   'while' '(' expression ')' compoundStatement
-    |   'until' '(' expression ')' compoundStatement
-    |   'do' compoundStatement 'while' '(' expression ')' ';'
-    |   'repeat' compoundStatement 'until' '(' expression ')' ';'
+    |   'while' '(' logicalOrExpression ')' compoundStatement
+    |   'until' '(' logicalOrExpression ')' compoundStatement
+    |   'do' compoundStatement 'while' '(' logicalOrExpression ')' ';'
+    |   'repeat' compoundStatement 'until' '(' logicalOrExpression ')' ';'
     |   'if' '(' logicalOrExpression ')' compoundStatement elseStatement?
     |   'switch' '(' expression ')' '{' (labeledStatement)* '}'
     ;
@@ -229,13 +229,17 @@ primaryExpression
 *   For condition
 **/
 forCondition
-	:   forDeclaration ';' forExpression? ';' forExpression?
-	|   expression? ';' forExpression? ';' forExpression?
+	:   forDeclaration ';' logicalOrExpression? ';' forExpression?
+	|   forInit? ';' logicalOrExpression? ';' forExpression?
 	;
 
 forDeclaration
     :   typeSpecifier initDeclaratorList
 	| 	typeSpecifier
+    ;
+
+forInit
+    :   forExpression
     ;
 
 forExpression
@@ -307,7 +311,6 @@ DigitSequence
 
 Constant
     :   IntegerConstant
-    |   CharacterConstant
     ;
 
 fragment
@@ -335,79 +338,6 @@ NonzeroDigit
     :   [1-9]
     ;
 
-fragment
-CharacterConstant
-    :   '\'' CCharSequence '\''
-    |   'L\'' CCharSequence '\''
-    |   'u\'' CCharSequence '\''
-    |   'U\'' CCharSequence '\''
-    ;
-
-fragment
-CCharSequence
-    :   CChar+
-    ;
-
-fragment
-CChar
-    :   ~['\\\r\n]
-    |   EscapeSequence
-    ;
-
-fragment
-EscapeSequence
-    :   SimpleEscapeSequence
-    |   OctalEscapeSequence
-    |   HexadecimalEscapeSequence
-    ;
-
-fragment
-SimpleEscapeSequence
-    :   '\\' ['"?abfnrtv\\]
-    ;
-
-fragment
-OctalEscapeSequence
-    :   '\\' OctalDigit
-    |   '\\' OctalDigit OctalDigit
-    |   '\\' OctalDigit OctalDigit OctalDigit
-    ;
-
-fragment
-HexadecimalEscapeSequence
-    :   '\\x' HexadecimalDigit+
-    ;
-
-fragment
-OctalDigit
-    :   [0-7]
-    ;
-
-fragment
-HexadecimalDigit
-    :   [0-9a-fA-F]
-    ;
-
-fragment
-EncodingPrefix
-    :   'u8'
-    |   'u'
-    |   'U'
-    |   'L'
-    ;
-
-fragment
-SCharSequence
-    :   SChar+
-    ;
-
-fragment
-SChar
-    :   ~["\\\r\n]
-    |   EscapeSequence
-    |   '\\\n'   // Added line
-    |   '\\\r\n' // Added line
-    ;
 
 Whitespace
     :   [ \t]+

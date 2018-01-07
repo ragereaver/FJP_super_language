@@ -61,6 +61,7 @@ public class SolveProblem {
         if (Validators.isDimHere(value)
                 || Validators.isArrayHere(value)
                 || Validators.isSignHere(value)) { // reseni zavorkovych vyrazu
+
             resolveMathProblems(assignmentExpCtx, token, type, identifier);
         }else {
             boolean negate = false;
@@ -219,7 +220,6 @@ public class SolveProblem {
             String resultType = Validators.validateAction( TypeConvertor.convertArrayTypes(leftType, defType),
                                                             TypeConvertor.convertArrayTypes(rightType, defType),
                                                              sign);
-
             if (resultType != null) {
                 lastType = resultType;
 
@@ -242,7 +242,12 @@ public class SolveProblem {
     private void loadValueFromArray(String value, ParserRuleContext ctx, String index, String defType){
         if (!value.isEmpty()) {
             if (!loadIndexForArray(value, index, ctx)){
-                EInstructionSet.loadArrayVariable(value, ctx.getStart(), index, Validators.getType(value));
+                TableOfSymbols.setConvertArray(true);
+                if (Validators.UNKNOWN_TYPE.equals(defType)) {
+                    defType = TypeConvertor.convertArrayTypesToSimple(Validators.getType(value));
+                }
+
+                EInstructionSet.loadArrayVariable(value, ctx.getStart(), index, defType);
             }
         }
     }
@@ -252,11 +257,11 @@ public class SolveProblem {
                 || Validators.isArrayHere(index)
                 || Validators.isMethodHere(index)
                 || Validators.isDimHere(index)) {
-
             Symbol array = TableOfSymbols.findByNameAllLevels(value, true);
             if (array == null) {
                 return true;
             }
+
             int level = TableOfSymbols.getActualLevel() - array.getLevel();
             EInstructionSet.doInstruction(EInstructionSet.LITERAL, 0, level);
 
@@ -269,5 +274,13 @@ public class SolveProblem {
         }
 
         return false;
+    }
+
+    protected boolean needSolving(String value) {
+        return Validators.isSignHere(value)
+                || Validators.isArrayHere(value)
+                || Validators.isMethodHere(value)
+                || Validators.isDimHere(value)
+                || Validators.isNegateSignHere(value);
     }
 }

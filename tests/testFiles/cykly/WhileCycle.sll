@@ -1,0 +1,39 @@
+int test = 1;
+boolean test2 = true;
+
+ while (test2){
+    test = test + test;
+
+    if ( test > 10 ) {
+        test2 = false;
+    }
+ }
+
+
+
+ while (test2 == false) {
+    test = test - test;
+    if ( test == 3 ) {
+         test2 = true;
+    }
+
+ }
+
+ while (test > 5 || test2) {
+    test = test + test;
+    break;
+    while (test2){
+        test = test + test;
+
+        if ( test > 10 ) {
+            break;
+        }else {
+            if ( test > 10 ) {
+                break;
+            }else {
+                continue;
+            }
+        }
+     }
+     continue;
+ }

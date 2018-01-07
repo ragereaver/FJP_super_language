@@ -4,7 +4,16 @@ int function name (int l, int o, int k) {
     return d;
 }
 
+boolean function name (int l) {
+    boolean d = (name(1, 2, 3) < 5) ? false : true;
 
+    return d;
+}
+
+void function empty () {
+    c = 15;
+
+}
 
 int c = 5;
 

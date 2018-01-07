@@ -33,21 +33,16 @@ public class CallFunctionTranslate {
             storeValues(values);
         }
 
-
         if (!RegisteredFunction.functionExist(identifier, types)) {
             ErrorHandle.addError(EErrorCodes.FUNCTION_NOT_EXIST, ctx);
             return Validators.UNKNOWN_TYPE;
         }
 
-        if (Validators.UNKNOWN_TYPE.equals(type)) {
-            type = RegisteredFunction.getFunctionType(identifier, types);
-        }
+        type = RegisteredFunction.getFunctionType(identifier, types);
+
 
         TableOfCodes.addCall("-1", types, identifier);
         Symbol function = TableOfSymbols.findFunction(identifier, types);
-        if (type != null && !RegisteredFunction.validFunctionType(identifier, types, type)) {
-            ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, ctx);
-        }
 
         if (function != null) {
             TableOfCodes.updateCall(types, identifier, String.valueOf(function.getAddress()));

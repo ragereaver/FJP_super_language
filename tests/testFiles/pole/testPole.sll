@@ -1,4 +1,8 @@
 int [] pole = new int [5];
+boolean [] fd = new boolean [5];
+int b = 3;
+fd[1] = true;
+fd[pole[1]] = true ;
 
 pole[1] = 6;
 pole[3] = 4;

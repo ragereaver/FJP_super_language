@@ -1,0 +1,22 @@
+int test = 0;
+int i = 0;
+int a, c, d;
+a = 501;
+
+for(; ;){
+    test = test + i;
+}
+
+for(int i = 25;;){
+    test = test + i;
+}
+
+for(int i = 1, k = 15; i < 10; i = 1, k = 10){
+    test = test + i;
+}
+
+
+for(i = 19, test = 15; i < 10; i = 16, test = 103){
+    test = test + i;
+}
+

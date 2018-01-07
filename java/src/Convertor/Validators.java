@@ -16,7 +16,7 @@ public class Validators {
     public static final String VARIABLE_TYPE_ARRAY_INT = "int[]";
     public static final String VARIABLE_TYPE_ARRAY_BOOLEAN = "boolean[]";
     public static final String UNKNOWN_TYPE = "none";
-
+    public static final String EMPTY_TYPE = "void";
     public static boolean validateType (String variableType, String value){
         boolean isVariable = false;
         Symbol var = null;
@@ -292,12 +292,16 @@ public class Validators {
     }
 
     public static boolean isAssignmentHere(String value) {
-        String pattern = "((\\w+)((\\[\\w+])?)(=)([^=]*)((\\+|-|!|\\()*)(\\w+)(.*))";
+        String pattern = "((\\w+)(.*)((\\[\\w+])?)(=)([^=]*)((\\+|-|!|\\()*)(\\w+)(.*))";
         return (value != null && value.matches(pattern));
     }
 
     public static boolean isCommaHere(String value) {
         String pattern = "((.+)(,)(.+))";
         return (value != null && value.matches(pattern));
+    }
+
+    public static boolean isArrayType(String type) {
+        return type.equals(VARIABLE_TYPE_ARRAY_BOOLEAN) || type.equals(VARIABLE_TYPE_ARRAY_INT);
     }
 }

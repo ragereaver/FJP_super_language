@@ -257,6 +257,12 @@ public interface SLLanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitForDeclaration(SLLanguageParser.ForDeclarationContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SLLanguageParser#forInit}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitForInit(SLLanguageParser.ForInitContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SLLanguageParser#forExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

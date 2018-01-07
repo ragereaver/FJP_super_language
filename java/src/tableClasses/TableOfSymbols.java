@@ -1,5 +1,6 @@
 package tableClasses;
 
+import Convertor.TypeConvertor;
 import Convertor.Validators;
 import enums.EErrorCodes;
 import enums.EInstructionSet;
@@ -15,7 +16,6 @@ public class TableOfSymbols {
 
 
     private static ArrayList <Symbol> tableOfSymbols = new ArrayList<>();
-    private static ArrayList <Symbol> registerFunctions = new ArrayList<>();
     private static Stack <Integer> changesInParentID = new Stack<>();
     private static Stack <Integer> changesInObjectID = new Stack<>();
     private static int actualLevel = 0;
@@ -24,6 +24,7 @@ public class TableOfSymbols {
     private static int actObjectID = 0;
     public static String filepath = "";
     public static String destinationFilepath = "";
+    private static boolean convertArray = false;
 
 
     public static boolean addSymbolConst(Token ctxToken, String name, String variableType, int size){
@@ -106,7 +107,13 @@ public class TableOfSymbols {
             return null;
         }
 
-        if (!sym.getVariableType().equals(type)){
+        String varType = sym.getVariableType();
+        if (TableOfSymbols.convertArray) {
+            varType = TypeConvertor.convertArrayTypesToSimple(varType);
+            setConvertArray(false);
+        }
+
+        if (!varType.equals(type)){
             ErrorHandle.addError(EErrorCodes.TYPE_MISMATCH, token);
             return null;
         }
@@ -252,8 +259,11 @@ public class TableOfSymbols {
         return objectID;
     }
 
+    public static void setConvertArray(boolean convertArray) {
+        TableOfSymbols.convertArray = convertArray;
+    }
+
     public static void clean() {
-        registerFunctions.clear();
         changesInParentID.clear();
         changesInObjectID.clear();
         actualLevel = 0;
@@ -263,6 +273,7 @@ public class TableOfSymbols {
         filepath = "";
         destinationFilepath = "";
         tableOfSymbols.clear();
+        convertArray = false;
     }
 
 }

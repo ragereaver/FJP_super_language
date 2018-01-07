@@ -25,7 +25,13 @@ public class FunctionTranslate {
     }
 
     public boolean doFunctionDefinition(SLLanguageParser.FunctionDefinitionContext ctx) {
-        String type = ctx.typeSpecifier().getText();
+        String type;
+        if (ctx.typeSpecifier() == null) {
+            type= ctx.emptySpecifier().getText();
+        }else {
+            type= ctx.typeSpecifier().getText();
+        }
+
         String name = ctx.Identifier().getText();
         SLLanguageParser.InitListContext list = ctx.initList();
 
@@ -74,7 +80,13 @@ public class FunctionTranslate {
     }
 
     public void registerFunction(SLLanguageParser.FunctionDefinitionContext ctx) {
-        String type = ctx.typeSpecifier().getText();
+        String type;
+        if (ctx.typeSpecifier() == null) {
+            type= ctx.emptySpecifier().getText();
+        }else {
+            type= ctx.typeSpecifier().getText();
+        }
+
         String name = ctx.Identifier().getText();
         SLLanguageParser.InitListContext variables = ctx.initList();
 

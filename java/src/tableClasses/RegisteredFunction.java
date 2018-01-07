@@ -64,8 +64,6 @@ public class RegisteredFunction {
                 for (int j = 0; j < symbol.getCountParam(); j++) {
 
                     if (!symbol.getTypeAtIndex(j).equals(types.get(j))){
-
-                        System.out.println(name + "-----------------" + types.get(j));
                         exists = false;
                         break;
                     }
