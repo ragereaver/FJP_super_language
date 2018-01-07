@@ -30,9 +30,13 @@ https://github.com/antlr/antlr4/blob/master/doc/getting-started.md
 
 After installing IntelliJ and ANTLR you can import our project into IntelliJ.
 There is several test files in directory testFiles. To compile these test files to PL/0 you can
-run class runTests.java
+run class runTests.java. More info to tests is in documentation.
 
-# Structure of project
+## Structure of project
+Main method to our project is in folder - java/src/Main.java
+Executible jar is in - java/out/artifacts/FJP_super_language_jar
+Gramatic for our language is in root directory - SLLanguage.g4
+
 > .idea
 - settings for intelliJ environment
 > docs
@@ -41,3 +45,4 @@ run class runTests.java
 - source and output of project
 > tests
 - files which are used to testing our solution
+
