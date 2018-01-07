@@ -49,7 +49,7 @@ run class runTests.java. More info to tests is in documentation.
 ## Setting up environment
 Everything should be done when you clone this repository like intellJ project except on setting up 
 parser for ANTLR.
-- to parse our grammar in intelliJ you need to follow these steps
+> to parse our grammar in intelliJ you need to follow these steps
 - you need install intelliJ plugin for ANTLR - info above
 - then right click on **SLLanguage.g4** file
 - select **configure ANTLR..**
